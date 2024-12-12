@@ -1,34 +1,13 @@
-import pandas as pd
 import plotly.graph_objects as go
 from dash import Dash, html, dcc, callback, Input, Output
 
 from music.tracks import UniversalTracks
-from music.treemap import TreemapNode
 
-universal_tracks = UniversalTracks()
-universal_tracks.fetch_tracks()
+universal_tracks = UniversalTracks.build()
 
 
-def build_treemap(treemap_data: TreemapNode):
-    print(treemap_data)
-    # Building nested dataframe for artists and albums
-    df = pd.DataFrame(columns=['ids', 'labels', 'parents', 'plays'])
-    for node in sorted(treemap_data.children, key=lambda x: x.sort_value):
-        df_artist = {
-            'ids': node.id,
-            'labels': node.value,
-            'parents': node.parent,
-            'plays': sum([child.plays for child in node.children]) if node.children else node.plays,
-        }
-        df.loc[len(df)] = df_artist
-        for album in sorted(node.children, key=lambda x: x.sort_value):
-            df_album = {
-                'ids': album.id,
-                'labels': album.value,
-                'parents': album.parent,
-                'plays': album.plays,
-            }
-            df.loc[len(df)] = df_album
+def build_treemap():
+    df = universal_tracks.treemap_dataframe
 
     # df["Total Plays"] = f'Total Plays | {len(artists)} artists | {len(tracks)} tracks | {sum(plays)} plays'
 
@@ -47,7 +26,7 @@ def build_treemap(treemap_data: TreemapNode):
             '%{label}',
             '%{value} plays',
         ]),
-        root_color="orange",
+        # root_color="orange",
     ))
     fig.update_layout(
         margin=dict(t=0, l=0, r=0, b=0),
@@ -57,7 +36,7 @@ def build_treemap(treemap_data: TreemapNode):
     return fig
 
 
-default_fig = build_treemap(universal_tracks.treemap_data)
+default_fig = build_treemap()
 
 
 @callback(
@@ -66,7 +45,7 @@ default_fig = build_treemap(universal_tracks.treemap_data)
 )
 def refresh_treemap(clicks):
     universal_tracks.fetch_tracks()
-    return build_treemap(universal_tracks.treemap_data)
+    return build_treemap()
 
 
 external_scripts = [

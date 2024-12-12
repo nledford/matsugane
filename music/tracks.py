@@ -1,6 +1,7 @@
 from dataclasses import field
 from typing import List
 
+import pandas as pd
 from pydantic import BaseModel
 
 from data.lastfm import LastfmFetcher
@@ -9,12 +10,18 @@ from music.artist import Artist
 from music.track import UniversalTrack
 from music.treemap import TreemapNode, NodeType
 
+fetcher = LastfmFetcher()
 
 class UniversalTracks(BaseModel):
     tracks: List[UniversalTrack] = field(default_factory=list)
 
+    @staticmethod
+    def build() -> "UniversalTracks":
+        ut = UniversalTracks()
+        ut.fetch_tracks()
+        return ut
+
     def fetch_tracks(self):
-        fetcher = LastfmFetcher()
         self.tracks = fetcher.fetch_recent_tracks()
 
     # @property
@@ -94,3 +101,25 @@ class UniversalTracks(BaseModel):
         root.children = tm_artists
 
         return root
+
+    @property
+    def treemap_dataframe(self) -> pd.DataFrame:
+        df = pd.DataFrame(columns=['ids', 'labels', 'parents', 'plays'])
+        for node in sorted(self.treemap_data.children, key=lambda x: x.sort_value):
+            df_artist = {
+                'ids': node.id,
+                'labels': node.value,
+                'parents': node.parent,
+                'plays': sum([child.plays for child in node.children]) if node.children else node.plays,
+            }
+            df.loc[len(df)] = df_artist
+            for album in sorted(node.children, key=lambda x: x.sort_value):
+                df_album = {
+                    'ids': album.id,
+                    'labels': album.value,
+                    'parents': album.parent,
+                    'plays': album.plays,
+                }
+                df.loc[len(df)] = df_album
+
+        return df
