@@ -37,12 +37,24 @@ class UniversalTracks(BaseModel):
         return sum([track.plays for track in self.tracks])
 
     @property
+    def total_artists(self) -> int:
+        return len(self.artists)
+
+    @property
+    def total_albums(self) -> int:
+        return len(self.albums)
+
+    @property
     def artists(self) -> List[Artist]:
         """
         Returns a list of all artists from list of tracks
         :return: A unique list of artists
         """
         return list(set([track.artist for track in self.tracks]))
+
+    @property
+    def albums(self) -> List[Album]:
+        return list(set([track.album for track in self.tracks]))
 
     def tracks_by_artist(self, artist: Artist) -> List[UniversalTrack]:
         return list(set([track for track in self.tracks if track.artist == artist]))
@@ -67,9 +79,12 @@ class UniversalTracks(BaseModel):
 
     @property
     def treemap_data(self) -> TreemapNode:
+        # df["Total Plays"] = f'Total Plays | {len(artists)} artists | {len(tracks)} tracks | {sum(plays)} plays'
+        root_value = f'Played Tracks | {self.total_artists} artists | {self.total_albums} albums | {self.total_tracks} tracks | {self.total_plays} plays'
+
         root = TreemapNode(node_type=NodeType.ROOT,
-                           value='Tracks',
-                           sort_value='tracks',
+                           value=root_value,
+                           sort_value=root_value.lower(),
                            plays=self.total_plays,
                            tracks=self.total_tracks,
                            parent='', )
@@ -81,7 +96,7 @@ class UniversalTracks(BaseModel):
                                       sort_value=artist.sort_name,
                                       tracks=self.total_tracks_by_artist(artist),
                                       plays=self.total_plays_by_artist(artist),
-                                      parent='Total Plays')
+                                      parent=root_value)
 
             tm_albums = []
             for album in self.albums_by_artist(artist):

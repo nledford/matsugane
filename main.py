@@ -9,8 +9,6 @@ universal_tracks = UniversalTracks.build()
 def build_treemap():
     df = universal_tracks.treemap_dataframe
 
-    # df["Total Plays"] = f'Total Plays | {len(artists)} artists | {len(tracks)} tracks | {sum(plays)} plays'
-
     fig = go.Figure(go.Treemap(
         branchvalues='total',
         labels=df.labels,
