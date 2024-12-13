@@ -1,40 +1,12 @@
-import plotly.graph_objects as go
 from dash import Dash, html, dcc, callback, Input, Output
 
+from music import treemap
 from music.tracks import UniversalTracks
 
+# Fetches and stores tracks from last.fm
 universal_tracks = UniversalTracks.build()
 
-
-def build_treemap():
-    df = universal_tracks.treemap_dataframe
-
-    fig = go.Figure(go.Treemap(
-        branchvalues='total',
-        labels=df.labels,
-        parents=df.parents,
-        ids=df.ids,
-        values=df['plays'],
-        hovertemplate='<br>'.join([
-            '%{label}',
-            '%{value} plays',
-            '<extra></extra>',
-        ]),
-        texttemplate='<br>'.join([
-            '%{label}',
-            '%{value} plays',
-        ]),
-        # root_color="orange",
-    ))
-    fig.update_layout(
-        margin=dict(t=0, l=0, r=0, b=0),
-        height=777,
-    )
-
-    return fig
-
-
-default_fig = build_treemap()
+treemap_fig = treemap.build_treemap(universal_tracks.treemap_dataframe)
 
 
 @callback(
@@ -43,7 +15,7 @@ default_fig = build_treemap()
 )
 def refresh_treemap(clicks):
     universal_tracks.fetch_tracks()
-    return build_treemap()
+    return treemap.build_treemap(universal_tracks.treemap_dataframe)
 
 
 external_scripts = [
@@ -65,7 +37,7 @@ app.layout = html.Div(
                         className='border border-neutral-700 bg-neutral-800 hover:bg-neutral-700/75 rounded py-1 px-2'),
             # dash_table.DataTable(data=df.to_dict('records'), page_size=10),
             # dcc.Graph(figure=fig, id="treemap", className='border border-neutral-700 my-5')
-            dcc.Graph(id='lastfm-treemap', figure=default_fig, className='border border-neutral-700 my-5'),
+            dcc.Graph(id='lastfm-treemap', figure=treemap_fig, className='border border-neutral-700 my-5'),
         ]
     )
 )

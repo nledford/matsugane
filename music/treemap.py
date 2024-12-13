@@ -1,3 +1,5 @@
+import pandas as pd
+import plotly.graph_objects as go
 from aenum import Enum
 
 import utils
@@ -36,3 +38,29 @@ class TreemapNode:
                 return "Artist: "
             case NodeType.ALBUM:
                 return "Album: "
+
+
+def build_treemap(df: pd.DataFrame):
+    fig = go.Figure(go.Treemap(
+        branchvalues='total',
+        labels=df.labels,
+        parents=df.parents,
+        ids=df.ids,
+        values=df['plays'],
+        hovertemplate='<br>'.join([
+            '%{label}',
+            '%{value} plays',
+            '<extra></extra>',
+        ]),
+        texttemplate='<br>'.join([
+            '%{label}',
+            '%{value} plays',
+        ]),
+        # root_color="orange",
+    ))
+    fig.update_layout(
+        margin=dict(t=0, l=0, r=0, b=0),
+        height=777,
+    )
+
+    return fig
