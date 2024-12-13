@@ -18,7 +18,7 @@ class TreemapNode:
             children = []
 
         self.node_type = node_type
-        self.id = utils.hash_str(str(node_type) + '-' + value.lower())
+        self.id = utils.generate_cuid2()
         self.parent = parent
         self.value = value
         self.sort_value = sort_value

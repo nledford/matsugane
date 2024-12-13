@@ -206,6 +206,17 @@ files = [
 ]
 
 [[package]]
+name = "cuid2"
+version = "2.0.1"
+description = "Next generation GUIDs. Collision-resistant ids optimized for horizontal scaling and performance."
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "cuid2-2.0.1-py3-none-any.whl", hash = "sha256:943bdf86dc3ed07f32253e1be6e3c34dda8c7bda1c453f851f4ebaaa5a2dcfbf"},
+    {file = "cuid2-2.0.1.tar.gz", hash = "sha256:8d262eb467c16b81419361e18e47f41da77c4446dd2cf0640eac2616680bc924"},
+]
+
+[[package]]
 name = "dash"
 version = "2.18.2"
 description = "A Python framework for building reactive web-apps. Developed by Plotly."
@@ -1071,4 +1082,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "d3ccdce52785d38e6488904fbb4effeb0f40fbeef4e91e69af6840cdff018acb"
+content-hash = "4ad690723387a1149eecd89dbdee71379e25234bceadfddcf60e5bd890467bf2"

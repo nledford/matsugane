@@ -1,4 +1,3 @@
-import hashlib
 from datetime import datetime
 
 
@@ -26,5 +25,9 @@ def remove_articles(text: str) -> str:
         return text
 
 
-def hash_str(text: str) -> str:
-    return hashlib.sha3_256(text.encode('utf-8')).hexdigest()
+def generate_cuid2() -> str:
+    from typing import Callable
+    from cuid2 import cuid_wrapper
+
+    cuid_generator: Callable[[], str] = cuid_wrapper()
+    return cuid_generator()
