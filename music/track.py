@@ -30,7 +30,7 @@ class UniversalTrack(BaseModel):
     def __lt__(self, other):
         return (self.title < other.title
                 & self.artist < other.artist
-                & self.album < other.album
+                & self.album < other.test_album
                 & self.plays < other.plays
                 & self.played_at < other.played_at)
 
