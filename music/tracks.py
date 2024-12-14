@@ -45,6 +45,18 @@ class UniversalTracks(BaseModel):
         return len(self.albums)
 
     @property
+    def average_plays_per_artist(self) -> float:
+        return self.total_plays / self.total_artists
+
+    @property
+    def average_tracks_per_artist(self) -> float:
+        return self.total_tracks / self.total_artists
+
+    @property
+    def average_albums_per_artist(self) -> float:
+        return self.total_albums / self.total_artists
+
+    @property
     def artists(self) -> List[Artist]:
         """
         Returns a list of all artists from list of tracks
