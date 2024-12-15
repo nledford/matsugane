@@ -1,5 +1,6 @@
 from dataclasses import field
 from typing import List
+from statistics import median, mode, pstdev, mean
 
 import pandas as pd
 from pydantic import BaseModel
@@ -24,10 +25,6 @@ class UniversalTracks(BaseModel):
     def fetch_tracks(self):
         self.tracks = fetcher.fetch_recent_tracks()
 
-    # @property
-    # def tracks(self) -> List[UniversalTrack]:
-    #     return self.__tracks
-
     @property
     def total_tracks(self) -> int:
         return len(self.tracks)
@@ -46,7 +43,19 @@ class UniversalTracks(BaseModel):
 
     @property
     def average_plays_per_artist(self) -> float:
-        return self.total_plays / self.total_artists
+        return mean(self.artist_plays)
+
+    @property
+    def median_plays_per_artist(self) -> float:
+        return median(self.artist_plays)
+
+    @property
+    def mode_plays_per_artist(self) -> float:
+        return mode(self.artist_plays)
+
+    @property
+    def artist_plays_std_dev(self) -> float:
+        return pstdev(self.artist_plays)
 
     @property
     def average_tracks_per_artist(self) -> float:
@@ -63,6 +72,13 @@ class UniversalTracks(BaseModel):
         :return: A unique list of artists
         """
         return list(set([track.artist for track in self.tracks]))
+
+    @property
+    def artist_plays(self) -> List[int]:
+        plays = []
+        for artist in self.artists:
+            plays.append(self.total_plays_by_artist(artist))
+        return plays
 
     @property
     def albums(self) -> List[Album]:
