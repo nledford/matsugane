@@ -9,6 +9,10 @@ class Album(BaseModel):
     artist: Artist
 
     @property
+    def id(self) -> str:
+        return utils.hash_string(f"{self.name.lower()}-{self.artist.id}")
+
+    @property
     def sort_name(self) -> str:
         return utils.remove_articles(self.name.lower())
 

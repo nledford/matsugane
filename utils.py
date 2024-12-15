@@ -1,4 +1,13 @@
+import hashlib
 from datetime import datetime
+
+
+def generate_cuid2() -> str:
+    from typing import Callable
+    from cuid2 import cuid_wrapper
+
+    cuid_generator: Callable[[], str] = cuid_wrapper()
+    return cuid_generator()
 
 
 def get_today_at_midnight() -> int:
@@ -14,6 +23,10 @@ def get_today_at_midnight() -> int:
     )
 
 
+def hash_string(text: str) -> str:
+    return hashlib.sha3_256(text.encode()).hexdigest()
+
+
 def remove_articles(text: str) -> str:
     split = text.split(' ')
     if len(split) == 1:
@@ -23,11 +36,3 @@ def remove_articles(text: str) -> str:
         return text.replace(split[0], '').strip()
     else:
         return text
-
-
-def generate_cuid2() -> str:
-    from typing import Callable
-    from cuid2 import cuid_wrapper
-
-    cuid_generator: Callable[[], str] = cuid_wrapper()
-    return cuid_generator()

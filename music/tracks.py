@@ -1,6 +1,6 @@
 from dataclasses import field
-from typing import List
 from statistics import median, mode, pstdev, mean
+from typing import List
 
 import pandas as pd
 from pydantic import BaseModel
@@ -12,6 +12,7 @@ from music.track import UniversalTrack
 from music.treemap import TreemapNode, NodeType
 
 fetcher = LastfmFetcher()
+
 
 class UniversalTracks(BaseModel):
     tracks: List[UniversalTrack] = field(default_factory=list)
@@ -71,7 +72,13 @@ class UniversalTracks(BaseModel):
         Returns a list of all artists from list of tracks
         :return: A unique list of artists
         """
-        return list(set([track.artist for track in self.tracks]))
+        seen = set()
+        artists = []
+        for artist in [track.artist for track in self.tracks]:
+            if artist.id not in seen:
+                seen.add(artist.id)
+                artists.append(artist)
+        return artists
 
     @property
     def artist_plays(self) -> List[int]:
@@ -94,10 +101,10 @@ class UniversalTracks(BaseModel):
         return sum([track.plays for track in self.tracks_by_artist(artist)])
 
     def albums_by_artist(self, artist: Artist) -> List[Album]:
-        return list(set([track.album for track in self.tracks if track.artist == artist]))
+        return list(set([track.album for track in self.tracks if track.artist.id == artist.id]))
 
     def tracks_by_album(self, album: Album) -> List[UniversalTrack]:
-        return list(set([track for track in self.tracks if track.album == album]))
+        return list(set([track for track in self.tracks if track.album.id == album.id]))
 
     def total_tracks_by_album(self, album: Album) -> int:
         return len(self.tracks_by_album(album))

@@ -7,6 +7,10 @@ class Artist(BaseModel):
     name: str
 
     @property
+    def id(self) -> str:
+        return utils.hash_string(self.name.lower())
+
+    @property
     def sort_name(self) -> str:
         return utils.remove_articles(self.name.lower())
 
