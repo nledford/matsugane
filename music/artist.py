@@ -3,11 +3,6 @@ from pydantic import BaseModel
 
 import utils
 
-# TODO move to database?
-hiragana_name_overrides = {
-    'あいみょん': 'Aimyon'
-}
-
 katsu = cutlet.Cutlet()
 
 
@@ -20,15 +15,7 @@ class Artist(BaseModel):
 
     @property
     def sort_name(self) -> str:
-        if self.name in hiragana_name_overrides:
-            sort_name = hiragana_name_overrides[self.name]
-        elif utils.has_unicode_group(self.name):
-            sort_name = katsu.romaji(self.name)
-        elif utils.string_is_hiragana(self.name):
-            sort_name = katsu.romaji(self.name)
-        else:
-            sort_name = self.name
-
+        sort_name = utils.convert_japanese_to_romanji(self.name)
         return utils.remove_articles(sort_name.lower())
 
     def __lt__(self, other):
