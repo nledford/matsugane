@@ -4,15 +4,15 @@ from datetime import datetime
 
 import cutlet
 
+katsu = cutlet.Cutlet()
+
+# TODO move to database?
+hiragana_name_overrides = {
+    'あいみょん': 'Aimyon'
+}
+
 
 def convert_japanese_to_romanji(text: str) -> str:
-    katsu = cutlet.Cutlet()
-
-    # TODO move to database?
-    hiragana_name_overrides = {
-        'あいみょん': 'Aimyon'
-    }
-
     if text in hiragana_name_overrides:
         return hiragana_name_overrides[text]
 
