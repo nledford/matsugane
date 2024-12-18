@@ -1,6 +1,14 @@
 import hashlib
+import unicodedata
 from datetime import datetime
 
+
+
+
+def char_is_hiragana(c) -> bool:
+    return u'\u3040' <= c <= u'\u309F'
+def string_is_hiragana(s: str) -> bool:
+    return all(char_is_hiragana(c) for c in s)
 
 def generate_cuid2() -> str:
     from typing import Callable
@@ -21,6 +29,14 @@ def get_today_at_midnight() -> int:
         .replace(hour=0, minute=0, second=0, microsecond=0)
         .timestamp()
     )
+
+
+def has_unicode_group(text):
+    for char in text:
+        for name in ('CJK','CHINESE','KATAKANA','HANGUL',):
+            if name in unicodedata.name(char):
+                return True
+    return False
 
 
 def hash_string(text: str) -> str:
