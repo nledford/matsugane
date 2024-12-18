@@ -7,10 +7,19 @@ import cutlet
 
 def convert_japanese_to_romanji(text: str) -> str:
     katsu = cutlet.Cutlet()
+
+    # TODO move to database?
+    hiragana_name_overrides = {
+        'あいみょん': 'Aimyon'
+    }
+
+    if text in hiragana_name_overrides:
+        return hiragana_name_overrides[text]
+
     if string_is_hiragana(text) or has_unicode_group(text):
         return katsu.romaji(text)
-    else:
-        return text
+
+    return text
 
 
 def string_is_hiragana(s: str) -> bool:

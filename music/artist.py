@@ -11,7 +11,7 @@ class Artist(BaseModel):
 
     @property
     def id(self) -> str:
-        return utils.hash_string(f'artist-{self.name.lower()}')
+        return utils.hash_string(f'artist-{self.sort_name}')
 
     @property
     def sort_name(self) -> str:
