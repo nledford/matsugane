@@ -63,7 +63,8 @@ app.layout = html.Div(
     )
 )
 
+refresh_data(0)
+
 # Run the app
 if __name__ == '__main__':
     app.run(debug=True, port=8077)
-    refresh_data(0)
