@@ -18,9 +18,10 @@ class UniversalTracks(BaseModel):
     tracks: List[UniversalTrack] = field(default_factory=list)
 
     @staticmethod
-    def build() -> "UniversalTracks":
+    def build(initialize_data: bool = True) -> "UniversalTracks":
         ut = UniversalTracks()
-        ut.fetch_tracks()
+        if initialize_data:
+            ut.fetch_tracks()
         return ut
 
     def fetch_tracks(self):

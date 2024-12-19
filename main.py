@@ -4,7 +4,7 @@ from music import treemap
 from music.tracks import UniversalTracks
 
 # Fetches and stores tracks from last.fm
-universal_tracks = UniversalTracks.build()
+universal_tracks = UniversalTracks.build(False)
 
 treemap_fig = treemap.build_treemap(universal_tracks.treemap_dataframe)
 
