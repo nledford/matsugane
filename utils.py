@@ -8,7 +8,8 @@ katsu = cutlet.Cutlet()
 
 # TODO move to database?
 hiragana_name_overrides = {
-    'あいみょん': 'Aimyon'
+    'あいみょん': 'Aimyon',
+    'リーガルリリー': 'Regal Lily'
 }
 
 
