@@ -115,8 +115,7 @@ class UniversalTracks(BaseModel):
 
     @property
     def treemap_data(self) -> TreemapNode:
-        # df["Total Plays"] = f'Total Plays | {len(artists)} artists | {len(tracks)} tracks | {sum(plays)} plays'
-        root_value = f'Played Tracks | {self.total_artists} artists | {self.total_albums} albums | {self.total_tracks} tracks | {self.total_plays} plays'
+        root_value = 'Played Tracks'
 
         root = TreemapNode(node_type=NodeType.ROOT,
                            value=root_value,
@@ -132,7 +131,7 @@ class UniversalTracks(BaseModel):
                                       sort_value=artist.sort_name,
                                       tracks=self.total_tracks_by_artist(artist),
                                       plays=self.total_plays_by_artist(artist),
-                                      parent=root_value)
+                                      parent=root.value)
 
             tm_albums = []
             for album in self.albums_by_artist(artist):
