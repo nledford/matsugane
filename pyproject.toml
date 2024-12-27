@@ -20,6 +20,7 @@ cuid2 = "^2.0.1"
 cutlet = "^0.4.0"
 unidic-lite = "^1.0.8"
 
+# Workaround to ensure numpy can be updated
 [tool.poetry.dependencies.numpy]
 git = "https://github.com/numpy/numpy"
 rev = "a07c6c5f12eec1322d2487f0ed935c5c13b8d883"
