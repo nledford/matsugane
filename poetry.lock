@@ -642,8 +642,8 @@ develop = false
 [package.source]
 type = "git"
 url = "https://github.com/numpy/numpy"
-reference = "a07c6c5f12eec1322d2487f0ed935c5c13b8d883"
-resolved_reference = "a07c6c5f12eec1322d2487f0ed935c5c13b8d883"
+reference = "HEAD"
+resolved_reference = "ebbd9442e9ccd2508979d58354d16e3eeca96d9c"
 
 [[package]]
 name = "packaging"
@@ -1156,4 +1156,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "17bc1c04a9306bbff7612648f92103ffbb9eb8c0716ca10afcda293fe1253227"
+content-hash = "a4b94ebe7918b5e3e0bc66a8c3411bc3a26348022188709c2600cdea8d0a9e21"
