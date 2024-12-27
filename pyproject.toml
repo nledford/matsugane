@@ -23,6 +23,7 @@ unidic-lite = "^1.0.8"
 # Workaround to ensure numpy can be updated
 [tool.poetry.dependencies.numpy]
 git = "https://github.com/numpy/numpy"
+rev = "7469245786b57405b7ae264b386400061b3b25d3"
 
 [build-system]
 requires = ["poetry-core"]

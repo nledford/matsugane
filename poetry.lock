@@ -632,18 +632,18 @@ files = [
 
 [[package]]
 name = "numpy"
-version = "2.3.0.dev0"
+version = "2.2.1"
 description = "Fundamental package for array computing in Python"
 optional = false
-python-versions = ">=3.11"
+python-versions = ">=3.10"
 files = []
 develop = false
 
 [package.source]
 type = "git"
 url = "https://github.com/numpy/numpy"
-reference = "HEAD"
-resolved_reference = "ebbd9442e9ccd2508979d58354d16e3eeca96d9c"
+reference = "7469245786b57405b7ae264b386400061b3b25d3"
+resolved_reference = "7469245786b57405b7ae264b386400061b3b25d3"
 
 [[package]]
 name = "packaging"
@@ -1156,4 +1156,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "a4b94ebe7918b5e3e0bc66a8c3411bc3a26348022188709c2600cdea8d0a9e21"
+content-hash = "5f0205a4564e5233b1bbf7183009b44835de639c6bfcc93d9d4d335dc3a5f4fc"
