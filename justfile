@@ -4,7 +4,7 @@ set dotenv-load
 
 test:
     # -v flag to produce verbose output
-    pytest -v
+    poetry run pytest -v
 
 run: test
     poetry run python main.py
