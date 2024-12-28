@@ -6,6 +6,9 @@ test:
     # -v flag to produce verbose output
     pytest -v
 
+run: test
+    poetry run python main.py
+
 update:
     poetry update
 
