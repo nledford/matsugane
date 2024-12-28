@@ -10,25 +10,31 @@ treemap_fig = treemap.build_treemap(universal_tracks.treemap_dataframe)
 
 
 def stats_header(ut: UniversalTracks) -> html:
+    def th(text: str):
+        return html.Th(children=text, className='px-6 py-2 bg-neutral-900/50')
+
+    def td(text: str):
+        return html.Td(children=text, className='px-6 py-2')
+
     return html.Table(
         className='w-full overflow-hidden bg-neutral-800 border border-neutral-700/30 rounded tabular-nums text-left',
         children=[
             html.Tr(children=[
-                html.Th(children='Total Artists', className='px-6 py-3'),
-                html.Td(children=ut.total_artists),
+                th('Total Artists'),
+                td(f'{ut.total_artists}'),
 
-                html.Th(children='Total Albums'),
-                html.Td(children=ut.total_albums),
+                th('Total Albums'),
+                td(f'{ut.total_albums}'),
 
-                html.Th(children='Total Tracks'),
-                html.Td(children=ut.total_tracks),
+                th('Total Tracks'),
+                td(f'{ut.total_tracks}'),
 
-                html.Th(children='Total Plays'),
-                html.Td(children=ut.total_plays),
+                th('Total Plays'),
+                td(f'{ut.total_plays}'),
             ]),
             html.Tr(children=[
-                html.Th(children='Avg. Plays Per Artist', className='px-6 py-3'),
-                html.Td(children=ut.average_plays_per_artist),
+                th('Avg. Plays Per Artist'),
+                td(f'{ut.average_plays_per_artist}'),
             ])
         ])
 
