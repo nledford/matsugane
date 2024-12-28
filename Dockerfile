@@ -12,7 +12,7 @@ ENV PYTHONFAULTHANDLER=1 \
 
 # Poetry
 ENV POETRY_NO_INTERACTION=1 \
-#    POETRY_VIRTUALENVS_CREATE=false \
+    POETRY_VIRTUALENVS_CREATE=false \
     POETRY_CACHE_DIR='/var/cache/pypoetry' \
     POETRY_HOME='/usr/local' \
     POETRY_VERSION=1.8.5
@@ -24,7 +24,7 @@ RUN poetry self add poetry-plugin-bundle
 
 WORKDIR /app
 COPY . .
-RUN poetry bundle venv /venv
+RUN poetry bundle venv --python=/usr/bin/python3 --only=main /venv
 
 
 FROM gcr.io/distroless/python3-debian12
