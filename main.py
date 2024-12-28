@@ -32,7 +32,8 @@ external_scripts = [
 
 # Initialize the app
 app = Dash(__name__,
-           external_scripts=external_scripts
+           external_scripts=external_scripts,
+           title="Last.fm Stats",
            )
 
 app.layout = html.Div(
