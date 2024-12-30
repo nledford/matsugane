@@ -14,7 +14,7 @@ def stats_header(ut: UniversalTracks) -> html:
         return html.Td(children=text, className='px-6 py-2 group-hover:bg-neutral-700/25')
 
     return html.Table(
-        className='w-full overflow-hidden bg-neutral-800 border border-neutral-700/30 rounded tabular-nums text-left pb-5',
+        className='w-full overflow-hidden bg-neutral-800 border border-neutral-700/30 rounded tabular-nums text-left',
         children=[
             tr(children=[
                 th('Total Artists'),

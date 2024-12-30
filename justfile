@@ -2,7 +2,7 @@
 
 set dotenv-load
 
-test:
+test: \
     # -v flag to produce verbose output
     poetry run pytest -v
 

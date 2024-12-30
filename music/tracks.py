@@ -1,10 +1,12 @@
 from dataclasses import field
+from datetime import datetime
 from statistics import median, mode, pstdev, mean
 from typing import List
 
 import pandas as pd
 from pydantic import BaseModel
 
+import utils
 from data.lastfm import LastfmFetcher
 from music.album import Album
 from music.artist import Artist
@@ -112,6 +114,24 @@ class UniversalTracks(BaseModel):
 
     def total_plays_by_album(self, album: Album) -> int:
         return sum([track.plays for track in self.tracks_by_album(album)])
+
+    @property
+    def tracks_dataframe(self) -> pd.DataFrame:
+        df = pd.DataFrame(columns=['Title',
+                                   'Artist',
+                                   'Album',
+                                   # 'Plays',
+                                   'Played At'])
+        for track in sorted(self.tracks, key=lambda x: x.played_at, reverse=True):
+            df_track = {
+                'Title': track.title,
+                'Artist': track.artist.name,
+                'Album': track.album.name,
+                # 'Plays': track.plays,
+                'Played At': utils.convert_ts_to_local_dt(track.played_at),
+            }
+            df.loc[len(df)] = df_track
+        return df
 
     @property
     def treemap_data(self) -> TreemapNode:

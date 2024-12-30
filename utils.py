@@ -13,6 +13,12 @@ hiragana_name_overrides = {
 }
 
 
+def convert_ts_to_local_dt(ts: str) -> str:
+    return (datetime.fromtimestamp(int(ts))
+            .astimezone(datetime.now().astimezone().tzinfo)
+            .strftime('%H:%M:%S'))
+
+
 def convert_japanese_to_romanji(text: str) -> str:
     if text in hiragana_name_overrides:
         return hiragana_name_overrides[text]
