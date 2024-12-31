@@ -45,16 +45,18 @@ refresh_btn = html.Button(children='Refresh', id='refresh-button',
                           className='border border-neutral-700 bg-neutral-800 hover:bg-neutral-700/75 rounded py-1 px-2'),
 
 app.layout = html.Div(
-    className='bg-neutral-900 text-neutral-200',
-    children=html.Div(
-        className='relative container mx-auto py-5',
-        children=[
-            page_header(refresh_btn),
-            html.Div(children=stats_header(universal_tracks), id='stats-header', className='mb-5'),
-            html.Div(children=played_tracks_table(universal_tracks), id='played_tracks_table', className='mb-5'),
-            dcc.Graph(id='lastfm-treemap', figure=treemap_fig, className='border border-neutral-700 my-5'),
-        ]
-    )
+    className='relative bg-neutral-900 text-neutral-200',
+    children=[
+        page_header(refresh_btn),
+        html.Div(
+            className='container mx-auto py-5 z-0',
+            children=[
+                html.Div(children=stats_header(universal_tracks), id='stats-header', className='mb-5'),
+                html.Div(children=played_tracks_table(universal_tracks), id='played_tracks_table', className='mb-5 z-0'),
+                dcc.Graph(id='lastfm-treemap', figure=treemap_fig, className='border border-neutral-700 my-5'),
+            ]
+        )
+    ]
 )
 
 refresh_data(0)
