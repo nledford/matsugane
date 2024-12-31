@@ -47,7 +47,7 @@ refresh_btn = html.Button(children='Refresh', id='refresh-button',
 app.layout = html.Div(
     className='bg-neutral-900 text-neutral-200',
     children=html.Div(
-        className='container mx-auto py-5',
+        className='relative container mx-auto py-5',
         children=[
             page_header(refresh_btn),
             html.Div(children=stats_header(universal_tracks), id='stats-header', className='mb-5'),
