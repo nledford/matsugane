@@ -51,9 +51,15 @@ app.layout = html.Div(
         html.Div(
             className='container mx-auto py-5 z-0',
             children=[
-                html.Div(children=stats_header(universal_tracks), id='stats-header', className='mb-5'),
-                html.Div(children=played_tracks_table(universal_tracks), id='played_tracks_table', className='mb-5 z-0'),
-                dcc.Graph(id='lastfm-treemap', figure=treemap_fig, className='border border-neutral-700 my-5'),
+                html.Div(children=stats_header(universal_tracks),
+                         id='stats-header',
+                         className='mb-5'),
+                html.Div(children=played_tracks_table(universal_tracks),
+                         id='played_tracks_table',
+                         className='mb-5 z-0'),
+                dcc.Graph(id='lastfm-treemap',
+                          figure=treemap_fig,
+                          className='border border-neutral-700 my-5'),
             ]
         )
     ]
