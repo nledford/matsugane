@@ -11,8 +11,7 @@ def played_tracks_table(ut: UniversalTracks) -> html.Div:
     header_row = html.Div(
         className='sticky top-0 left-0 right-0 w-full flex flex-row items-center',
         children=[
-            html.Div(children=x,
-                     className=f'bg-neutral-900/75 backdrop-blur {'basis-[13%]' if idx == 3 else 'basis-[29%]'} font-bold px-3 py-2')
+            cell(text=x, is_header_cell=True, is_time_cell=idx == 3)
             for idx, x in enumerate(ut.tracks_dataframe.columns.values)
         ]
     )
@@ -21,10 +20,7 @@ def played_tracks_table(ut: UniversalTracks) -> html.Div:
         html.Div(
             className='flex flex-row items-center bg-neutral-800 hover:bg-neutral-700/50 border-b border-neutral-700/30',
             children=[
-                html.Div(
-                    className=f'{'basis-[13%]' if idx == 3 else 'basis-[29%]'} px-3 py-2 tabular-nums',
-                    children=x
-                )
+                cell(text=x, is_time_cell=idx == 3)
                 for idx, x in enumerate(row)
             ])
         for row in ut.tracks_dataframe.to_dict('split')['data']
@@ -33,3 +29,12 @@ def played_tracks_table(ut: UniversalTracks) -> html.Div:
     wrapper.children = [header_row, played_tracks]
 
     return wrapper
+
+
+def cell(text: str, is_header_cell: bool = False, is_time_cell: bool = False):
+    return html.Div(
+        children=text,
+        className=f'{'basis-[13%] text-center' if is_time_cell else 'basis-[29%]'} '
+                  f'{'font-bold bg-neutral-900/75 backdrop-blur' if is_header_cell else ''} '
+                  f'px-3 py-2 tabular-nums'
+    )
