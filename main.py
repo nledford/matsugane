@@ -1,4 +1,4 @@
-from dash import Dash, html, dcc, callback, Input, Output, dash_table
+from dash import Dash, html, dcc, callback, Input, Output
 
 from components.page_header import page_header
 from components.played_tracks_table import played_tracks_table
@@ -31,13 +31,11 @@ def refresh_data(clicks):
     )
 
 
-external_scripts = [
-    {'src': 'https://cdn.tailwindcss.com'}
-]
-
 # Initialize the app
 app = Dash(__name__,
-           external_scripts=external_scripts,
+           external_scripts=[
+               {'src': 'https://cdn.tailwindcss.com'}
+           ],
            title="Last.fm Stats",
            )
 
@@ -69,4 +67,4 @@ refresh_data(0)
 
 # Run the app
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port=8077)
+    app.run(debug=True, host="0.0.0.0", port=8077)  # pyright: ignore [reportArgumentType]
