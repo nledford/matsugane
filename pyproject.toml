@@ -4,6 +4,9 @@ version = "0.1.0"
 description = ""
 authors = ["Nathaniel Ledford <nate@nateledford.com>"]
 readme = "README.md"
+packages = [
+    { include = "lastfm_stats", from = "src" }
+]
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -15,22 +18,27 @@ pydantic = "^2.10.3"
 pylast = "^5.3.0"
 python-dotenv = "^1.0.1"
 aenum = "^3.1.15"
-pytest = "^8.3.4"
 cuid2 = "^2.0.1"
 cutlet = "^0.4.0"
 unidic-lite = "^1.0.8"
+
+[tool.poetry.group.test.dependencies]
+pytest = "^8.3.4"
 
 # Workaround to ensure numpy can be updated
 [tool.poetry.dependencies.numpy]
 git = "https://github.com/numpy/numpy"
 rev = "7469245786b57405b7ae264b386400061b3b25d3"
 
+[tool.poetry.scripts]
+lastfm_stats = "lastfm_stats.main:main"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pyright]
-#include = ["src"]
+include = ["src"]
 exclude = [
     "**/node_modules",
     "**/__pycache__",

@@ -1,19 +1,22 @@
-from typing import Annotated
+from typing import Annotated, NewType
 
 from annotated_types import Gt
 from pydantic import BaseModel
 from pylast import PlayedTrack
 
-from music.album import Album
-from music.artist import Artist
+from lastfm_stats.music.album import Album
+from lastfm_stats.music.artist import Artist
+
+TrackTitle = NewType("TrackTitle", str)
+PlayedAt = NewType("PlayedAt", str)
 
 
 class UniversalTrack(BaseModel):
-    title: str
+    title: TrackTitle
     artist: Artist
     album: Album
     plays: Annotated[int, Gt(-1)] = 1
-    played_at: str
+    played_at: PlayedAt
 
     @staticmethod
     def from_lastfm_track(played_track: PlayedTrack) -> "UniversalTrack":

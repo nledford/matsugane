@@ -4,10 +4,10 @@ import pandas as pd
 import plotly.graph_objects as go
 from aenum import Enum
 
-import utils
+from lastfm_stats import utils
 
-Plays = NewType('Plays', int)
-Tracks = NewType('Tracks', int)
+NodePlays = NewType('NodePlays', int)
+NodeTracks = NewType('NodeTracks', int)
 
 
 class NodeType(Enum):  # pyright: ignore [reportGeneralTypeIssues]
@@ -21,8 +21,8 @@ class TreemapNode:
                  node_type: int,
                  value: str,
                  sort_value: str,
-                 plays: Plays,
-                 tracks: Tracks,
+                 plays: NodePlays,
+                 tracks: NodeTracks,
                  parent: str,
                  children: Optional[list['TreemapNode']] = None):
         if children is None:

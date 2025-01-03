@@ -1,7 +1,7 @@
 from dash import html
 
 
-def page_header(btn: tuple[html.Button]):
+def page_header(btn: tuple[html.Button]) -> html.Div:
     return html.Div(
         className='sticky top-0 left-0 right-0 bg-neutral-900/75 backdrop-blur border-b border-neutral-700/75 z-50',
         children=[

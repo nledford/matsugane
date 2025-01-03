@@ -1,17 +1,16 @@
 from dataclasses import field
-from datetime import datetime
 from statistics import median, mode, pstdev, mean
 from typing import List
 
 import pandas as pd
 from pydantic import BaseModel
 
-import utils
-from data.lastfm import LastfmFetcher
-from music.album import Album
-from music.artist import Artist
-from music.track import UniversalTrack
-from music.treemap import TreemapNode, NodeType
+from lastfm_stats import utils
+from lastfm_stats.data.lastfm import LastfmFetcher
+from lastfm_stats.music.album import Album
+from lastfm_stats.music.artist import Artist
+from lastfm_stats.music.track import UniversalTrack
+from lastfm_stats.music.treemap import NodePlays, NodeTracks, TreemapNode, NodeType
 
 fetcher = LastfmFetcher()
 
@@ -117,7 +116,7 @@ class UniversalTracks(BaseModel):
 
     @property
     def tracks_dataframe(self) -> pd.DataFrame:
-        df = pd.DataFrame(columns=['Title',
+        df = pd.DataFrame(columns=['Title',  # pyright: ignore [reportArgumentType]
                                    'Artist',
                                    'Album',
                                    # 'Plays',
@@ -140,8 +139,8 @@ class UniversalTracks(BaseModel):
         root = TreemapNode(node_type=NodeType.ROOT,
                            value=root_value,
                            sort_value=root_value.lower(),
-                           plays=self.total_plays,
-                           tracks=self.total_tracks,
+                           plays=NodePlays(self.total_plays),
+                           tracks=NodeTracks(self.total_tracks),
                            parent='', )
 
         tm_artists = []
@@ -149,8 +148,8 @@ class UniversalTracks(BaseModel):
             artist_node = TreemapNode(node_type=NodeType.ARTIST,
                                       value=artist.name,
                                       sort_value=artist.sort_name,
-                                      tracks=self.total_tracks_by_artist(artist),
-                                      plays=self.total_plays_by_artist(artist),
+                                      tracks=NodeTracks(self.total_tracks_by_artist(artist)),
+                                      plays=NodePlays(self.total_plays_by_artist(artist)),
                                       parent=root.value)
 
             tm_albums = []
@@ -158,8 +157,8 @@ class UniversalTracks(BaseModel):
                 album_node = TreemapNode(node_type=NodeType.ALBUM,
                                          value=album.name,
                                          sort_value=album.sort_name,
-                                         tracks=self.total_tracks_by_album(album),
-                                         plays=self.total_plays_by_album(album),
+                                         tracks=NodeTracks(self.total_tracks_by_album(album)),
+                                         plays=NodePlays(self.total_plays_by_album(album)),
                                          parent=artist_node.id)
                 tm_albums.append(album_node)
 
@@ -174,7 +173,7 @@ class UniversalTracks(BaseModel):
 
     @property
     def treemap_dataframe(self) -> pd.DataFrame:
-        df = pd.DataFrame(columns=['ids', 'labels', 'parents', 'plays'])
+        df = pd.DataFrame(columns=['ids', 'labels', 'parents', 'plays'])  # pyright: ignore [reportArgumentType]
         for node in sorted(self.treemap_data.children, key=lambda x: x.sort_value):
             df_artist = {
                 'ids': node.id,

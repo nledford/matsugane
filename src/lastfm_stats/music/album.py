@@ -1,11 +1,15 @@
+from typing import NewType
+
 from pydantic import BaseModel
 
-import utils
-from music.artist import Artist
+from lastfm_stats import utils
+from lastfm_stats.music.artist import Artist
+
+AlbumName = NewType("AlbumName", str)
 
 
 class Album(BaseModel):
-    name: str
+    name: AlbumName
     artist: Artist
 
     @property

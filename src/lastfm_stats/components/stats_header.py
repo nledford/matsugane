@@ -1,9 +1,9 @@
 from dash import html
 
-from music.tracks import UniversalTracks
+from lastfm_stats.music.tracks import UniversalTracks
 
 
-def stats_header(ut: UniversalTracks) -> html:
+def stats_header(ut: UniversalTracks) -> html.Table:
     def tr(children):
         return html.Tr(children=children, className='group')
 

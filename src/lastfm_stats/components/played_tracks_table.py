@@ -1,6 +1,6 @@
 from dash import html
 
-from music.tracks import UniversalTracks
+from lastfm_stats.music.tracks import UniversalTracks
 
 
 def played_tracks_table(ut: UniversalTracks) -> html.Div:

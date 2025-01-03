@@ -1,13 +1,15 @@
+from typing import NewType
 import cutlet
 from pydantic import BaseModel
 
-import utils
+from lastfm_stats import utils
 
 katsu = cutlet.Cutlet()
 
+ArtistName = NewType("ArtistName", str)
 
 class Artist(BaseModel):
-    name: str
+    name: ArtistName
 
     @property
     def id(self) -> str:

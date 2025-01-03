@@ -1,10 +1,10 @@
 from dash import Dash, html, dcc, callback, Input, Output
 
-from components.page_header import page_header
-from components.played_tracks_table import played_tracks_table
-from components.stats_header import stats_header
-from music import treemap
-from music.tracks import UniversalTracks
+from lastfm_stats.components.page_header import page_header
+from lastfm_stats.components.played_tracks_table import played_tracks_table
+from lastfm_stats.components.stats_header import stats_header
+from lastfm_stats.music import treemap
+from lastfm_stats.music.tracks import UniversalTracks
 
 # Fetches and stores tracks from last.fm
 universal_tracks = UniversalTracks.build()
@@ -63,8 +63,12 @@ app.layout = html.Div(
     ]
 )
 
-refresh_data(0)
+
+def main():
+    refresh_data(0)
+    app.run(debug=True, host="0.0.0.0", port=8077)  # pyright: ignore [reportArgumentType]
+
 
 # Run the app
 if __name__ == '__main__':
-    app.run(debug=True, host="0.0.0.0", port=8077)  # pyright: ignore [reportArgumentType]
+    main()

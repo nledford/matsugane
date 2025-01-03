@@ -9,7 +9,7 @@ test: lint
     poetry run pytest -v
 
 run: test
-    poetry run python main.py
+    poetry run lastfm_stats
 
 update:
     poetry update

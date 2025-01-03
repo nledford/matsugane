@@ -6,20 +6,20 @@ from annotated_types import Gt
 from dotenv import load_dotenv
 from pydantic import BaseModel
 
-import utils
-from music.track import UniversalTrack
+from lastfm_stats import utils
+from lastfm_stats.music.track import UniversalTrack
 
 load_dotenv()
 
 
 class LastfmFetcher(BaseModel):
-    username: str = os.getenv("LASTFM_USER")
+    username: str = str(os.getenv("LASTFM_USER"))
 
     network: ClassVar[pylast.LastFMNetwork] = pylast.LastFMNetwork(
-        api_key=os.getenv("LASTFM_KEY"),
-        api_secret=os.getenv("LASTFM_SECRET"),
+        api_key=str(os.getenv("LASTFM_KEY")),
+        api_secret=str(os.getenv("LASTFM_SECRET")),
         username=username,
-        password_hash=pylast.md5(os.getenv("LASTFM_PASSWORD")),
+        password_hash=pylast.md5(str(os.getenv("LASTFM_PASSWORD"))),
     )
 
     def fetch_recent_tracks(self, limit: Annotated[int, Gt(0)] = 200) -> list[UniversalTrack]:
