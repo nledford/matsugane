@@ -2,8 +2,10 @@
 
 set dotenv-load
 
-test: \
-    # -v flag to produce verbose output
+lint:
+    pyright
+
+test: lint
     poetry run pytest -v
 
 run: test
