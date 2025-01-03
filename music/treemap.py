@@ -1,19 +1,30 @@
+from typing import NewType, Optional
+
 import pandas as pd
 import plotly.graph_objects as go
 from aenum import Enum
 
 import utils
 
+Plays = NewType('Plays', int)
+Tracks = NewType('Tracks', int)
 
-class NodeType(Enum):
+
+class NodeType(Enum):  # pyright: ignore [reportGeneralTypeIssues]
     ROOT = 1
     ARTIST = 2
     ALBUM = 3
 
 
 class TreemapNode:
-    def __init__(self, node_type: int, value: str, sort_value: str, plays: int, tracks: int, parent: str,
-                 children=None):
+    def __init__(self,
+                 node_type: int,
+                 value: str,
+                 sort_value: str,
+                 plays: Plays,
+                 tracks: Tracks,
+                 parent: str,
+                 children: Optional[list['TreemapNode']] = None):
         if children is None:
             children = []
 
