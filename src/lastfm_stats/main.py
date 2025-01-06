@@ -1,4 +1,4 @@
-from dash import Dash, html, dcc, callback, Input, Output
+from dash import Dash, html, dcc, Input, Output
 
 from lastfm_stats.components.page_header import page_header
 from lastfm_stats.components.played_tracks_table import played_tracks_table
@@ -10,26 +10,6 @@ from lastfm_stats.music.tracks import UniversalTracks
 universal_tracks = UniversalTracks.build()
 
 treemap_fig = treemap.build_treemap(universal_tracks.treemap_dataframe)
-
-
-@callback(
-    # stats header
-    Output('stats-header', 'children'),
-    # played tracks table
-    Output('played_tracks_table', 'children'),
-    # treemap
-    Output('lastfm-treemap', 'figure'),
-    Input('refresh-button', 'n_clicks'),
-)
-def refresh_data(clicks):
-    universal_tracks.fetch_tracks()
-
-    return (
-        stats_header(universal_tracks),
-        played_tracks_table(universal_tracks),
-        treemap.build_treemap(universal_tracks.treemap_dataframe)
-    )
-
 
 # Initialize the app
 app = Dash(__name__,
@@ -62,6 +42,25 @@ app.layout = html.Div(
         )
     ]
 )
+
+
+@app.callback(
+    # stats header
+    Output('stats-header', 'children'),
+    # played tracks table
+    Output('played_tracks_table', 'children'),
+    # treemap
+    Output('lastfm-treemap', 'figure'),
+    Input('refresh-button', 'n_clicks'),
+)
+def refresh_data(clicks):
+    universal_tracks.fetch_tracks()
+
+    return (
+        stats_header(universal_tracks),
+        played_tracks_table(universal_tracks),
+        treemap.build_treemap(universal_tracks.treemap_dataframe)
+    )
 
 
 def main():
