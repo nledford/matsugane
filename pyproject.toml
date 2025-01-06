@@ -1,15 +1,18 @@
-[tool.poetry]
-name = "charts"
+[project]
+name = "lastfm_stats"
 version = "0.1.0"
 description = ""
-authors = ["Nathaniel Ledford <nate@nateledford.com>"]
+authors = [{ name = "Nathaniel Ledford", email = "<nate@nateledford.com>" }]
 readme = "README.md"
 packages = [
     { include = "lastfm_stats", from = "src" }
 ]
+requires-python = ">=3.13"
+
+#[tool.poetry]
+#package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.12"
 plotly = "^5.24.1"
 requests = "^2.32.3"
 pandas = "^2.2.3"
@@ -34,7 +37,7 @@ rev = "7469245786b57405b7ae264b386400061b3b25d3"
 lastfm_stats = "lastfm_stats.main:main"
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pyright]
