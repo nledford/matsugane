@@ -16,13 +16,13 @@ def last_updated() -> html.Div:
 
 def stats_header(ut: UniversalTracks) -> html.Div:
     def tr(children):
-        return html.Tr(children=children, className='group')
+        return html.Tr(children=children, className='group border-b border-neutral-700/30 last:border-none')
 
-    def th(text: str):
-        return html.Th(children=text, className='px-6 py-2 bg-neutral-900/75 group-hover:bg-neutral-900/50')
+    def th(text: str, colspan: int = 1):
+        return html.Th(children=text, className='px-6 py-2 bg-neutral-900/75 group-hover:bg-neutral-900/50', colSpan=colspan)
 
-    def td(text: str):
-        return html.Td(children=text, className='px-6 py-2 group-hover:bg-neutral-700/25')
+    def td(text: str, colspan: int = 1):
+        return html.Td(children=text, className='px-6 py-2 group-hover:bg-neutral-700/25', colSpan=colspan)
 
     sh = html.Div(children=[
         last_updated(),
@@ -44,7 +44,10 @@ def stats_header(ut: UniversalTracks) -> html.Div:
                 ]),
                 tr(children=[
                     th('Avg. Plays Per Artist'),
-                    td(f'{ut.average_plays_per_artist}'),
+                    td(f'{ut.average_plays_per_artist}', colspan=3),
+
+                    th('Avg. Plays Per Album'),
+                    td(f'{ut.average_plays_per_album}', colspan=3),
                 ])
             ])
     ])
