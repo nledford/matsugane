@@ -3,7 +3,6 @@ name = "lastfm_stats"
 version = "0.1.0"
 description = ""
 authors = [{ name = "Nathaniel Ledford", email = "<nate@nateledford.com>" }]
-readme = "README.md"
 packages = [
     { include = "lastfm_stats", from = "src" }
 ]
