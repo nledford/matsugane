@@ -22,22 +22,13 @@ RUN python3 -m venv $POETRY_VENV \
 
 # Add `poetry` to PATH
 ENV PATH="${PATH}:${POETRY_VENV}/bin"
-#
-## Bundle app
-#WORKDIR /app
-#COPY . .
-#RUN poetry bundle venv --only=main /venv
-#
+
+# Bundle app
+WORKDIR /app
+COPY . .
+RUN poetry bundle venv --only=main /venv
+
 ## Run app
 #FROM gcr.io/distroless/python3-debian12
 #COPY --from=builder /venv /venv
-#ENTRYPOINT ["/venv/bin/charts"]
-
-# Install dependencies
-COPY poetry.lock pyproject.toml ./
-RUN poetry install --no-ansi
-
-# Run your app
-COPY . /app
-
-CMD ["poetry", "run", "python", "./app/main.py"]
+ENTRYPOINT ["/venv/bin/lastfm_stats"]
