@@ -164,6 +164,17 @@ class UniversalTracks(BaseModel):
                                          tracks=NodeTracks(self.total_tracks_by_album(album)),
                                          plays=NodePlays(self.total_plays_by_album(album)),
                                          parent=artist_node.id)
+
+                tm_tracks = []
+                for track in self.tracks_by_album(album):
+                    track_node = TreemapNode(node_type=NodeType.TRACK,
+                                             value=track.title,
+                                             sort_value=track.title.lower(),
+                                             plays=NodePlays(track.plays),
+                                             parent=album_node.id,
+                                             tracks=NodeTracks(1))
+                    tm_tracks.append(track_node)
+                album_node.children = tm_tracks
                 tm_albums.append(album_node)
 
             artist_node.children = tm_albums
@@ -194,5 +205,13 @@ class UniversalTracks(BaseModel):
                     'plays': album.plays,
                 }
                 df.loc[len(df)] = df_album
+                for track in sorted(album.children, key=lambda x: x.sort_value):
+                    df_track = {
+                        'ids': track.id,
+                        'labels': track.value,
+                        'parents': track.parent,
+                        'plays': track.plays,
+                    }
+                    df.loc[len(df)] = df_track
 
         return df

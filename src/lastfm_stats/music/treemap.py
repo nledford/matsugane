@@ -14,6 +14,7 @@ class NodeType(Enum):  # pyright: ignore [reportGeneralTypeIssues]
     ROOT = 1
     ARTIST = 2
     ALBUM = 3
+    TRACK = 4
 
 
 class TreemapNode:
