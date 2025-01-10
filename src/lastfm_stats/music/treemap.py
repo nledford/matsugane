@@ -72,7 +72,7 @@ def build_treemap(df: pd.DataFrame):
     ))
     fig.update_layout(
         margin=dict(t=0, l=0, r=0, b=0),
-        height=777,
+        height=789,
     )
 
     return fig
