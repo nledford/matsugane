@@ -7,16 +7,15 @@ import cutlet
 katsu = cutlet.Cutlet()
 
 # TODO move to database?
-hiragana_name_overrides = {
-    'あいみょん': 'Aimyon',
-    'リーガルリリー': 'Regal Lily'
-}
+hiragana_name_overrides = {"あいみょん": "Aimyon", "リーガルリリー": "Regal Lily"}
 
 
 def convert_ts_to_local_dt(ts: str) -> str:
-    return (datetime.fromtimestamp(int(ts))
-            .astimezone(datetime.now().astimezone().tzinfo)
-            .strftime('%H:%M:%S'))
+    return (
+        datetime.fromtimestamp(int(ts))
+        .astimezone(datetime.now().astimezone().tzinfo)
+        .strftime("%H:%M:%S")
+    )
 
 
 def convert_japanese_to_romanji(text: str) -> str:
@@ -31,7 +30,7 @@ def convert_japanese_to_romanji(text: str) -> str:
 
 def string_is_hiragana(s: str) -> bool:
     def char_is_hiragana(c) -> bool:
-        return u'\u3040' <= c <= u'\u309F'
+        return "\u3040" <= c <= "\u309f"
 
     return all(char_is_hiragana(c) for c in s)
 
@@ -50,16 +49,18 @@ def get_today_at_midnight() -> int:
     :return: An integer timestamp
     """
     return int(
-        datetime
-        .now()
-        .replace(hour=0, minute=0, second=0, microsecond=0)
-        .timestamp()
+        datetime.now().replace(hour=0, minute=0, second=0, microsecond=0).timestamp()
     )
 
 
 def has_unicode_group(text):
     for char in text:
-        for name in ('CJK', 'CHINESE', 'KATAKANA', 'HANGUL',):
+        for name in (
+            "CJK",
+            "CHINESE",
+            "KATAKANA",
+            "HANGUL",
+        ):
             if name in unicodedata.name(char):
                 return True
     return False
@@ -70,11 +71,11 @@ def hash_string(text: str) -> str:
 
 
 def remove_articles(text: str) -> str:
-    split = text.split(' ')
+    split = text.split(" ")
     if len(split) == 1:
         return text
 
-    if split[0] in ['The', 'A', 'An', 'the', 'a', 'an']:
-        return text.replace(split[0], '').strip()
+    if split[0] in ["The", "A", "An", "the", "a", "an"]:
+        return text.replace(split[0], "").strip()
     else:
         return text

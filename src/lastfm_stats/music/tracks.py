@@ -107,7 +107,9 @@ class UniversalTracks(BaseModel):
         return sum([track.plays for track in self.tracks_by_artist(artist)])
 
     def albums_by_artist(self, artist: Artist) -> List[Album]:
-        return list(set([track.album for track in self.tracks if track.artist.id == artist.id]))
+        return list(
+            set([track.album for track in self.tracks if track.artist.id == artist.id])
+        )
 
     def tracks_by_album(self, album: Album) -> List[UniversalTrack]:
         return list(set([track for track in self.tracks if track.album.id == album.id]))
@@ -120,59 +122,71 @@ class UniversalTracks(BaseModel):
 
     @property
     def tracks_dataframe(self) -> pd.DataFrame:
-        df = pd.DataFrame(columns=['Title',  # pyright: ignore [reportArgumentType]
-                                   'Artist',
-                                   'Album',
-                                   # 'Plays',
-                                   'Played At'])
+        df = pd.DataFrame(
+            columns=[
+                "Title",  # pyright: ignore [reportArgumentType]
+                "Artist",
+                "Album",
+                # 'Plays',
+                "Played At",
+            ]
+        )
         for track in sorted(self.tracks, key=lambda x: x.played_at, reverse=True):
             df_track = {
-                'Title': track.title,
-                'Artist': track.artist.name,
-                'Album': track.album.name,
+                "Title": track.title,
+                "Artist": track.artist.name,
+                "Album": track.album.name,
                 # 'Plays': track.plays,
-                'Played At': utils.convert_ts_to_local_dt(track.played_at),
+                "Played At": utils.convert_ts_to_local_dt(track.played_at),
             }
             df.loc[len(df)] = df_track
         return df
 
     @property
     def treemap_data(self) -> TreemapNode:
-        root_value = 'Played Tracks'
+        root_value = "Played Tracks"
 
-        root = TreemapNode(node_type=NodeType.ROOT,
-                           value=root_value,
-                           sort_value=root_value.lower(),
-                           plays=NodePlays(self.total_plays),
-                           tracks=NodeTracks(self.total_tracks),
-                           parent='', )
+        root = TreemapNode(
+            node_type=NodeType.ROOT,
+            value=root_value,
+            sort_value=root_value.lower(),
+            plays=NodePlays(self.total_plays),
+            tracks=NodeTracks(self.total_tracks),
+            parent="",
+        )
 
         tm_artists = []
         for artist in self.artists:
-            artist_node = TreemapNode(node_type=NodeType.ARTIST,
-                                      value=artist.name,
-                                      sort_value=artist.sort_name,
-                                      tracks=NodeTracks(self.total_tracks_by_artist(artist)),
-                                      plays=NodePlays(self.total_plays_by_artist(artist)),
-                                      parent=root.value)
+            artist_node = TreemapNode(
+                node_type=NodeType.ARTIST,
+                value=artist.name,
+                sort_value=artist.sort_name,
+                tracks=NodeTracks(self.total_tracks_by_artist(artist)),
+                plays=NodePlays(self.total_plays_by_artist(artist)),
+                parent=root.value,
+            )
 
             tm_albums = []
             for album in self.albums_by_artist(artist):
-                album_node = TreemapNode(node_type=NodeType.ALBUM,
-                                         value=album.name,
-                                         sort_value=album.sort_name,
-                                         tracks=NodeTracks(self.total_tracks_by_album(album)),
-                                         plays=NodePlays(self.total_plays_by_album(album)),
-                                         parent=artist_node.id)
+                album_node = TreemapNode(
+                    node_type=NodeType.ALBUM,
+                    value=album.name,
+                    sort_value=album.sort_name,
+                    tracks=NodeTracks(self.total_tracks_by_album(album)),
+                    plays=NodePlays(self.total_plays_by_album(album)),
+                    parent=artist_node.id,
+                )
 
                 tm_tracks = []
                 for track in self.tracks_by_album(album):
-                    track_node = TreemapNode(node_type=NodeType.TRACK,
-                                             value=track.title,
-                                             sort_value=track.title.lower(),
-                                             plays=NodePlays(track.plays),
-                                             parent=album_node.id,
-                                             tracks=NodeTracks(1))
+                    track_node = TreemapNode(
+                        node_type=NodeType.TRACK,
+                        value=track.title,
+                        sort_value=track.title.lower(),
+                        plays=NodePlays(track.plays),
+                        parent=album_node.id,
+                        tracks=NodeTracks(1),
+                    )
                     tm_tracks.append(track_node)
                 album_node.children = tm_tracks
                 tm_albums.append(album_node)
@@ -188,29 +202,31 @@ class UniversalTracks(BaseModel):
 
     @property
     def treemap_dataframe(self) -> pd.DataFrame:
-        df = pd.DataFrame(columns=['ids', 'labels', 'parents', 'plays'])  # pyright: ignore [reportArgumentType]
+        df = pd.DataFrame(columns=["ids", "labels", "parents", "plays"])  # pyright: ignore [reportArgumentType]
         for node in sorted(self.treemap_data.children, key=lambda x: x.sort_value):
             df_artist = {
-                'ids': node.id,
-                'labels': node.value,
-                'parents': node.parent,
-                'plays': sum([child.plays for child in node.children]) if node.children else node.plays,
+                "ids": node.id,
+                "labels": node.value,
+                "parents": node.parent,
+                "plays": sum([child.plays for child in node.children])
+                if node.children
+                else node.plays,
             }
             df.loc[len(df)] = df_artist
             for album in sorted(node.children, key=lambda x: x.sort_value):
                 df_album = {
-                    'ids': album.id,
-                    'labels': album.value,
-                    'parents': album.parent,
-                    'plays': album.plays,
+                    "ids": album.id,
+                    "labels": album.value,
+                    "parents": album.parent,
+                    "plays": album.plays,
                 }
                 df.loc[len(df)] = df_album
                 for track in sorted(album.children, key=lambda x: x.sort_value):
                     df_track = {
-                        'ids': track.id,
-                        'labels': track.value,
-                        'parents': track.parent,
-                        'plays': track.plays,
+                        "ids": track.id,
+                        "labels": track.value,
+                        "parents": track.parent,
+                        "plays": track.plays,
                     }
                     df.loc[len(df)] = df_track
 

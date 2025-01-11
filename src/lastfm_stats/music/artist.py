@@ -8,12 +8,13 @@ katsu = cutlet.Cutlet()
 
 ArtistName = NewType("ArtistName", str)
 
+
 class Artist(BaseModel):
     name: ArtistName
 
     @property
     def id(self) -> str:
-        return utils.hash_string(f'artist-{self.sort_name}')
+        return utils.hash_string(f"artist-{self.sort_name}")
 
     @property
     def sort_name(self) -> str:

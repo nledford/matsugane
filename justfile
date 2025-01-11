@@ -2,17 +2,23 @@
 
 set dotenv-load
 
+venv:
+    source .venv/bin/activate
+
 lint:
     pyright
+    uvx ruff check
+    uvx ruff format
 
 test: lint
-    poetry run pytest -v
+    pytest -v
 
 run: test
-    poetry run lastfm_stats
+    uv run lastfm_stats
 
 update:
-    poetry update
+    uv lock --upgrade
+    uv sync
 
 docker-build:
     docker build -t nledford/matsugane:latest .

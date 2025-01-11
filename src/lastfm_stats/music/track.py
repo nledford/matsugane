@@ -27,15 +27,18 @@ class UniversalTrack(BaseModel):
             title=played_track.track.title,
             artist=artist,
             album=album,
-            played_at=played_track.timestamp
+            played_at=played_track.timestamp,
         )
 
     def __lt__(self, other):
-        return (self.title < other.title
-                & self.artist < other.artist
-                & self.album < other.test_album
-                & self.plays < other.plays
-                & self.played_at < other.played_at)
+        return (
+            self.title
+            < other.title & self.artist
+            < other.artist & self.album
+            < other.test_album & self.plays
+            < other.plays & self.played_at
+            < other.played_at
+        )
 
     def __hash__(self):
         return hash((self.title, self.artist, self.album, self.plays))

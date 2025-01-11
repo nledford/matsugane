@@ -22,11 +22,11 @@ class LastfmFetcher(BaseModel):
         password_hash=pylast.md5(str(os.getenv("LASTFM_PASSWORD"))),
     )
 
-    def fetch_recent_tracks(self, limit: Annotated[int, Gt(0)] = 200) -> list[UniversalTrack]:
+    def fetch_recent_tracks(
+        self, limit: Annotated[int, Gt(0)] = 200
+    ) -> list[UniversalTrack]:
         user = self.network.get_user(self.username)
         raw_tracks = user.get_recent_tracks(
-            cacheable=False,
-            time_from=utils.get_today_at_midnight(),
-            limit=limit
+            cacheable=False, time_from=utils.get_today_at_midnight(), limit=limit
         )
         return [UniversalTrack.from_lastfm_track(track) for track in raw_tracks]
