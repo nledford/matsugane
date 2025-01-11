@@ -6,7 +6,7 @@ authors = [{ name = "Nathaniel Ledford", email = "<nate@nateledford.com>" }]
 packages = [
     { include = "lastfm_stats", from = "src" }
 ]
-requires-python = ">=3.11"
+requires-python = ">=3.13"
 dependencies = [
     "requests (>=2.32.3,<3.0.0)",
     "aenum (>=3.1.15,<4.0.0)",
@@ -24,7 +24,7 @@ dependencies = [
 ]
 
 [tool.poetry]
-packages = [{ include = "lastfm_stats" }]
+packages = [{ include = "lastfm_stats", from = "src" }]
 
 [project.scripts]
 lastfm_stats = "lastfm_stats.main:main"
