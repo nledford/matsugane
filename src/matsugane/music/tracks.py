@@ -5,12 +5,12 @@ from typing import List
 import pandas as pd
 from pydantic import BaseModel
 
-from lastfm_stats import utils
-from lastfm_stats.data.lastfm import LastfmFetcher
-from lastfm_stats.music.album import Album
-from lastfm_stats.music.artist import Artist
-from lastfm_stats.music.track import UniversalTrack
-from lastfm_stats.music.treemap import NodePlays, NodeTracks, TreemapNode, NodeType
+from matsugane import utils
+from matsugane.data.lastfm import LastfmFetcher
+from matsugane.music.album import Album
+from matsugane.music.artist import Artist
+from matsugane.music.track import UniversalTrack
+from matsugane.music.treemap import NodePlays, NodeTracks, TreemapNode, NodeType
 
 fetcher = LastfmFetcher()
 

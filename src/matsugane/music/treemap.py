@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from aenum import Enum
 
-from lastfm_stats import utils
+from matsugane import utils
 
 NodePlays = NewType("NodePlays", int)
 NodeTracks = NewType("NodeTracks", int)

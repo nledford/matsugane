@@ -14,8 +14,8 @@
   <component name="PyNamespacePackagesService">
     <option name="namespacePackageFolders">
       <list>
-        <option value="$MODULE_DIR$/src/lastfm_stats/data" />
-        <option value="$MODULE_DIR$/src/lastfm_stats/music" />
+        <option value="$MODULE_DIR$/src/matsugane/data" />
+        <option value="$MODULE_DIR$/src/matsugane/music" />
       </list>
     </option>
   </component>

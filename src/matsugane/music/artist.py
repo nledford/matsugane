@@ -2,7 +2,7 @@ from typing import NewType
 import cutlet
 from pydantic import BaseModel
 
-from lastfm_stats import utils
+from matsugane import utils
 
 katsu = cutlet.Cutlet()
 

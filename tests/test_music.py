@@ -1,6 +1,6 @@
-from lastfm_stats.music.album import Album, AlbumName
-from lastfm_stats.music.artist import Artist, ArtistName
-from lastfm_stats.music.track import PlayedAt, TrackTitle, UniversalTrack
+from matsugane.music.album import Album, AlbumName
+from matsugane.music.artist import Artist, ArtistName
+from matsugane.music.track import PlayedAt, TrackTitle, UniversalTrack
 
 test_timestamp = "1494824400"
 

@@ -2,8 +2,8 @@ from typing import NewType
 
 from pydantic import BaseModel
 
-from lastfm_stats import utils
-from lastfm_stats.music.artist import Artist
+from matsugane import utils
+from matsugane.music.artist import Artist
 
 AlbumName = NewType("AlbumName", str)
 

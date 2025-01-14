@@ -4,8 +4,8 @@ from annotated_types import Gt
 from pydantic import BaseModel
 from pylast import PlayedTrack
 
-from lastfm_stats.music.album import Album
-from lastfm_stats.music.artist import Artist
+from matsugane.music.album import Album
+from matsugane.music.artist import Artist
 
 TrackTitle = NewType("TrackTitle", str)
 PlayedAt = NewType("PlayedAt", str)

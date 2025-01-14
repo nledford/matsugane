@@ -6,8 +6,8 @@ from annotated_types import Gt
 from dotenv import load_dotenv
 from pydantic import BaseModel
 
-from lastfm_stats import utils
-from lastfm_stats.music.track import UniversalTrack
+from matsugane import utils
+from matsugane.music.track import UniversalTrack
 
 load_dotenv()
 

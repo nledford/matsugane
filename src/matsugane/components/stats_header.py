@@ -2,7 +2,7 @@ from datetime import datetime
 
 from dash import html
 
-from lastfm_stats.music.tracks import UniversalTracks
+from matsugane.music.tracks import UniversalTracks
 
 
 def last_updated() -> html.Div:

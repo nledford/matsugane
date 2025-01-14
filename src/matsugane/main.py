@@ -1,10 +1,10 @@
 from dash import Dash, html, dcc, Input, Output
 
-from lastfm_stats.components.page_header import page_header
-from lastfm_stats.components.played_tracks_table import played_tracks_table
-from lastfm_stats.components.stats_header import stats_header
-from lastfm_stats.music import treemap
-from lastfm_stats.music.tracks import UniversalTracks
+from matsugane.components.page_header import page_header
+from matsugane.components.played_tracks_table import played_tracks_table
+from matsugane.components.stats_header import stats_header
+from matsugane.music import treemap
+from matsugane.music.tracks import UniversalTracks
 
 # Fetches and stores tracks from last.fm
 universal_tracks = UniversalTracks.build()
