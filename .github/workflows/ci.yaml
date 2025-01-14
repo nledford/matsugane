@@ -18,14 +18,38 @@ jobs:
   lint:
     runs-on: ubuntu-22.04
     steps:
-      - name: pyright
-        uses: jakebailey/pyright-action@v2
-      - name: ruff
-        uses: astral-sh/ruff-action@v3
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
         with:
-          src: "./src"
-#          version: "latest"
-      - name: check
-        run: ruff check --fix
-      - name: format
-        run: ruff format
+          # Install a specific version of uv.
+          version: "0.5.18"
+      - name: Set up Python
+        run: uv python install
+      - name: Install the project
+        run: uv sync --all-extras --dev
+      - name: pyright
+        run: uv run pyright
+      - name: ruff check
+        run: uvx ruff check --fix
+      - name: ruff format
+        run: uvx ruff format
+
+
+  test:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+        with:
+          # Install a specific version of uv.
+          version: "0.5.18"
+      - name: Set up Python
+        run: uv python install
+      - name: Install the project
+        run: uv sync --all-extras --dev
+      - name: pytest
+        run: uv run pytest tests -v
