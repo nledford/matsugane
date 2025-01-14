@@ -1,0 +1,31 @@
+name: matsugane
+
+on:
+  push:
+    branches:
+      - master
+      - dev
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+
+env:
+  # Use docker.io for Docker Hub if empty
+  REGISTRY: ghcr.io
+  # github.repository as <account>/<repo>
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  lint:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: pyright
+        uses: jakebailey/pyright-action@v2
+      - name: ruff
+        uses: astral-sh/ruff-action@v3
+        with:
+          src: "./src"
+#          version: "latest"
+      - name: check
+        run: ruff check --fix
+      - name: format
+        run: ruff format

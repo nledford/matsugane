@@ -7,7 +7,7 @@ venv:
 
 lint:
     pyright
-    uvx ruff check
+    uvx ruff check --fix
     uvx ruff format
 
 test: lint
@@ -33,3 +33,6 @@ docker-run: docker-build
       -e LASTFM_SECRET=$LASTFM_SECRET \
       -e LASTFM_PASSWORD=$LASTFM_PASSWORD \
       --rm -it --name matsugane nledford/matsugane:latest
+
+act:
+    act -s GITHUB_TOKEN="$(gh auth token)"
