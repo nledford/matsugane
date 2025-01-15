@@ -11,7 +11,7 @@ TrackTitle = NewType("TrackTitle", str)
 PlayedAt = NewType("PlayedAt", str)
 
 
-@define
+@define(eq=False)
 class UniversalTrack:
     title: TrackTitle
     artist: Artist

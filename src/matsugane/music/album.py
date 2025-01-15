@@ -8,7 +8,7 @@ from matsugane.music.artist import Artist
 AlbumName = NewType("AlbumName", str)
 
 
-@define
+@define(eq=False)
 class Album:
     name: AlbumName
     artist: Artist

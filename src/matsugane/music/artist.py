@@ -9,7 +9,7 @@ katsu = cutlet.Cutlet()
 ArtistName = NewType("ArtistName", str)
 
 
-@define
+@define(eq=False)
 class Artist:
     name: ArtistName
 
