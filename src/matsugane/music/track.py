@@ -5,7 +5,7 @@ from pylast import PlayedTrack
 from matsugane.music.album import Album
 from matsugane.music.artist import Artist
 
-from attrs import define
+from attrs import define, field, validators
 
 TrackTitle = NewType("TrackTitle", str)
 PlayedAt = NewType("PlayedAt", str)
@@ -17,7 +17,7 @@ class UniversalTrack:
     artist: Artist
     album: Album
     played_at: PlayedAt
-    plays: int = 1
+    plays: int = field(default=1, validator=validators.gt(0))
 
     @staticmethod
     def from_lastfm_track(played_track: PlayedTrack) -> "UniversalTrack":
