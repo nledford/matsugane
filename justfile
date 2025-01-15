@@ -18,7 +18,7 @@ run: test
 
 update:
     uv lock --upgrade
-    uv sync
+    uv sync --all-groups
 
 docker-build:
     docker build -t nledford/matsugane:latest .
