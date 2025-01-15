@@ -13,7 +13,7 @@ load_dotenv()
 
 @define
 class LastfmFetcher:
-    username: str = str(os.getenv("LASTFM_USER"))
+    username: ClassVar[str] = str(os.getenv("LASTFM_USER"))
 
     network: ClassVar[pylast.LastFMNetwork] = pylast.LastFMNetwork(
         api_key=str(os.getenv("LASTFM_KEY")),
@@ -22,8 +22,9 @@ class LastfmFetcher:
         password_hash=pylast.md5(str(os.getenv("LASTFM_PASSWORD"))),
     )
 
-    def fetch_recent_tracks(self, limit: int = 200) -> list[UniversalTrack]:
-        user = self.network.get_user(self.username)
+    @classmethod
+    def fetch_recent_tracks(cls, limit: int = 200) -> list[UniversalTrack]:
+        user = cls.network.get_user(cls.username)
         raw_tracks = user.get_recent_tracks(
             cacheable=False, time_from=utils.get_today_at_midnight(), limit=limit
         )
