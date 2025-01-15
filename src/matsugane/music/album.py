@@ -1,6 +1,6 @@
 from typing import NewType
 
-from pydantic import BaseModel
+from attrs import define
 
 from matsugane import utils
 from matsugane.music.artist import Artist
@@ -8,7 +8,8 @@ from matsugane.music.artist import Artist
 AlbumName = NewType("AlbumName", str)
 
 
-class Album(BaseModel):
+@define
+class Album:
     name: AlbumName
     artist: Artist
 
@@ -20,9 +21,3 @@ class Album(BaseModel):
     def sort_name(self) -> str:
         sort_name = utils.convert_japanese_to_romanji(self.name)
         return utils.remove_articles(sort_name.lower())
-
-    def __lt__(self, other):
-        return self.name < other.name & self.artist.name < other.artist.name
-
-    def __hash__(self):
-        return hash((self.name, self.artist))

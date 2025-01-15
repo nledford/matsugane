@@ -3,8 +3,8 @@ from statistics import median, mode, pstdev, mean
 from typing import List
 
 import pandas as pd
-from pydantic import BaseModel
 
+from attrs import define
 from matsugane import utils
 from matsugane.data.lastfm import LastfmFetcher
 from matsugane.music.album import Album
@@ -15,7 +15,8 @@ from matsugane.music.treemap import NodePlays, NodeTracks, TreemapNode, NodeType
 fetcher = LastfmFetcher()
 
 
-class UniversalTracks(BaseModel):
+@define
+class UniversalTracks:
     tracks: List[UniversalTrack] = field(default_factory=list)
 
     @staticmethod

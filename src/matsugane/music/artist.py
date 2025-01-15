@@ -1,6 +1,6 @@
 from typing import NewType
 import cutlet
-from pydantic import BaseModel
+from attrs import define
 
 from matsugane import utils
 
@@ -9,7 +9,8 @@ katsu = cutlet.Cutlet()
 ArtistName = NewType("ArtistName", str)
 
 
-class Artist(BaseModel):
+@define
+class Artist:
     name: ArtistName
 
     @property
@@ -20,9 +21,3 @@ class Artist(BaseModel):
     def sort_name(self) -> str:
         sort_name = utils.convert_japanese_to_romanji(self.name)
         return utils.remove_articles(sort_name.lower())
-
-    def __lt__(self, other):
-        return self.name < other.name
-
-    def __hash__(self):
-        return hash(self.name)

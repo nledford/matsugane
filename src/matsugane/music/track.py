@@ -1,22 +1,23 @@
-from typing import Annotated, NewType
+from typing import NewType
 
-from annotated_types import Gt
-from pydantic import BaseModel
 from pylast import PlayedTrack
 
 from matsugane.music.album import Album
 from matsugane.music.artist import Artist
 
+from attrs import define
+
 TrackTitle = NewType("TrackTitle", str)
 PlayedAt = NewType("PlayedAt", str)
 
 
-class UniversalTrack(BaseModel):
+@define
+class UniversalTrack:
     title: TrackTitle
     artist: Artist
     album: Album
-    plays: Annotated[int, Gt(-1)] = 1
     played_at: PlayedAt
+    plays: int = 1
 
     @staticmethod
     def from_lastfm_track(played_track: PlayedTrack) -> "UniversalTrack":
@@ -29,16 +30,3 @@ class UniversalTrack(BaseModel):
             album=album,
             played_at=played_track.timestamp,
         )
-
-    def __lt__(self, other):
-        return (
-            self.title
-            < other.title & self.artist
-            < other.artist & self.album
-            < other.test_album & self.plays
-            < other.plays & self.played_at
-            < other.played_at
-        )
-
-    def __hash__(self):
-        return hash((self.title, self.artist, self.album, self.plays))

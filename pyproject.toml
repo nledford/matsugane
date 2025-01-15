@@ -1,18 +1,18 @@
 [project]
 name = "matsugane"
-version = "0.1.1"
+version = "0.2.0"
 description = "Displays stats from Last.fm using Ploty Dash graphs"
 readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "aenum>=3.1.15",
+    "attrs>=24.3.0",
     "cuid2>=2.0.1",
     "cutlet>=0.5.0",
     "dash>=2.18.2",
     "numpy>=2.2.1",
     "pandas>=2.2.3",
     "plotly>=5.24.1",
-    "pydantic>=2.10.5",
     "pylast>=5.3.0",
     "python-dotenv>=1.0.1",
     "requests>=2.32.3",
@@ -24,7 +24,7 @@ dev = [
     "pytest>=8.3.4",
 ]
 lint = [
-    "pyright>=1.1.392",
+    "pyright>=1.1.392.post0",
     "ruff>=0.9.1",
 ]
 

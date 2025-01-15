@@ -1,8 +1,9 @@
-from typing import NewType, Optional
+from typing import NewType
 
 import pandas as pd
 import plotly.graph_objects as go
 from aenum import Enum
+from attrs import define
 
 from matsugane import utils
 
@@ -17,33 +18,16 @@ class NodeType(Enum):  # pyright: ignore [reportGeneralTypeIssues]
     TRACK = 4
 
 
+@define
 class TreemapNode:
-    def __init__(
-        self,
-        node_type: int,
-        value: str,
-        sort_value: str,
-        plays: NodePlays,
-        tracks: NodeTracks,
-        parent: str,
-        children: Optional[list["TreemapNode"]] = None,
-    ):
-        if children is None:
-            children = []
-
-        self.node_type = node_type
-        self.id = utils.generate_cuid2()
-        self.parent = parent
-        self.value = value
-        self.sort_value = sort_value
-        self.plays = plays
-        self.tracks = tracks
-        self.children: list[TreemapNode] = children
-
-    def __repr__(self):
-        return (
-            f"TreemapNode({self.value}, {self.plays}, {self.tracks}, {self.children})"
-        )
+    node_type: NodeType
+    id = utils.generate_cuid2()
+    parent: str
+    value: str
+    sort_value: str
+    plays: int
+    tracks: int
+    children: list["TreemapNode"] = []
 
     @property
     def node_type_label(self):
