@@ -21,8 +21,11 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "pyright>=1.1.392",
     "pytest>=8.3.4",
+]
+lint = [
+    "pyright>=1.1.392",
+    "ruff>=0.9.1",
 ]
 
 [project.scripts]
