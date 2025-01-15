@@ -6,7 +6,7 @@ venv:
     source .venv/bin/activate
 
 lint:
-    pyright
+    uv run pyright
     uvx ruff check --fix
     uvx ruff format
 
