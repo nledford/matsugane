@@ -1,16 +1,16 @@
 from dataclasses import field
-from statistics import median, mode, pstdev, mean
+from statistics import mean, median, mode, pstdev
 from typing import List
 
 import pandas as pd
-
 from attrs import define
+
 from matsugane import utils
 from matsugane.data.lastfm import LastfmFetcher
 from matsugane.music.album import Album
 from matsugane.music.artist import Artist
 from matsugane.music.track import UniversalTrack
-from matsugane.music.treemap import NodePlays, NodeTracks, TreemapNode, NodeType
+from matsugane.music.treemap import NodePlays, NodeTracks, NodeType, TreemapNode
 
 fetcher = LastfmFetcher()
 
@@ -30,8 +30,12 @@ class UniversalTracks:
         self.tracks = fetcher.fetch_recent_tracks()
 
     @property
+    def unique_tracks(self) -> List[UniversalTrack]:
+        return list(utils.remove_duplicates(self.tracks, key=lambda t: t.id))
+
+    @property
     def total_tracks(self) -> int:
-        return len(self.tracks)
+        return len(self.unique_tracks)
 
     @property
     def total_plays(self) -> int:
@@ -99,7 +103,9 @@ class UniversalTracks:
         return list(set([track.album for track in self.tracks]))
 
     def tracks_by_artist(self, artist: Artist) -> List[UniversalTrack]:
-        return list(set([track for track in self.tracks if track.artist == artist]))
+        return list(
+            set([track for track in self.tracks if track.artist.id == artist.id])
+        )
 
     def total_tracks_by_artist(self, artist: Artist) -> int:
         return len(self.tracks_by_artist(artist))
@@ -108,9 +114,15 @@ class UniversalTracks:
         return sum([track.plays for track in self.tracks_by_artist(artist)])
 
     def albums_by_artist(self, artist: Artist) -> List[Album]:
-        return list(
-            set([track.album for track in self.tracks if track.artist.id == artist.id])
-        )
+        seen = set()
+        albums = []
+        for album in [
+            track.album for track in self.tracks if track.artist.id == artist.id
+        ]:
+            if album.id not in seen:
+                seen.add(album.id)
+                albums.append(album)
+        return albums
 
     def tracks_by_album(self, album: Album) -> List[UniversalTrack]:
         return list(set([track for track in self.tracks if track.album.id == album.id]))

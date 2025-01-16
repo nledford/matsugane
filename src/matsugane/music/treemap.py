@@ -3,7 +3,7 @@ from typing import NewType
 import pandas as pd
 import plotly.graph_objects as go
 from aenum import Enum
-from attrs import define
+from attrs import define, field
 
 from matsugane import utils
 
@@ -21,13 +21,16 @@ class NodeType(Enum):  # pyright: ignore [reportGeneralTypeIssues]
 @define
 class TreemapNode:
     node_type: NodeType
-    id = utils.generate_cuid2()
+    id: str = field(init=False)
     parent: str
     value: str
     sort_value: str
-    plays: int
     tracks: int
-    children: list["TreemapNode"] = []
+    children: list["TreemapNode"] = field(factory=list)
+    plays: int = field(default=0)
+
+    def __attrs_post_init__(self):
+        self.id = utils.generate_cuid2()
 
     @property
     def node_type_label(self):
@@ -38,6 +41,8 @@ class TreemapNode:
                 return "Artist: "
             case NodeType.ALBUM:
                 return "Album: "
+            case NodeType.TRACK:
+                return "Track: "
 
 
 def build_treemap(df: pd.DataFrame):

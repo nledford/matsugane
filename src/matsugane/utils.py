@@ -66,6 +66,11 @@ def has_unicode_group(text):
     return False
 
 
+def build_sort_name(name: str) -> str:
+    converted = convert_japanese_to_romanji(name)
+    return remove_articles(converted.lower())
+
+
 def hash_string(text: str) -> str:
     return hashlib.sha3_256(text.encode()).hexdigest()
 
@@ -79,3 +84,12 @@ def remove_articles(text: str) -> str:
         return text.replace(split[0], "").strip()
     else:
         return text
+
+
+def remove_duplicates(items, key=None):
+    unique_items = set()
+    for item in items:
+        val = item if key is None else key(item)
+        if val not in unique_items:
+            yield item
+            unique_items.add(val)

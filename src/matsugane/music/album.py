@@ -15,7 +15,7 @@ class Album:
 
     @property
     def id(self) -> str:
-        return utils.hash_string(f"album-{self.sort_name}-{self.artist.id}")
+        return utils.hash_string(f"album-{self.sort_name}-{self.artist.sort_name}")
 
     @property
     def sort_name(self) -> str:
