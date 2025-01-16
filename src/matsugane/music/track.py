@@ -32,7 +32,9 @@ class UniversalTrack:
 
     @property
     def complete_id(self) -> str:
-        return utils.hash_string(f"track-{self.sort_name}-{self.artist.id}-{self.album.id}")
+        return utils.hash_string(
+            f"track-{self.sort_name}-{self.artist.id}-{self.album.id}"
+        )
 
     @property
     def sort_name(self) -> str:

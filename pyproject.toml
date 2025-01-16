@@ -1,6 +1,6 @@
 [project]
 name = "matsugane"
-version = "0.2.2"
+version = "0.2.3"
 description = "Displays stats from Last.fm using Ploty Dash graphs"
 readme = "README.md"
 requires-python = ">=3.13"
@@ -25,7 +25,7 @@ dev = [
 ]
 lint = [
     "pyright>=1.1.392.post0",
-    "ruff>=0.9.1",
+    "ruff>=0.9.2",
 ]
 
 [project.scripts]
