@@ -19,5 +19,4 @@ class Artist:
 
     @property
     def sort_name(self) -> str:
-        sort_name = utils.convert_japanese_to_romanji(self.name)
-        return utils.remove_articles(sort_name.lower())
+        return utils.build_sort_name(self.name)

@@ -22,17 +22,21 @@ class UniversalTrack:
 
     @property
     def id(self) -> str:
-        return utils.hash_string(f"track-{self.title}-{self.artist.id}")
+        return utils.hash_string(f"track-{self.sort_name}-{self.artist.id}")
 
     @property
     def unique_id(self) -> str:
         return utils.hash_string(
-            f"track-{self.title}-{self.artist.id}-{self.album.id}-{self.played_at}"
+            f"track-{self.sort_name}-{self.artist.id}-{self.album.id}-{self.played_at}"
         )
 
     @property
     def complete_id(self) -> str:
-        return utils.hash_string(f"track-{self.title}-{self.artist.id}-{self.album.id}")
+        return utils.hash_string(f"track-{self.sort_name}-{self.artist.id}-{self.album.id}")
+
+    @property
+    def sort_name(self) -> str:
+        return utils.build_sort_name(self.title)
 
     @classmethod
     def from_lastfm_track(cls, played_track: PlayedTrack) -> "UniversalTrack":

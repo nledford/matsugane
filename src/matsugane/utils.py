@@ -67,7 +67,7 @@ def has_unicode_group(text):
 
 
 def build_sort_name(name: str) -> str:
-    converted = convert_japanese_to_romanji(name)
+    converted = convert_japanese_to_romanji(name.lower())
     return remove_articles(converted.lower())
 
 

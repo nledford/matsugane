@@ -100,7 +100,13 @@ class UniversalTracks:
 
     @property
     def albums(self) -> List[Album]:
-        return list(set([track.album for track in self.tracks]))
+        seen = set()
+        albums = []
+        for album in [track.album for track in self.tracks]:
+            if album.id not in seen:
+                seen.add(album.id)
+                albums.append(album)
+        return albums
 
     def tracks_by_artist(self, artist: Artist) -> List[UniversalTrack]:
         return list(
@@ -195,7 +201,7 @@ class UniversalTracks:
                     track_node = TreemapNode(
                         node_type=NodeType.TRACK,
                         value=track.title,
-                        sort_value=track.title.lower(),
+                        sort_value=track.sort_name,
                         plays=NodePlays(track.plays),
                         parent=album_node.id,
                         tracks=NodeTracks(1),
