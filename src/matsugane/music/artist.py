@@ -19,4 +19,9 @@ class Artist:
 
     @property
     def sort_name(self) -> str:
-        return utils.build_sort_name(self.name)
+        if self.name.startswith("Noel Gallagher"):
+            name = "Noel Gallagher's High Flying Birds"
+        else:
+            name = self.name
+
+        return utils.build_sort_name(name)

@@ -72,7 +72,7 @@ def build_sort_name(name: str) -> str:
 
 
 def hash_string(text: str) -> str:
-    return hashlib.sha3_256(text.encode()).hexdigest()
+    return hashlib.sha3_256(text.strip().encode()).hexdigest()
 
 
 def remove_articles(text: str) -> str:
