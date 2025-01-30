@@ -46,6 +46,10 @@ update:
     if __name__ == "__main__":
         main()
 
+lock-sync:
+    uv lock --upgrade
+    uv sync --all-groups
+
 docker-build:
     docker build -t nledford/matsugane:latest .
 
