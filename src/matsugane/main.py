@@ -5,6 +5,7 @@ from textual.widgets import Footer, Header
 class MatsuganeApp(App):
     """A Textual app to display stats from Lastfm."""
 
+    CSS_PATH = "styles.tcss"
     # BINDINGS = [("d", "toggle_dark", "Toggle dark mode")]#
 
     def compose(self) -> ComposeResult:
