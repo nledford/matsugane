@@ -1,12 +1,10 @@
 from typing import NewType
 
-from matsugane import utils
-from pylast import PlayedTrack
-
-from matsugane.music.album import Album
-from matsugane.music.artist import Artist
-
 from attrs import define, field, validators
+
+from matsugane import utils
+from matsugane.music.album import Album, AlbumName
+from matsugane.music.artist import Artist, ArtistName
 
 TrackTitle = NewType("TrackTitle", str)
 PlayedAt = NewType("PlayedAt", str)
@@ -41,13 +39,15 @@ class UniversalTrack:
         return utils.build_sort_name(self.title)
 
     @classmethod
-    def from_lastfm_track(cls, played_track: PlayedTrack) -> "UniversalTrack":
-        artist = Artist(name=played_track.track.artist.name)
-        album = Album(name=played_track.album, artist=artist)
+    def from_lastfm_api(
+        cls, title: str, artist: str, album: str, played_at: str
+    ) -> "UniversalTrack":
+        universal_artist = Artist(name=ArtistName(artist))
+        universal_album = Album(name=AlbumName(album), artist=universal_artist)
 
         return cls(
-            title=played_track.track.title,
-            artist=artist,
-            album=album,
-            played_at=played_track.timestamp,
+            title=TrackTitle(title),
+            artist=universal_artist,
+            album=universal_album,
+            played_at=PlayedAt(played_at),
         )

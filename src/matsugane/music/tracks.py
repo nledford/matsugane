@@ -18,8 +18,8 @@ fetcher = LastfmFetcher()
 class UniversalTracks:
     tracks: List[UniversalTrack] = []
 
-    def fetch_tracks(self):
-        self.tracks = fetcher.fetch_recent_tracks()
+    async def fetch_tracks(self):
+        self.tracks = await fetcher.fetch_recent_tracks()
 
     @property
     def unique_tracks(self) -> List[UniversalTrack]:

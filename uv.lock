@@ -353,10 +353,10 @@ dependencies = [
     { name = "attrs" },
     { name = "cuid2" },
     { name = "cutlet" },
+    { name = "httpx" },
     { name = "numpy" },
     { name = "pandas" },
     { name = "plotly" },
-    { name = "pylast" },
     { name = "python-dotenv" },
     { name = "requests" },
     { name = "textual" },
@@ -367,6 +367,9 @@ dependencies = [
 dev = [
     { name = "pytest" },
     { name = "textual-dev" },
+]
+just = [
+    { name = "toml" },
 ]
 lint = [
     { name = "pyright" },
@@ -379,10 +382,10 @@ requires-dist = [
     { name = "attrs", specifier = ">=25.1.0" },
     { name = "cuid2", specifier = ">=2.0.1" },
     { name = "cutlet", specifier = ">=0.5.0" },
+    { name = "httpx", specifier = ">=0.28.1" },
     { name = "numpy", specifier = ">=2.2.2" },
     { name = "pandas", specifier = ">=2.2.3" },
     { name = "plotly", specifier = ">=6.0.0" },
-    { name = "pylast", specifier = ">=5.3.0" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "requests", specifier = ">=2.32.3" },
     { name = "textual", specifier = ">=1.0.0" },
@@ -394,6 +397,7 @@ dev = [
     { name = "pytest", specifier = ">=8.3.4" },
     { name = "textual-dev", specifier = ">=1.7.0" },
 ]
+just = [{ name = "toml", specifier = ">=0.10.2" }]
 lint = [
     { name = "pyright", specifier = ">=1.1.393" },
     { name = "ruff", specifier = ">=0.9.4" },
@@ -617,18 +621,6 @@ wheels = [
 ]
 
 [[package]]
-name = "pylast"
-version = "5.3.0"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "httpx" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/bf/f2/84e992deea30c5195f7166387295049bd6b29f23a6a1a03ff8c16f59436f/pylast-5.3.0.tar.gz", hash = "sha256:637943b1b0e6045dd85ed7389db6071a1fea45cc7ff90dc6126fd509ca6fae2f", size = 41552 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/9b/57/e25206d012afe3fe5e3336a875babb5413b81c00706411a645a38185ad3b/pylast-5.3.0-py3-none-any.whl", hash = "sha256:4cc47cdcb05baf24a5cea10a012c17df0fe13e22911296a69835b127458a7308", size = 29054 },
-]
-
-[[package]]
 name = "pyright"
 version = "1.1.393"
 source = { registry = "https://pypi.org/simple" }
@@ -803,6 +795,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/18/6c/57248070f525ea8a9a02d9f58dc2747c609b615b0bda1306aaeb80a233bd/textual_serve-1.1.1.tar.gz", hash = "sha256:71c662472c462e5e368defc660ee6e8eae3bfda88ca40c050c55474686eb0c54", size = 445957 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/07/a9/01d35770fde8d889e1fe28b726188cf28801e57afd369c614cd2bc100ee4/textual_serve-1.1.1-py3-none-any.whl", hash = "sha256:568782f1c0e60e3f7039d9121e1cb5c2f4ca1aaf6d6bd7aeb833d5763a534cb2", size = 445034 },
+]
+
+[[package]]
+name = "toml"
+version = "0.10.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/be/ba/1f744cdc819428fc6b5084ec34d9b30660f6f9daaf70eead706e3203ec3c/toml-0.10.2.tar.gz", hash = "sha256:b3bda1d108d5dd99f4a20d24d9c348e91c4db7ab1b749200bded2f839ccbe68f", size = 22253 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/44/6f/7120676b6d73228c96e17f1f794d8ab046fc910d781c8d151120c3f1569e/toml-0.10.2-py2.py3-none-any.whl", hash = "sha256:806143ae5bfb6a3c6e736a764057db0e6a0e05e338b5630894a5f779cabb4f9b", size = 16588 },
 ]
 
 [[package]]

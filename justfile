@@ -31,7 +31,7 @@ run: test
 # Upgrades `pyproject.toml` dependencies with `uv`. (SOURCE: https://gist.github.com/yhoiseth/c80c1e44a7036307e424fce616eed25e)
 [group('Python')]
 upgrade:
-    #!/usr/bin/env python
+    #!./.venv/bin/python
     from typing import Any
     from re import match, Match
     import toml

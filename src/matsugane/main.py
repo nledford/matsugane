@@ -38,7 +38,7 @@ class MatsuganeApp(App):
         self.query_one("#lastRefresh", Label).update(text)
 
     async def on_load(self) -> None:
-        self.tracks.fetch_tracks()
+        await self.tracks.fetch_tracks()
 
     def compose(self) -> ComposeResult:
         """Create child widgets for the app."""
@@ -51,7 +51,7 @@ class MatsuganeApp(App):
 
     async def action_refresh_data(self) -> None:
         """An action to fetch new data from Last.fm"""
-        self.tracks.fetch_tracks()
+        await self.tracks.fetch_tracks()
         self.mutate_reactive(MatsuganeApp.last_refresh)
         self.update_last_refresh()
 
