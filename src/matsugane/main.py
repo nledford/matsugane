@@ -1,8 +1,10 @@
 from textual.app import App, ComposeResult
+from textual.containers import Vertical
 from textual.reactive import reactive
 from textual.widgets import Footer, Header, Label
 
 from matsugane import utils
+from matsugane.components.recent_plays import RecentPlays
 from matsugane.components.stats_header import StatsHeader
 from matsugane.music.tracks import UniversalTracks
 
@@ -36,8 +38,10 @@ class MatsuganeApp(App):
         """Create child widgets for the app."""
         yield Header()
 
-        yield Label(utils.get_last_refresh(), id="lastRefresh")
-        yield StatsHeader().data_bind(MatsuganeApp.tracks)
+        with Vertical(id="appContainer"):
+            yield Label(utils.get_last_refresh(), id="lastRefresh")
+            yield StatsHeader().data_bind(MatsuganeApp.tracks)
+            yield RecentPlays(id="recentPlays").data_bind(MatsuganeApp.tracks)
 
         yield Footer()
 

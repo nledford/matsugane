@@ -48,6 +48,10 @@ class UniversalTracks:
         return len(self.albums)
 
     @property
+    def is_empty(self) -> bool:
+        return self.total_tracks <= 0
+
+    @property
     def plays_per_artist_stats(self) -> Stats:
         return Stats(self.artist_plays)
 
