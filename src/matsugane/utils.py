@@ -37,6 +37,7 @@ def string_is_hiragana(s: str) -> bool:
 
 def generate_cuid2() -> str:
     from typing import Callable
+
     from cuid2 import cuid_wrapper
 
     cuid_generator: Callable[[], str] = cuid_wrapper()
@@ -93,3 +94,12 @@ def remove_duplicates(items, key=None):
         if val not in unique_items:
             yield item
             unique_items.add(val)
+
+
+def current_time() -> str:
+    """Returns the current 24-hour time as a string."""
+    return datetime.now().strftime("%H:%M:%S")
+
+
+def get_last_refresh() -> str:
+    return f"Last Refresh: {current_time()}"
