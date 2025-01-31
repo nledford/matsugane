@@ -3,7 +3,7 @@
     margin-right: 1;
 }
 
-#lastRefresh {
+LastRefresh {
     background: black;
     color: white;
     margin-bottom: 1;
@@ -29,6 +29,6 @@ StatsHeader {
     width: 50%;
 }
 
-#recentPlays {
+RecentPlays {
     height: 8;
 }

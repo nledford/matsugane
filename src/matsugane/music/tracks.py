@@ -1,7 +1,7 @@
 from typing import List
 
 import pandas as pd
-from attrs import define
+from attrs import define, field
 
 from matsugane import utils
 from matsugane.data.lastfm import LastfmFetcher
@@ -17,9 +17,18 @@ fetcher = LastfmFetcher()
 @define
 class UniversalTracks:
     tracks: List[UniversalTrack] = []
+    last_updated: str = field(default=utils.get_last_refresh())
+
+    @staticmethod
+    async def build(fetch_tracks: bool = False) -> "UniversalTracks":
+        ut = UniversalTracks()
+        if fetch_tracks:
+            await ut.fetch_tracks()
+        return ut
 
     async def fetch_tracks(self):
         self.tracks = await fetcher.fetch_recent_tracks()
+        self.last_updated = utils.get_last_refresh()
 
     @property
     def unique_tracks(self) -> List[UniversalTrack]:

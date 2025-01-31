@@ -18,27 +18,27 @@ class Stats(HorizontalGroup):
 
 
 class StatsHeader(HorizontalGroup):
-    tracks: reactive[UniversalTracks] = reactive(UniversalTracks(), recompose=True)
+    ut: reactive[UniversalTracks] = reactive(UniversalTracks(), recompose=True)
 
-    def watch_tracks(self, tracks: UniversalTracks) -> None:
-        self.tracks = tracks
+    def watch_ut(self, tracks: UniversalTracks) -> None:
+        self.ut = tracks
 
     def compose(self) -> ComposeResult:
         yield VerticalGroup(
             HorizontalGroup(
-                Stats(header="Total Artists", data=str(self.tracks.total_artists)),
-                Stats(header="Total Albums", data=str(self.tracks.total_albums)),
-                Stats(header="Total Tracks", data=str(self.tracks.total_tracks)),
-                Stats(header="Total Plays", data=str(self.tracks.total_plays)),
+                Stats(header="Total Artists", data=str(self.ut.total_artists)),
+                Stats(header="Total Albums", data=str(self.ut.total_albums)),
+                Stats(header="Total Tracks", data=str(self.ut.total_tracks)),
+                Stats(header="Total Plays", data=str(self.ut.total_plays)),
             ),
             HorizontalGroup(
                 Stats(
                     header="Avg. Plays Per Artist",
-                    data=str(self.tracks.plays_per_artist_stats.average),
+                    data=str(self.ut.plays_per_artist_stats.average),
                 ),
                 Stats(
                     header="Avg. Plays Per Album",
-                    data=str(self.tracks.plays_per_album_stats.average),
+                    data=str(self.ut.plays_per_album_stats.average),
                 ),
             ),
         )

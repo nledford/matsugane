@@ -7,7 +7,7 @@ from matsugane.music.tracks import UniversalTracks
 
 
 class RecentPlays(DataTable):
-    tracks: reactive[UniversalTracks] = reactive(UniversalTracks(), recompose=True)
+    ut: reactive[UniversalTracks] = reactive(UniversalTracks(), recompose=True)
 
     def on_resize(self, event: events.Resize) -> None:
         """
@@ -23,26 +23,23 @@ class RecentPlays(DataTable):
             column.width = column_width
         self.refresh()
 
-    def watch_tracks(self, tracks: UniversalTracks) -> None:
-        self.tracks = tracks
-        self.build_table(clear_data=True)
+    def watch_ut(self, tracks: UniversalTracks) -> None:
+        self.ut = tracks
+        self.build_table(tracks)
 
     def on_mount(self) -> None:
-        self.build_table()
+        self.add_columns("title", "artist", "album", "played at")
+        self.cursor_type = "row"
+        self.zebra_stripes = True
+        self.build_table(self.ut)
 
-    def build_table(self, clear_data: bool = False) -> None:
-        if clear_data:
-            self.clear()
+    def build_table(self, ut: UniversalTracks) -> None:
+        self.clear()
 
-        if not clear_data:
-            self.add_columns("title", "artist", "album", "played at")
-            self.cursor_type = "row"
-            self.zebra_stripes = True
-
-        if self.tracks.is_empty and self.row_count == 0:
+        if ut.is_empty and self.row_count == 0:
             self.add_row("No tracks", "", "", "", key="NO DATA")
         else:
-            for track in self.tracks.tracks:
+            for track in ut.tracks:
                 self.add_row(
                     track.title,
                     track.artist.name,
