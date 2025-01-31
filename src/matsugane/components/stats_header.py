@@ -22,13 +22,6 @@ class StatsHeader(HorizontalGroup):
         self.tracks: UniversalTracks = ut
 
     def compose(self) -> ComposeResult:
-        # yield HorizontalGroup(
-        #     Stats(header="Total Artists", data=str(self.tracks.total_artists)),
-        #     Stats(header="Total Albums", data=str(self.tracks.total_albums)),
-        #     Stats(header="Total Tracks", data=str(self.tracks.total_tracks)),
-        #     Stats(header="Total Plays", data=str(self.tracks.total_plays)),
-        #     id="StatsHeader",
-        # )
         yield VerticalGroup(
             HorizontalGroup(
                 Stats(header="Total Artists", data=str(self.tracks.total_artists)),
