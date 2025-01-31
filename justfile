@@ -1,25 +1,36 @@
 #!/usr/bin/env just --justfile
 
-set dotenv-load
+set dotenv-load := true
 
+# List all available commands
+default:
+    @just -l
+
+# Activate virtual environment
+[group('Python')]
 venv:
     source .venv/bin/activate
 
+# Lint and format code
+[group('Python')]
 lint:
     uv run pyright
     uvx ruff check --fix
     uvx ruff format
 
+# Run unit tests
+[group('Python')]
 test: lint
     pytest -v
 
-run:
-    #uv run lastfm_stats
+# Run the application
+[group('Python')]
+run: test
     uvx textual run --dev ./src/matsugane/main.py
 
-# updates dependecies using `uv`
-# SOURCE: https://gist.github.com/yhoiseth/c80c1e44a7036307e424fce616eed25e
-update:
+# Upgrades `pyproject.toml` dependencies with `uv`. (SOURCE: https://gist.github.com/yhoiseth/c80c1e44a7036307e424fce616eed25e)
+[group('Python')]
+upgrade:
     #!/usr/bin/env python
     from typing import Any
     from re import match, Match
@@ -47,13 +58,19 @@ update:
     if __name__ == "__main__":
         main()
 
-lock-sync:
+# Update Python packages
+[group('Python')]
+update: upgrade
     uv lock --upgrade
     uv sync --all-groups
 
+# Build docker image
+[group('Docker')]
 docker-build:
     docker build -t nledford/matsugane:latest .
 
+# Run docker image
+[group('Docker')]
 docker-run: docker-build
     @echo "Running app for $LASTFM_USER..."
     docker run \
@@ -65,5 +82,7 @@ docker-run: docker-build
       -e LASTFM_PASSWORD=$LASTFM_PASSWORD \
       --rm -it --name matsugane nledford/matsugane:latest
 
+# Test Github actions
+[group('Github')]
 act:
     act -s GITHUB_TOKEN="$(gh auth token)"
