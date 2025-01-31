@@ -1,4 +1,3 @@
-from statistics import mean, median, mode, pstdev
 from typing import List
 
 import pandas as pd
@@ -8,6 +7,7 @@ from matsugane import utils
 from matsugane.data.lastfm import LastfmFetcher
 from matsugane.music.album import Album
 from matsugane.music.artist import Artist
+from matsugane.music.stats import Stats
 from matsugane.music.track import UniversalTrack
 from matsugane.music.treemap import NodePlays, NodeTracks, NodeType, TreemapNode
 
@@ -45,20 +45,8 @@ class UniversalTracks:
         return len(self.albums)
 
     @property
-    def average_plays_per_artist(self) -> float:
-        return mean(self.artist_plays)
-
-    @property
-    def median_plays_per_artist(self) -> float:
-        return median(self.artist_plays)
-
-    @property
-    def mode_plays_per_artist(self) -> float:
-        return mode(self.artist_plays)
-
-    @property
-    def artist_plays_std_dev(self) -> float:
-        return pstdev(self.artist_plays)
+    def plays_per_artists_stats(self) -> Stats:
+        return Stats(self.artist_plays)
 
     @property
     def average_tracks_per_artist(self) -> float:

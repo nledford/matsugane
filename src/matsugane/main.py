@@ -40,7 +40,7 @@ class MatsuganeApp(App):
         yield Header()
 
         yield Label(f"Last Refresh: {current_time()}", id="lastRefresh")
-        yield StatsHeader(self.tracks)
+        yield StatsHeader().data_bind(MatsuganeApp.tracks)
 
         yield Footer()
 
@@ -50,12 +50,6 @@ class MatsuganeApp(App):
         self.update_last_refresh()
 
 
-# def main():
-#     app = MatsuganeApp()
-#     app.run()
-#
-
 if __name__ == "__main__":
-    # main()
     app = MatsuganeApp()
     app.run()

@@ -1,6 +1,7 @@
 from textual.app import ComposeResult
 from textual.containers import HorizontalGroup, VerticalGroup
 from textual.widgets import Label
+from textual.reactive import reactive
 
 from matsugane.music.tracks import UniversalTracks
 
@@ -17,9 +18,7 @@ class Stats(HorizontalGroup):
 
 
 class StatsHeader(HorizontalGroup):
-    def __init__(self, ut: UniversalTracks):
-        super().__init__()
-        self.tracks: UniversalTracks = ut
+    tracks: reactive[UniversalTracks] = reactive(UniversalTracks())
 
     def compose(self) -> ComposeResult:
         yield VerticalGroup(
