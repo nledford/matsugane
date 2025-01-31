@@ -42,6 +42,9 @@ class UniversalTracks:
 
     @property
     def total_albums(self) -> int:
+        if not self.albums:
+            return 0
+
         return len(self.albums)
 
     @property
@@ -49,14 +52,8 @@ class UniversalTracks:
         return Stats(self.artist_plays)
 
     @property
-    def average_tracks_per_artist(self) -> float:
-        return self.total_tracks / self.total_artists
-
-    @property
-    def average_plays_per_album(self) -> float:
-        if self.total_plays == 0 or self.total_albums == 0:
-            return 0.0
-        return self.total_plays / self.total_albums
+    def plays_per_album_stats(self) -> Stats:
+        return Stats(self.album_plays)
 
     @property
     def artists(self) -> List[Artist]:
@@ -93,6 +90,13 @@ class UniversalTracks:
                 seen.add(album.id)
                 albums.append(album)
         return albums
+
+    @property
+    def album_plays(self) -> List[int]:
+        plays = []
+        for album in self.albums:
+            plays.append(self.total_plays_by_album(album))
+        return plays
 
     def tracks_by_artist(self, artist: Artist) -> List[UniversalTrack]:
         return list(

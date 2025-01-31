@@ -39,7 +39,7 @@ class StatsHeader(HorizontalGroup):
                 ),
                 Stats(
                     header="Avg. Plays Per Album",
-                    data=str(self.tracks.average_plays_per_album),
+                    data=str(self.tracks.plays_per_album_stats.average),
                 ),
             ),
         )
