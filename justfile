@@ -21,7 +21,7 @@ lint:
 # Run unit tests
 [group('Python')]
 test: lint
-    pytest -v
+    uv run pytest -v
 
 # Run the application
 [group('Python')]
