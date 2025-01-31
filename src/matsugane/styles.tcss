@@ -1,3 +1,9 @@
+#lastRefresh {
+    background: black;
+    color: white;
+    margin-left: 1;
+}
+
 StatsHeader {
     height: 2;
     background: blue;
@@ -16,10 +22,4 @@ StatsHeader {
 
 .stats-cell {
     width: 50%;
-}
-
-#lastRefresh {
-    background: black;
-    color: white;
-    margin-left: 1;
 }
