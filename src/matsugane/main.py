@@ -19,7 +19,7 @@ class MatsuganeApp(App):
     CSS_PATH = "styles.tcss"
     BINDINGS = [("r", "refresh_data", "Refresh Last.fm Data")]
 
-    tracks: reactive[UniversalTracks] = reactive(UniversalTracks())
+    tracks: reactive[UniversalTracks] = reactive(UniversalTracks(), recompose=True)
     last_refresh: reactive[str] = reactive(current_time())
 
     def __init__(self) -> None:
@@ -47,6 +47,7 @@ class MatsuganeApp(App):
     async def action_refresh_data(self) -> None:
         """An action to fetch new data from Last.fm"""
         self.tracks.fetch_tracks()
+        self.mutate_reactive(MatsuganeApp.last_refresh)
         self.update_last_refresh()
 
 
