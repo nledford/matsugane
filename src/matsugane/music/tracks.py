@@ -1,4 +1,3 @@
-from dataclasses import field
 from statistics import mean, median, mode, pstdev
 from typing import List
 
@@ -17,14 +16,7 @@ fetcher = LastfmFetcher()
 
 @define
 class UniversalTracks:
-    tracks: List[UniversalTrack] = field(default_factory=list)
-
-    @staticmethod
-    def build(initialize_data: bool = True) -> "UniversalTracks":
-        ut = UniversalTracks()
-        if initialize_data:
-            ut.fetch_tracks()
-        return ut
+    tracks: List[UniversalTrack] = []
 
     def fetch_tracks(self):
         self.tracks = fetcher.fetch_recent_tracks()
@@ -43,6 +35,9 @@ class UniversalTracks:
 
     @property
     def total_artists(self) -> int:
+        if not self.artists:
+            return 0
+
         return len(self.artists)
 
     @property
@@ -83,6 +78,11 @@ class UniversalTracks:
         Returns a list of all artists from list of tracks
         :return: A unique list of artists
         """
+
+        # First check if we have any tracks and return an empty list if not
+        if not self.tracks:
+            return []
+
         seen = set()
         artists = []
         for artist in [track.artist for track in self.tracks]:

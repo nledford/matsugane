@@ -13,8 +13,9 @@ lint:
 test: lint
     pytest -v
 
-run: test
-    uv run lastfm_stats
+run:
+    #uv run lastfm_stats
+    uvx textual run --dev ./src/matsugane/main.py
 
 # updates dependecies using `uv`
 # SOURCE: https://gist.github.com/yhoiseth/c80c1e44a7036307e424fce616eed25e
