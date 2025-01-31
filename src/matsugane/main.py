@@ -24,7 +24,7 @@ class MatsuganeApp(App):
     BINDINGS = [("r", "refresh_data", "Refresh Last.fm Data")]
 
     tracks: reactive[UniversalTracks] = reactive(UniversalTracks(), recompose=True)
-    last_refresh: reactive[str] = reactive(get_last_refresh())
+    last_refresh: reactive[str] = reactive(get_last_refresh(), recompose=True)
 
     def __init__(self) -> None:
         super().__init__()
@@ -33,7 +33,6 @@ class MatsuganeApp(App):
     def update_last_refresh(self):
         self.last_refresh = get_last_refresh()
 
-    # TODO set last refresh on app load
     def watch_last_refresh(self, text: str) -> None:
         self.query_one("#lastRefresh", Label).update(text)
 
@@ -44,7 +43,7 @@ class MatsuganeApp(App):
         """Create child widgets for the app."""
         yield Header()
 
-        yield Label(self.last_refresh, id="lastRefresh")
+        yield Label(get_last_refresh(), id="lastRefresh")
         yield StatsHeader().data_bind(MatsuganeApp.tracks)
 
         yield Footer()
@@ -52,7 +51,6 @@ class MatsuganeApp(App):
     async def action_refresh_data(self) -> None:
         """An action to fetch new data from Last.fm"""
         await self.tracks.fetch_tracks()
-        self.mutate_reactive(MatsuganeApp.last_refresh)
         self.update_last_refresh()
 
 

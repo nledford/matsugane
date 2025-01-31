@@ -19,5 +19,7 @@ StatsHeader {
 }
 
 #lastRefresh {
+    background: black;
+    color: white;
     margin-left: 1;
 }
