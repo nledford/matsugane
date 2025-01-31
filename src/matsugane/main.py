@@ -14,7 +14,7 @@ class MatsuganeApp(App):
     BINDINGS = [("r", "refresh_data", "Refresh Last.fm Data")]
 
     tracks: reactive[UniversalTracks] = reactive(UniversalTracks(), recompose=True)
-    last_refresh: reactive[str] = reactive(utils.get_last_refresh(), recompose=True)
+    last_refresh: reactive[str] = reactive(utils.get_last_refresh())
 
     def __init__(self) -> None:
         super().__init__()
