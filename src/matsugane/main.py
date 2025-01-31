@@ -31,6 +31,9 @@ class MatsuganeApp(App):
     def watch_last_refresh(self, text: str) -> None:
         self.query_one("#lastRefresh", Label).update(text)
 
+    def watch_tracks(self, new_tracks: UniversalTracks) -> None:
+        self.tracks = new_tracks
+
     async def on_load(self) -> None:
         await self.tracks.fetch_tracks()
 
