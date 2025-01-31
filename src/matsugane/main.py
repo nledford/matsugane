@@ -20,8 +20,11 @@ class MatsuganeApp(App):
         super().__init__()
         self.set_reactive(MatsuganeApp.last_refresh, utils.get_last_refresh())
 
-    def update_last_refresh(self):
-        self.last_refresh = utils.get_last_refresh()
+    def update_last_refresh(self, refreshing: bool = False):
+        if refreshing:
+            self.last_refresh = "Refreshing. Please wait..."
+        else:
+            self.last_refresh = utils.get_last_refresh()
 
     def watch_last_refresh(self, text: str) -> None:
         self.query_one("#lastRefresh", Label).update(text)
@@ -40,6 +43,7 @@ class MatsuganeApp(App):
 
     async def action_refresh_data(self) -> None:
         """An action to fetch new data from Last.fm"""
+        self.update_last_refresh(True)
         await self.tracks.fetch_tracks()
         self.update_last_refresh()
 
