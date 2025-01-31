@@ -22,7 +22,6 @@ class StatsHeader(HorizontalGroup):
 
     def watch_tracks(self, tracks: UniversalTracks) -> None:
         self.tracks = tracks
-        # self.mutate_reactive(StatsHeader.tracks)
 
     def compose(self) -> ComposeResult:
         yield VerticalGroup(
