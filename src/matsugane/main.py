@@ -10,13 +10,13 @@ from matsugane.music.tracks import UniversalTracks
 
 
 class LastRefresh(Label):
-    last_refresh: reactive[str] = reactive(utils.get_last_refresh())
+    is_refreshing: reactive[bool] = reactive(False)
 
-    def watch_last_refresh(self, last_refresh: str) -> None:
-        self.update(last_refresh)
-
-
-# TODO set up loading indicators
+    def watch_is_refreshing(self, refreshing: bool) -> None:
+        if refreshing:
+            self.update("Refreshing. Please wait...")
+        else:
+            self.update(utils.get_last_refresh())
 
 
 class MatsuganeApp(App):
@@ -26,35 +26,37 @@ class MatsuganeApp(App):
     BINDINGS = [("r", "refresh_data", "Refresh Last.fm Data")]
 
     ut: reactive[UniversalTracks] = reactive(UniversalTracks())
-    last_refresh: reactive[str] = reactive(utils.get_last_refresh())
+    is_refreshing: reactive[bool] = reactive(False)
 
     async def on_mount(self) -> None:
         await self.refresh_tracks()
-        self.update_last_refresh()
+
+    def update_is_refreshing(self, override: bool = False) -> None:
+        if override:
+            self.is_refreshing = True
+        else:
+            self.is_refreshing = not self.is_refreshing
+
+        self.query_one(StatsHeader).loading = self.is_refreshing
+        self.query_one(RecentPlays).loading = self.is_refreshing
 
     async def refresh_tracks(self) -> None:
+        self.update_is_refreshing(True)
         self.ut = await UniversalTracks.build(True)
-
-    def update_last_refresh(self, is_refreshing: bool = False):
-        if is_refreshing:
-            self.last_refresh = "Refreshing. Please wait..."
-        else:
-            self.last_refresh = utils.get_last_refresh()
+        self.update_is_refreshing()
 
     def compose(self) -> ComposeResult:
         yield Header()
 
         with Vertical(id="appContainer"):
-            yield LastRefresh(id="lastRefreshed").data_bind(MatsuganeApp.last_refresh)
+            yield LastRefresh(id="lastRefreshed").data_bind(MatsuganeApp.is_refreshing)
             yield StatsHeader().data_bind(MatsuganeApp.ut)
             yield RecentPlays(id="recentPlays").data_bind(MatsuganeApp.ut)
 
         yield Footer()
 
     async def action_refresh_data(self) -> None:
-        self.update_last_refresh(True)
         await self.refresh_tracks()
-        self.update_last_refresh()
 
 
 if __name__ == "__main__":
