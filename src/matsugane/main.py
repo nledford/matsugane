@@ -15,7 +15,9 @@ class LastRefresh(Label):
     def watch_last_refresh(self, last_refresh: str) -> None:
         self.update(last_refresh)
 
+
 # TODO set up loading indicators
+
 
 class MatsuganeApp(App):
     """A Textual app to display stats from Lastfm."""
