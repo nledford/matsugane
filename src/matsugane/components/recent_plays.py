@@ -54,6 +54,6 @@ class RecentPlaysTable(DataTable):
                     track.title,
                     track.artist,
                     track.album,
-                    utils.convert_ts_to_local_dt(track.played_at),
+                    utils.convert_ts_to_local_time(track.played_at),
                     key=track.id,
                 )

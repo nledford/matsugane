@@ -21,7 +21,7 @@ lint:
 # Run unit tests
 [group('Python')]
 test: lint
-    uv run pytest -v
+    uv run pytest -v --doctest-modules
 
 # Run the application
 [group('Python')]

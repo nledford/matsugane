@@ -16,17 +16,27 @@ fetcher = LastfmFetcher()
 @define
 class UniversalTracks:
     lastfm_tracks: List[LastfmTrack] = []
+    """A list of `LastfmTrack`s"""
+
     last_updated: str = field(default=utils.get_last_refresh())
     _tracks: List[Artist] = []
 
     @staticmethod
     async def build(fetch_tracks: bool = False) -> "UniversalTracks":
+        """
+        Builds (or rebuilds) a `UniversalTracks` object.
+        :param fetch_tracks: If true, fetches tracks from Lastfm
+        :return: A new `UniversalTracks` object.
+        """
         ut = UniversalTracks()
         if fetch_tracks:
             await ut.fetch_tracks()
         return ut
 
-    async def fetch_tracks(self):
+    async def fetch_tracks(self) -> None:
+        """
+        Fetches tracks from Lastfm.
+        """
         self.lastfm_tracks = await fetcher.fetch_recent_tracks()
         self.last_updated = utils.get_last_refresh()
 
@@ -65,7 +75,7 @@ class UniversalTracks:
             ]
         )
 
-        plays_dict = dict()
+        plays_dict: dict[str, int] = dict()
         played_at_dict: dict[str, List[str]] = dict()
         for raw_track in raw_tracks:
             plays_dict[raw_track.title] = plays_dict.get(raw_track.title, 0) + 1
@@ -106,10 +116,16 @@ class UniversalTracks:
 
     @property
     def total_artists(self) -> int:
+        """
+        Returns the total number of artists.
+        """
         return len(self.artists)
 
     @property
     def total_albums(self) -> int:
+        """
+        Returns the total number of albums for all artists.
+        """
         if self.is_empty:
             return 0
 
@@ -117,10 +133,18 @@ class UniversalTracks:
 
     @property
     def plays_per_artist_stats(self) -> Stats:
+        """
+        Builds and returns a `Stats` objects for plays per artist.
+        :return: A `Stats` object for plays per artist.
+        """
         return Stats([artist.total_tracks for artist in self.artists])
 
     @property
     def plays_per_album_stats(self) -> Stats:
+        """
+        Builds and returns a `Stats` object for plays per album.
+        :return: A `Stats` object for plays per album.
+        """
         albums = flatten([artist.albums for artist in self.artists])
         plays = [album.total_plays for album in albums]
         return Stats(plays)

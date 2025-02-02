@@ -10,7 +10,21 @@ katsu = cutlet.Cutlet()
 hiragana_name_overrides = {"あいみょん": "Aimyon", "リーガルリリー": "Regal Lily"}
 
 
-def convert_ts_to_local_dt(ts: str) -> str:
+def convert_ts_to_local_time(ts: str | int) -> str:
+    """
+    Converts a unix timestamp to local time.
+
+    :param ts: The unix timestamp to convert.
+    :return: The unix timestamp converted to local time.
+
+    >>> convert_ts_to_local_time("449802511")
+    '20:08:31'
+    >>> convert_ts_to_local_time(449802511)
+    '20:08:31'
+    >>> '00:00:00' == convert_ts_to_local_time("474747474")
+    False
+
+    """
     return (
         datetime.fromtimestamp(int(ts))
         .astimezone(datetime.now().astimezone().tzinfo)
@@ -29,19 +43,31 @@ def convert_japanese_to_romanji(text: str) -> str:
 
 
 def string_is_hiragana(s: str) -> bool:
+    """
+    Check if a string is composed entirely of hiragana
+    :param s: A string to check
+    :return: True if the string is composed entirely of hiragana
+
+    >>> string_is_hiragana("おはようございます")
+    True
+    >>> string_is_hiragana("Good morning!")
+    False
+    """
+
     def char_is_hiragana(c) -> bool:
+        """
+        Checks if a single character represents a hiragana
+        :param c: A single character to check
+        :return: True if the character represents a hiragana
+
+        >>> char_is_hiragana("あ")
+        True
+        >>> char_is_hiragana("A")
+        False
+        """
         return "\u3040" <= c <= "\u309f"
 
     return all(char_is_hiragana(c) for c in s)
-
-
-def generate_cuid2() -> str:
-    from typing import Callable
-
-    from cuid2 import cuid_wrapper
-
-    cuid_generator: Callable[[], str] = cuid_wrapper()
-    return cuid_generator()
 
 
 def get_today_at_midnight() -> int:
@@ -54,7 +80,18 @@ def get_today_at_midnight() -> int:
     )
 
 
-def has_unicode_group(text):
+def has_unicode_group(text: str) -> bool:
+    """
+    Detects if a provided string contains Japanese characters (Kanji, katana, or hiragana)
+
+    >>> has_unicode_group("Rush")
+    False
+    >>> has_unicode_group("羊文学")
+    True
+
+    :param text: The string to check
+    :return: True if string contains Japanese characters, False otherwise
+    """
     for char in text:
         for name in (
             "CJK",
@@ -96,10 +133,13 @@ def remove_duplicates(items, key=None):
             unique_items.add(val)
 
 
-def current_time() -> str:
-    """Returns the current 24-hour time as a string."""
-    return datetime.now().strftime("%H:%M:%S")
-
-
 def get_last_refresh() -> str:
-    return f"Last Refresh: {current_time()}"
+    """
+    Constructs a string for the last refresh time.
+    :return: The last refresh time.
+
+    >>> expected = f"Last Refresh: {datetime.now().strftime('%H:%M:%S')}"
+    >>> get_last_refresh() == expected
+    True
+    """
+    return f"Last Refresh: {datetime.now().strftime('%H:%M:%S')}"
