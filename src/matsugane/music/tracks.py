@@ -102,6 +102,9 @@ class UniversalTracks:
 
     @property
     def total_tracks(self) -> int:
+        """
+        Returns the number of tracks from all artists and albums.
+        """
         if self.is_empty:
             return 0
 
@@ -109,6 +112,9 @@ class UniversalTracks:
 
     @property
     def total_plays(self) -> int:
+        """
+        Returns the sum of plays from all tracks.
+        """
         if self.is_empty:
             return 0
 

@@ -26,19 +26,21 @@ class Artist:
 
     @property
     def total_albums(self) -> int:
+        """
+        Returns the total number of albums in associated with this artist.
+        """
         return len(self.albums)
 
     @property
     def total_tracks(self) -> int:
-        tracks = 0
-        for album in self.albums:
-            tracks += len(album.tracks)
-        return tracks
+        """
+        Returns total number of tracks from all albums.
+        """
+        return sum(album.total_tracks for album in self.albums)
 
     @property
     def total_plays(self) -> int:
-        plays = 0
-        for album in self.albums:
-            for track in album.tracks:
-                plays += track.plays
-        return plays
+        """
+        Returns the sum of all plays from all albums.
+        """
+        return sum(album.total_plays for album in self.albums)
