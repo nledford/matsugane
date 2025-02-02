@@ -30,5 +30,5 @@ StatsHeader {
 }
 
 RecentPlays {
-    height: 8;
+    height: 7;
 }
