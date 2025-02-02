@@ -6,9 +6,18 @@ from attrs import define
 from dotenv import load_dotenv
 
 from matsugane import utils
-from matsugane.music.track import UniversalTrack
 
 load_dotenv()
+
+
+@define(eq=False)
+class LastfmTrack:
+    title: str
+    track_url: str
+    artist: str
+    artist_url: str
+    album: str
+    played_at: str
 
 
 @define
@@ -19,7 +28,7 @@ class LastfmFetcher:
     password: ClassVar[str] = str(os.getenv("LASTFM_PASSWORD"))
 
     @classmethod
-    async def fetch_recent_tracks(cls, limit: int = 200) -> list[UniversalTrack]:
+    async def fetch_recent_tracks(cls, limit: int = 200) -> list[LastfmTrack]:
         params = {
             "method": "user.getrecenttracks",
             "user": cls.username,
@@ -36,17 +45,14 @@ class LastfmFetcher:
             )
             recent_tracks = result.json()["recenttracks"]["track"]
 
-            universal_tracks: list[UniversalTrack] = []
-            for track in recent_tracks:
-                title = track["name"]
-                artist = track["artist"]["name"]
-                # artist_url = track['artist']['url']
-                album = track["album"]["#text"]
-                played_at = track["date"]["uts"]
-                # track_url = track['url']
-
-                universal_track = UniversalTrack.from_lastfm_api(
-                    title=title, artist=artist, album=album, played_at=played_at
+            return [
+                LastfmTrack(
+                    title=track["name"],
+                    track_url=track["url"],
+                    artist=track["artist"]["name"],
+                    artist_url=track["artist"]["url"],
+                    album=track["album"]["#text"],
+                    played_at=track["date"]["uts"],
                 )
-                universal_tracks.append(universal_track)
-            return universal_tracks
+                for track in recent_tracks
+            ]

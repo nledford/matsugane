@@ -49,7 +49,7 @@ class RecentPlaysTable(DataTable):
         if ut.is_empty and self.row_count == 0:
             self.add_row("No tracks", "", "", "", key="NO DATA")
         else:
-            for track in ut.tracks:
+            for track in ut.lastfm_tracks:
                 self.add_row(
                     track.title,
                     track.artist.name,

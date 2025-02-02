@@ -1,8 +1,10 @@
-from typing import NewType
+from typing import List, NewType
+
 import cutlet
 from attrs import define
 
 from matsugane import utils
+from matsugane.music.album import Album
 
 katsu = cutlet.Cutlet()
 
@@ -12,6 +14,7 @@ ArtistName = NewType("ArtistName", str)
 @define(eq=False)
 class Artist:
     name: ArtistName
+    _albums: List[Album] = []
 
     @property
     def id(self) -> str:
@@ -19,9 +22,12 @@ class Artist:
 
     @property
     def sort_name(self) -> str:
-        if self.name.startswith("Noel Gallagher"):
-            name = "Noel Gallagher's High Flying Birds"
-        else:
-            name = self.name
+        return utils.build_sort_name(self.name)
 
-        return utils.build_sort_name(name)
+    @property
+    def albums(self) -> List[Album]:
+        return self._albums
+
+    @property
+    def total_albums(self) -> int:
+        return len(self._albums)
