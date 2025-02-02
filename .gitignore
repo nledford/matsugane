@@ -245,4 +245,5 @@ fabric.properties
 
 playground
 .DS_Store
+debug.py
 
