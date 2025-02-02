@@ -1,12 +1,22 @@
 from textual import events
+from textual.app import ComposeResult
 from textual.reactive import reactive
-from textual.widgets import DataTable
+from textual.widget import Widget
+from textual.widgets import DataTable, Label
 
 from matsugane import utils
 from matsugane.music.tracks import UniversalTracks
 
 
-class RecentPlays(DataTable):
+class RecentPlays(Widget):
+    ut: reactive[UniversalTracks] = reactive(UniversalTracks(), recompose=True)
+
+    def compose(self) -> ComposeResult:
+        yield Label("Recent Plays")
+        yield RecentPlaysTable().data_bind(RecentPlays.ut)
+
+
+class RecentPlaysTable(DataTable):
     ut: reactive[UniversalTracks] = reactive(UniversalTracks(), recompose=True)
 
     def on_resize(self, event: events.Resize) -> None:
@@ -28,7 +38,7 @@ class RecentPlays(DataTable):
         self.build_table(tracks)
 
     def on_mount(self) -> None:
-        self.add_columns("title", "artist", "album", "played at")
+        self.add_columns("Title", "Artist", "Album", "Played at")
         self.cursor_type = "row"
         self.zebra_stripes = True
         self.build_table(self.ut)

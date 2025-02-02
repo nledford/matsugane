@@ -5,7 +5,6 @@
 
 LastRefresh {
     background: black;
-    color: white;
     margin-bottom: 1;
 }
 
@@ -29,6 +28,11 @@ StatsHeader {
     width: 50%;
 }
 
-RecentPlays {
+RecentPlays Label {
+    color: white;
+    text-style: bold;
+}
+
+RecentPlaysTable {
     height: 7;
 }
