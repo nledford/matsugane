@@ -52,8 +52,8 @@ class RecentPlaysTable(DataTable):
             for track in ut.lastfm_tracks:
                 self.add_row(
                     track.title,
-                    track.artist.name,
-                    track.album.name,
+                    track.artist,
+                    track.album,
                     utils.convert_ts_to_local_dt(track.played_at),
-                    key=track.unique_id,
+                    key=track.id,
                 )

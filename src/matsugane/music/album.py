@@ -1,4 +1,4 @@
-from typing import NewType
+from typing import List, NewType
 
 from attrs import define
 
@@ -11,8 +11,16 @@ AlbumName = NewType("AlbumName", str)
 @define(eq=False)
 class Album:
     name: AlbumName
-    _tracks: [UniversalTrack] = []
+    tracks: List[UniversalTrack] = []
 
     @property
     def sort_name(self) -> str:
         return utils.build_sort_name(self.name)
+
+    @property
+    def total_tracks(self) -> int:
+        return len(self.tracks)
+
+    @property
+    def total_plays(self) -> int:
+        return sum(track.plays for track in self.tracks)

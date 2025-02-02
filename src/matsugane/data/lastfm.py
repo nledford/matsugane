@@ -19,6 +19,10 @@ class LastfmTrack:
     album: str
     played_at: str
 
+    @property
+    def id(self) -> str:
+        return f"{self.artist}-{self.album}-{self.title}-{self.played_at}"
+
 
 @define
 class LastfmFetcher:

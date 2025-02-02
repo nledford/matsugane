@@ -354,6 +354,7 @@ dependencies = [
     { name = "cuid2" },
     { name = "cutlet" },
     { name = "httpx" },
+    { name = "more-itertools" },
     { name = "python-dotenv" },
     { name = "requests" },
     { name = "textual" },
@@ -380,6 +381,7 @@ requires-dist = [
     { name = "cuid2", specifier = ">=2.0.1" },
     { name = "cutlet", specifier = ">=0.5.0" },
     { name = "httpx", specifier = ">=0.28.1" },
+    { name = "more-itertools", specifier = ">=10.6.0" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "requests", specifier = ">=2.32.3" },
     { name = "textual", specifier = ">=1.0.0" },
@@ -423,6 +425,15 @@ name = "mojimoji"
 version = "0.0.13"
 source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/08/fb/ee22357cd7622fb879fac575feaffc54469ed9a0c1d9073355b1ebc62b7f/mojimoji-0.0.13.tar.gz", hash = "sha256:0e6d2fba22cc8bf132a5bdf3a964296d9287a618d09681a12868f0fd518e4230", size = 5010 }
+
+[[package]]
+name = "more-itertools"
+version = "10.6.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/88/3b/7fa1fe835e2e93fd6d7b52b2f95ae810cf5ba133e1845f726f5a992d62c2/more-itertools-10.6.0.tar.gz", hash = "sha256:2cd7fad1009c31cc9fb6a035108509e6547547a7a738374f10bd49a09eb3ee3b", size = 125009 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/23/62/0fe302c6d1be1c777cab0616e6302478251dfbf9055ad426f5d0def75c89/more_itertools-10.6.0-py3-none-any.whl", hash = "sha256:6eb054cb4b6db1473f6e15fcc676a08e4732548acd47c708f0e179c2c7c01e89", size = 63038 },
+]
 
 [[package]]
 name = "msgpack"
