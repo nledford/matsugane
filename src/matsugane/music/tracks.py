@@ -154,3 +154,16 @@ class UniversalTracks:
         albums = flatten([artist.albums for artist in self.artists])
         plays = [album.total_plays for album in albums]
         return Stats(plays)
+
+    @property
+    def top_artists(self) -> List[Artist]:
+        top_artists = sorted(
+            self.artists,
+            key=lambda x: (
+                -x.total_plays,
+                -x.total_tracks,
+                -x.total_albums,
+                x.sort_name,
+            ),
+        )[:10]
+        return top_artists
