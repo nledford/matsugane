@@ -13,6 +13,7 @@ dependencies = [
     "python-dotenv>=1.0.1",
     "requests>=2.32.3",
     "textual>=1.0.0",
+    "textual-plotext>=1.0.1",
     "unidic-lite>=1.0.8",
 ]
 
