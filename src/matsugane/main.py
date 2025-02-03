@@ -1,22 +1,12 @@
 from textual.app import App, ComposeResult
 from textual.containers import Vertical
 from textual.reactive import reactive
-from textual.widgets import Footer, Header, Label
+from textual.widgets import Footer, Header
 
-from matsugane import utils
+from matsugane.components.last_refresh import LastRefresh
 from matsugane.components.recent_plays import RecentPlays
 from matsugane.components.stats_header import StatsHeader
 from matsugane.music.tracks import UniversalTracks
-
-
-class LastRefresh(Label):
-    is_refreshing: reactive[bool] = reactive(False)
-
-    def watch_is_refreshing(self, refreshing: bool) -> None:
-        if refreshing:
-            self.update("Refreshing. Please wait...")
-        else:
-            self.update(utils.get_last_refresh())
 
 
 class MatsuganeApp(App):
