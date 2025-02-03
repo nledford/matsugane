@@ -27,9 +27,6 @@ class MatsuganeApp(App):
         else:
             self.is_refreshing = not self.is_refreshing
 
-        self.query_one(StatsHeader).loading = self.is_refreshing
-        self.query_one(RecentPlays).loading = self.is_refreshing
-
     async def refresh_tracks(self) -> None:
         self.update_is_refreshing(True)
         self.ut = await UniversalTracks.build(True)
