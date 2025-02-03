@@ -1,11 +1,12 @@
 from textual.app import App, ComposeResult
-from textual.containers import Vertical
+from textual.containers import VerticalGroup
 from textual.reactive import reactive
 from textual.widgets import Footer, Header
 
 from matsugane.components.last_refresh import LastRefresh
 from matsugane.components.recent_plays import RecentPlays
 from matsugane.components.stats_header import StatsHeader
+from matsugane.components.top_artists import TopArtists
 from matsugane.music.tracks import UniversalTracks
 
 
@@ -35,12 +36,11 @@ class MatsuganeApp(App):
     def compose(self) -> ComposeResult:
         yield Header()
 
-        with Vertical(id="appContainer"):
+        with VerticalGroup(id="appContainer"):
             yield LastRefresh(id="lastRefreshed").data_bind(MatsuganeApp.is_refreshing)
             yield StatsHeader().data_bind(MatsuganeApp.ut)
             yield RecentPlays(id="recentPlays").data_bind(MatsuganeApp.ut)
-
-            # yield TopArtists().data_bind(MatsuganeApp.ut)
+            yield TopArtists().data_bind(MatsuganeApp.ut)
 
         yield Footer()
 
