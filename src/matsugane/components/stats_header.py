@@ -23,6 +23,9 @@ class StatsHeader(HorizontalGroup):
     def watch_ut(self, tracks: UniversalTracks) -> None:
         self.ut = tracks
 
+    def on_mount(self) -> None:
+        self.border_title = "Global Stats"
+
     def compose(self) -> ComposeResult:
         yield VerticalGroup(
             HorizontalGroup(
