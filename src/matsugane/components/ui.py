@@ -1,6 +1,12 @@
 from textual import events
 from textual.widgets import DataTable
 
+# StretchyDataTable {
+#     border: inner #737373;
+#     border-title-color: #e5e5e5;
+#     border-title-style: bold;
+# }
+
 
 class StretchyDataTable(DataTable):
     """
@@ -9,11 +15,17 @@ class StretchyDataTable(DataTable):
     """
 
     def on_resize(self, event: events.Resize) -> None:
-        total_width = event.size.width
+        total_width = event.size.width - (len(self.columns) // 2)
         total_padding = 2 * (self.cell_padding * len(self.columns))
         column_width = (total_width - total_padding) // len(self.columns)
 
         for column in self.columns.values():
             column.auto_width = False
             column.width = column_width
+        self.refresh()
+
+    def on_mount(self) -> None:
+        self.styles.border = ("inner", "#737373")
+        self.styles.border_title_color = "#e5e5e5"
+        self.styles.border_title_style = "bold"
         self.refresh()

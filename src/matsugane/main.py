@@ -7,6 +7,7 @@ from matsugane.components.last_refresh import LastRefresh
 from matsugane.components.recent_plays import RecentPlays
 from matsugane.components.stats_header import StatsHeader
 from matsugane.components.top_artists import TopArtists
+from matsugane.components.top_plays_by_hour import TopPlaysByHour
 from matsugane.music.tracks import UniversalTracks
 
 
@@ -41,6 +42,7 @@ class MatsuganeApp(App):
             yield StatsHeader().data_bind(MatsuganeApp.ut)
             yield RecentPlays(id="recentPlays").data_bind(MatsuganeApp.ut)
             yield TopArtists().data_bind(MatsuganeApp.ut)
+            yield TopPlaysByHour().data_bind(MatsuganeApp.ut)
 
         yield Footer()
 
