@@ -10,6 +10,12 @@ katsu = cutlet.Cutlet()
 hiragana_name_overrides = {"あいみょん": "Aimyon", "リーガルリリー": "Regal Lily"}
 
 
+def convert_ts_to_dt(ts: str | int) -> datetime:
+    return datetime.fromtimestamp((int(ts))).astimezone(
+        datetime.now().astimezone().tzinfo
+    )
+
+
 def convert_ts_to_local_time(ts: str | int) -> str:
     """
     Converts a unix timestamp to local time.
@@ -25,11 +31,7 @@ def convert_ts_to_local_time(ts: str | int) -> str:
     False
 
     """
-    return (
-        datetime.fromtimestamp(int(ts))
-        .astimezone(datetime.now().astimezone().tzinfo)
-        .strftime("%H:%M:%S")
-    )
+    return convert_ts_to_dt(ts).strftime("%H:%M:%S")
 
 
 def convert_japanese_to_romanji(text: str) -> str:

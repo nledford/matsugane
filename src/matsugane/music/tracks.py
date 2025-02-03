@@ -167,3 +167,13 @@ class UniversalTracks:
             ),
         )[:10]
         return top_artists
+
+    @property
+    def plays_by_hour(self) -> dict[int, int]:
+        hours = dict.fromkeys(range(0, 24), 0)
+
+        for track in self.lastfm_tracks:
+            played_at_hour = utils.convert_ts_to_dt(track.played_at).hour
+            hours[played_at_hour] += 1
+
+        return hours
