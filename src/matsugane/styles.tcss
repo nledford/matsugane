@@ -4,7 +4,6 @@
 }
 
 LastRefresh {
-    background: black;
     margin-bottom: 1;
 }
 
@@ -35,4 +34,9 @@ RecentPlays Label {
 
 RecentPlaysTable {
     height: 7;
+}
+
+TopArtists {
+    width: 50%;
+    height: 11;
 }
