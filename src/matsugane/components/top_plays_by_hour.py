@@ -24,6 +24,6 @@ class TopPlaysByHour(StretchyDataTable):
         if ut.is_empty and self.row_count == 0:
             self.add_row("No tracks", "", key="NO DATA TOP HOURS")
         else:
-            for hour, plays in ut.plays_by_hour.items():
-                if plays > 0:
-                    self.add_row(f"{hour:02}:00", f"{plays} plays")
+            for item in ut.plays_by_hour:
+                if item.plays > 0:
+                    self.add_row(item.hour, item.plays_fmt)

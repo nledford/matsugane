@@ -1,5 +1,6 @@
 from typing import List
 
+import attrs.validators
 from attrs import define, field
 from more_itertools import flatten
 
@@ -11,6 +12,25 @@ from matsugane.music.stats import Stats
 from matsugane.music.track import TrackTitle, UniversalTrack
 
 fetcher = LastfmFetcher()
+
+
+@define
+class PlaysByHour:
+    _hour: int = field(default=0)
+    plays: int = field(
+        default=0,
+        validator=attrs.validators.and_(
+            attrs.validators.ge(0), attrs.validators.lt(24)
+        ),
+    )
+
+    @property
+    def hour(self) -> str:
+        return f"{self._hour:02}:00"
+
+    @property
+    def plays_fmt(self) -> str:
+        return f"{self.plays} play{'' if self.plays == 1 else 's'}"
 
 
 @define
@@ -169,11 +189,14 @@ class UniversalTracks:
         return top_artists
 
     @property
-    def plays_by_hour(self) -> dict[int, int]:
+    def plays_by_hour(self) -> list[PlaysByHour]:
         hours = dict.fromkeys(range(0, 24), 0)
 
         for track in self.lastfm_tracks:
             played_at_hour = utils.convert_ts_to_dt(track.played_at).hour
             hours[played_at_hour] += 1
 
-        return hours
+        plays_by_hour = [PlaysByHour(k, v) for k, v in hours.items()]
+        plays_by_hour.sort(key=lambda x: (-x.plays, x.hour))
+
+        return plays_by_hour
