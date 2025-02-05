@@ -16,13 +16,13 @@ fetcher = LastfmFetcher()
 
 @define
 class PlaysByHour:
-    _hour: int = field(default=0)
-    plays: int = field(
+    _hour: int = field(
         default=0,
         validator=attrs.validators.and_(
             attrs.validators.ge(0), attrs.validators.lt(24)
         ),
     )
+    plays: int = field(default=0)
 
     @property
     def hour(self) -> str:
