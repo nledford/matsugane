@@ -20,8 +20,12 @@ class LastfmTrack:
     played_at: str
 
     @property
-    def id(self) -> str:
+    def unique_id(self) -> str:
         return f"{self.artist}-{self.album}-{self.title}-{self.played_at}"
+
+    @property
+    def track_artist_id(self) -> str:
+        return f"{self.title}-{self.artist}"
 
 
 @define
