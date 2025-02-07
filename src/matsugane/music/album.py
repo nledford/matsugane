@@ -11,11 +11,25 @@ AlbumName = NewType("AlbumName", str)
 @define(eq=False)
 class Album:
     name: AlbumName
-    tracks: List[UniversalTrack] = []
+    _tracks: List[UniversalTrack] = []
 
     @property
     def sort_name(self) -> str:
         return utils.build_sort_name(self.name)
+
+    @property
+    def tracks(self) -> List[UniversalTrack]:
+        seen = set()
+        tracks = []
+        for track in self._tracks:
+            if track.title not in seen:
+                seen.add(track.title)
+                tracks.append(track)
+        return tracks
+
+    @tracks.setter
+    def tracks(self, tracks: List[UniversalTrack]) -> None:
+        self._tracks = tracks
 
     @property
     def total_tracks(self) -> int:

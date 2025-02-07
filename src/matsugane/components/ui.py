@@ -1,12 +1,6 @@
 from textual import events
 from textual.widgets import DataTable
 
-# StretchyDataTable {
-#     border: inner #737373;
-#     border-title-color: #e5e5e5;
-#     border-title-style: bold;
-# }
-
 
 class StretchyDataTable(DataTable):
     """

@@ -14,7 +14,7 @@ ArtistName = NewType("ArtistName", str)
 @define(eq=False)
 class Artist:
     name: ArtistName
-    albums: List[Album] = []
+    _albums: List[Album] = []
 
     @property
     def id(self) -> str:
@@ -23,6 +23,20 @@ class Artist:
     @property
     def sort_name(self) -> str:
         return utils.build_sort_name(self.name)
+
+    @property
+    def albums(self) -> List[Album]:
+        seen = set()
+        albums = []
+        for album in self._albums:
+            if album.name not in seen:
+                seen.add(album.name)
+                albums.append(album)
+        return albums
+
+    @albums.setter
+    def albums(self, albums: List[Album]) -> None:
+        self._albums = albums
 
     @property
     def total_albums(self) -> int:
