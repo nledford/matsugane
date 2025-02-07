@@ -12,28 +12,29 @@ LastRefresh {
 }
 
 StatsHeader {
-    background: blue 20%;
     column-span: 2;
     color: white;
-    border: round white;
+    border: inner #727373;
+    border-title-color: #e5e5e5;
+    border-title-style: bold;
 }
 
 
 .stats-cell-header {
-    background: navy;
+    background: #cc5400;
     padding-left: 1;
     text-style: bold;
     width: 50%;
 }
 
 .stats-cell {
-    background: blue;
+    background: #ff8733;
     padding-left: 1;
     width: 50%;
 }
 
 .table {
-    border: inner #737373;
+    border: inner #727373;
     border-title-color: #e5e5e5;
     border-title-style: bold;
 }
