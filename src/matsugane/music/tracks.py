@@ -194,7 +194,7 @@ class UniversalTracks:
                 -x.total_albums,
                 x.sort_name,
             ),
-        )[:10]
+        )[:25]
         return top_artists
 
     @property
