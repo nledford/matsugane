@@ -1,6 +1,8 @@
 import os
 from typing import ClassVar
 
+import arrow
+from arrow import Arrow
 import httpx
 from attrs import define
 from dotenv import load_dotenv
@@ -26,6 +28,10 @@ class LastfmTrack:
     @property
     def track_artist_id(self) -> str:
         return f"{self.title}-{self.artist}"
+
+    @property
+    def played_at_ts(self) -> Arrow:
+        return arrow.get(int(self.played_at))
 
 
 @define

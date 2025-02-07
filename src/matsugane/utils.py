@@ -1,7 +1,8 @@
 import hashlib
 import unicodedata
-from datetime import datetime
+from datetime import datetime, tzinfo
 
+import arrow
 import cutlet
 
 katsu = cutlet.Cutlet()
@@ -10,10 +11,12 @@ katsu = cutlet.Cutlet()
 hiragana_name_overrides = {"あいみょん": "Aimyon", "リーガルリリー": "Regal Lily"}
 
 
+def get_system_timezone() -> tzinfo:
+    return arrow.now().tzinfo
+
+
 def convert_ts_to_dt(ts: str | int) -> datetime:
-    return datetime.fromtimestamp((int(ts))).astimezone(
-        datetime.now().astimezone().tzinfo
-    )
+    return arrow.get(int(ts)).astimezone(get_system_timezone())
 
 
 def convert_ts_to_local_time(ts: str | int) -> str:
@@ -140,11 +143,11 @@ def get_last_refresh() -> str:
     Constructs a string for the last refresh time.
     :return: The last refresh time.
 
-    >>> expected = f"Last Refresh: {datetime.now().strftime('%H:%M:%S')}"
+    >>> expected = f"Last Refresh: {arrow.now().strftime('%H:%M:%S')}"
     >>> get_last_refresh() == expected
     True
     """
-    return f"Last Refresh: {datetime.now().strftime('%H:%M:%S')}"
+    return f"Last Refresh: {arrow.now().strftime('%H:%M:%S')}"
 
 
 def truncate(text: str, max_length: int = 40) -> str:
