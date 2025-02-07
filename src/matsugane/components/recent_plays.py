@@ -1,11 +1,11 @@
 from textual.reactive import reactive
+from textual.widgets import DataTable
 
 from matsugane import utils
-from matsugane.components.ui import StretchyDataTable
 from matsugane.music.tracks import UniversalTracks
 
 
-class RecentPlays(StretchyDataTable):
+class RecentPlays(DataTable):
     ut: reactive[UniversalTracks] = reactive(UniversalTracks(), recompose=True)
 
     def watch_ut(self, tracks: UniversalTracks) -> None:
@@ -17,6 +17,7 @@ class RecentPlays(StretchyDataTable):
         self.cursor_type = "row"
         self.zebra_stripes = True
         self.border_title = "Recent Plays"
+        self.classes = "table"
         self.build_table(self.ut)
 
     def build_table(self, ut: UniversalTracks) -> None:
