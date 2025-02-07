@@ -16,21 +16,26 @@ fetcher = LastfmFetcher()
 
 @define
 class PlaysByHour:
-    _hour: int = field(
+    hour: int = field(
         default=0,
         validator=attrs.validators.and_(
             attrs.validators.ge(0), attrs.validators.lt(24)
         ),
     )
     plays: int = field(default=0)
+    percent: float = field(default=0.0)
 
     @property
-    def hour(self) -> str:
-        return f"{self._hour:02}:00"
+    def hour_fmt(self) -> str:
+        return f"{self.hour:02}:00"
 
     @property
     def plays_fmt(self) -> str:
         return f"{self.plays} play{'' if self.plays == 1 else 's'}"
+
+    @property
+    def percent_fmt(self) -> str:
+        return f"{self.percent * 100}%"
 
 
 @define
@@ -196,7 +201,9 @@ class UniversalTracks:
             played_at_hour = utils.convert_ts_to_dt(track.played_at).hour
             hours[played_at_hour] += 1
 
-        plays_by_hour = [PlaysByHour(k, v) for k, v in hours.items()]
-        plays_by_hour.sort(key=lambda x: (-x.plays, x.hour))
+        plays_by_hour = [
+            PlaysByHour(k, v, float(v) / self.total_tracks) for k, v in hours.items()
+        ]
+        plays_by_hour.sort(key=lambda x: (-x.percent, -x.plays, -x.hour))
 
         return plays_by_hour

@@ -12,7 +12,7 @@ class TopPlaysByHour(DataTable):
         self.build_table(tracks)
 
     def on_mount(self) -> None:
-        self.add_columns("Hour", "Plays")
+        self.add_columns("Hour", "Plays", "%")
         self.cursor_type = "row"
         self.zebra_stripes = True
         self.build_table(self.ut)
@@ -23,8 +23,8 @@ class TopPlaysByHour(DataTable):
         self.clear()
 
         if ut.is_empty and self.row_count == 0:
-            self.add_row("No tracks", "", key="NO DATA TOP HOURS")
+            self.add_row("No tracks", "", "", key="NO DATA TOP HOURS")
         else:
             for item in ut.plays_by_hour:
                 if item.plays > 0:
-                    self.add_row(item.hour, item.plays_fmt)
+                    self.add_row(item.hour_fmt, item.plays_fmt, item.percent_fmt)
