@@ -45,3 +45,11 @@ class Stats:
         if result <= 0:
             return 0.0
         return result
+
+    @property
+    def upper_limit(self) -> float:
+        return self.average + (2 * self.stddev)
+
+    @property
+    def items_exceeding_upper_limit(self) -> int:
+        return len([item for item in self.items if item > self.upper_limit])

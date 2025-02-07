@@ -44,4 +44,36 @@ class StatsHeader(HorizontalGroup):
                     data=str(self.ut.plays_per_album_stats.average),
                 ),
             ),
+            HorizontalGroup(
+                Stats(
+                    header="Std Dev",
+                    data=str(self.ut.plays_per_artist_stats.stddev),
+                ),
+                Stats(
+                    header="Std Dev",
+                    data=str(self.ut.plays_per_album_stats.stddev),
+                ),
+            ),
+            HorizontalGroup(
+                Stats(
+                    header="Upper Limit",
+                    data=str(self.ut.plays_per_artist_stats.upper_limit),
+                ),
+                Stats(
+                    header="Upper Limit",
+                    data=str(self.ut.plays_per_album_stats.upper_limit),
+                ),
+            ),
+            HorizontalGroup(
+                Stats(
+                    header="Exceeding Upper Limit",
+                    data=str(
+                        self.ut.plays_per_artist_stats.items_exceeding_upper_limit
+                    ),
+                ),
+                Stats(
+                    header="Exceeding Upper Limit",
+                    data=str(self.ut.plays_per_album_stats.items_exceeding_upper_limit),
+                ),
+            ),
         )

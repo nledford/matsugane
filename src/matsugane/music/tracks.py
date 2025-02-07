@@ -202,7 +202,7 @@ class UniversalTracks:
             hours[played_at_hour] += 1
 
         plays_by_hour = [
-            PlaysByHour(k, v, float(v) / self.total_tracks) for k, v in hours.items()
+            PlaysByHour(k, v, float(v) / self.total_plays) for k, v in hours.items()
         ]
         plays_by_hour.sort(key=lambda x: (-x.percent, -x.plays, x.hour))
 
