@@ -18,6 +18,7 @@ class TopArtists(DataTable):
         self.zebra_stripes = True
         self.border_title = "Top Artists By Plays"
         self.build_table(self.ut)
+        self.classes = 'table'
         self.refresh()
 
     def build_table(self, ut: UniversalTracks) -> None:

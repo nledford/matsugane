@@ -32,6 +32,12 @@ StatsHeader {
     width: 50%;
 }
 
+.table {
+    border: inner #737373;
+    border-title-color: #e5e5e5;
+    border-title-style: bold;
+}
+
 RecentPlays {
     column-span: 2;
 }

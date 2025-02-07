@@ -19,7 +19,4 @@ class StretchyDataTable(DataTable):
         self.refresh()
 
     def on_mount(self) -> None:
-        self.styles.border = ("inner", "#737373")
-        self.styles.border_title_color = "#e5e5e5"
-        self.styles.border_title_style = "bold"
-        self.refresh()
+        self.classes = "table"
