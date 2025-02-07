@@ -145,3 +145,17 @@ def get_last_refresh() -> str:
     True
     """
     return f"Last Refresh: {datetime.now().strftime('%H:%M:%S')}"
+
+
+def truncate(text: str, max_length: int = 40) -> str:
+    """
+    Truncates a string to a given max length, with `...` appended to the end
+
+    :param text: The text to truncate
+    :param max_length: The maximum length of the string, including `...`
+    :return: Truncated text
+    """
+    if len(text) > max_length:
+        return f"{text[: max_length - 3]}..."
+    else:
+        return text

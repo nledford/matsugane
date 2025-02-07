@@ -16,14 +16,14 @@ fetcher = LastfmFetcher()
 
 @define
 class PlaysByHour:
+    plays: int
+    total: int
     hour: int = field(
         default=0,
         validator=attrs.validators.and_(
             attrs.validators.ge(0), attrs.validators.lt(24)
         ),
     )
-    plays: int = field(default=0)
-    _total: int = field(default=0)
 
     @property
     def hour_fmt(self) -> str:
@@ -35,7 +35,7 @@ class PlaysByHour:
 
     @property
     def percent(self) -> float:
-        return self.plays / self._total
+        return self.plays / self.total
 
     @property
     def percent_fmt(self) -> str:

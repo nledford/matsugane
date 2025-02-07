@@ -30,7 +30,7 @@ class RecentPlays(DataTable):
                 self.add_row(
                     track.title,
                     track.artist,
-                    track.album,
+                    utils.truncate(track.album),
                     utils.convert_ts_to_local_time(track.played_at),
                     key=track.id,
                 )
