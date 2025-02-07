@@ -23,7 +23,7 @@ class PlaysByHour:
         ),
     )
     plays: int = field(default=0)
-    percent: float = field(default=0.0)
+    _total: int = field(default=0)
 
     @property
     def hour_fmt(self) -> str:
@@ -32,6 +32,10 @@ class PlaysByHour:
     @property
     def plays_fmt(self) -> str:
         return f"{self.plays} play{'' if self.plays == 1 else 's'}"
+
+    @property
+    def percent(self) -> float:
+        return self.plays / self._total
 
     @property
     def percent_fmt(self) -> str:
@@ -195,15 +199,18 @@ class UniversalTracks:
 
     @property
     def plays_by_hour(self) -> list[PlaysByHour]:
-        hours = dict.fromkeys(range(0, 24), 0)
+        hours: dict[int, int] = dict()
 
-        for track in self.lastfm_tracks:
-            played_at_hour = utils.convert_ts_to_dt(track.played_at).hour
-            hours[played_at_hour] += 1
+        for artist in self.artists:
+            for album in artist.albums:
+                for track in album.tracks:
+                    for played_at in track.played_at:
+                        hour = utils.convert_ts_to_dt(played_at).hour
+                        hours[hour] = hours.get(hour, 0) + 1
 
         plays_by_hour = [
-            PlaysByHour(k, v, float(v) / self.total_plays) for k, v in hours.items()
+            PlaysByHour(hour=k, plays=v, total=self.total_plays)
+            for k, v in hours.items()
         ]
         plays_by_hour.sort(key=lambda x: (-x.percent, -x.plays, x.hour))
-
         return plays_by_hour
