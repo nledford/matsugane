@@ -2,7 +2,6 @@ from typing import List
 
 import attrs.validators
 from attrs import define, field
-from more_itertools import flatten
 
 from matsugane import utils
 from matsugane.data.lastfm import LastfmFetcher, LastfmTrack
@@ -172,7 +171,7 @@ class UniversalTracks:
         Builds and returns a `Stats` objects for plays per artist.
         :return: A `Stats` object for plays per artist.
         """
-        return Stats([artist.total_tracks for artist in self.artists])
+        return Stats([artist.total_plays for artist in self.artists])
 
     @property
     def plays_per_album_stats(self) -> Stats:
@@ -180,8 +179,10 @@ class UniversalTracks:
         Builds and returns a `Stats` object for plays per album.
         :return: A `Stats` object for plays per album.
         """
-        albums = flatten([artist.albums for artist in self.artists])
-        plays = [album.total_plays for album in albums]
+        plays = []
+        for artist in self.artists:
+            for album in artist.albums:
+                plays.append(album.total_plays)
         return Stats(plays)
 
     @property
