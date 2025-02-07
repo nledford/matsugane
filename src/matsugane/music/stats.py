@@ -48,8 +48,14 @@ class Stats:
 
     @property
     def upper_limit(self) -> float:
+        if self.total == 0:
+            return 0.0
+
         return self.average + (2 * self.stddev)
 
     @property
     def items_exceeding_upper_limit(self) -> int:
+        if self.items == 0:
+            return 0
+
         return len([item for item in self.items if item > self.upper_limit])
