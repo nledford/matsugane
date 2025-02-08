@@ -85,7 +85,11 @@ class UniversalTracks:
 
     def _albums_by_artist(self, artist: Artist) -> List[Album]:
         raw_albums = set(
-            [track.album for track in self.lastfm_tracks if track.artist == artist.name]
+            [
+                track.album
+                for track in self.lastfm_tracks
+                if utils.build_sort_name(track.artist) == artist.sort_name
+            ]
         )
         albums = []
         for raw_album in raw_albums:
@@ -100,7 +104,8 @@ class UniversalTracks:
             [
                 track
                 for track in self.lastfm_tracks
-                if track.artist == artist.name and track.album == album.name
+                if utils.build_sort_name(track.artist) == artist.sort_name
+                and utils.build_sort_name(track.album) == album.sort_name
             ]
         )
 
