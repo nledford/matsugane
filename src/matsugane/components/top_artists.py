@@ -25,7 +25,7 @@ class TopArtists(DataTable):
 
         def percentage(artist_plays: int = 0) -> str:
             result = (float(artist_plays) / float(self.ut.total_plays)) * 100
-            return f"{result}%"
+            return f"{result:.7f}%"
 
         if ut.is_empty and self.row_count == 0:
             self.add_row("No Tracks", "", "", "", key="NO DATA TOP ARTISTS")

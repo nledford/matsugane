@@ -38,7 +38,7 @@ class PlaysByHour:
 
     @property
     def percent_fmt(self) -> str:
-        return f"{self.percent * 100}%"
+        return f"{(self.percent * 100):.7f}%"
 
 
 @define
