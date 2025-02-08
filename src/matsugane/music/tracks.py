@@ -70,15 +70,16 @@ class UniversalTracks:
 
     @property
     def artists(self) -> List[Artist]:
-        raw_artists = set([track.artist for track in self.lastfm_tracks])
+        seen = set()
+        artists: List[Artist] = []
+        for track in self.lastfm_tracks:
+            artist = Artist(ArtistName(track.artist))
 
-        artists = []
+            if artist.sort_name not in seen:
+                seen.add(artist.sort_name)
 
-        for raw_artist in raw_artists:
-            artist = Artist(ArtistName(raw_artist))
-            albums = self._albums_by_artist(artist)
-            artist.albums = albums
-            artists.append(artist)
+                artist.albums = self._albums_by_artist(artist)
+                artists.append(artist)
 
         return sorted(artists, key=lambda a: a.sort_name)
 
