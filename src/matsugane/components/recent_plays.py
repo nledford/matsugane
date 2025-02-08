@@ -28,8 +28,8 @@ class RecentPlays(DataTable):
         else:
             for track in ut.lastfm_tracks:
                 self.add_row(
-                    track.title,
-                    track.artist,
+                    utils.truncate(track.title),
+                    utils.truncate(track.artist),
                     utils.truncate(track.album),
                     utils.convert_ts_to_local_time(track.played_at),
                     key=track.unique_id,
