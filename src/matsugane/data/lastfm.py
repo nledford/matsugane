@@ -2,8 +2,8 @@ import os
 from typing import ClassVar
 
 import arrow
-from arrow import Arrow
 import httpx
+from arrow import Arrow
 from attrs import define
 from dotenv import load_dotenv
 
@@ -22,12 +22,40 @@ class LastfmTrack:
     played_at: str
 
     @property
+    def sort_title(self) -> str:
+        return utils.build_sort_name(self.title)
+
+    @property
+    def artist_id(self) -> str:
+        return f"artist-{self.artist_sort_name}"
+
+    @property
+    def artist_sort_name(self) -> str:
+        return utils.build_sort_name(self.artist)
+
+    @property
+    def album_id(self) -> str:
+        return f"album-{self.album_sort_name}-{self.album_sort_name}"
+
+    @property
+    def album_sort_name(self) -> str:
+        return utils.build_sort_name(self.album)
+
+    @property
+    def id(self) -> str:
+        return f"track={self.sort_title}-{self.artist_sort_name}-{self.album_sort_name}"
+
+    @property
     def unique_id(self) -> str:
-        return f"{self.artist}-{self.album}-{self.title}-{self.played_at}"
+        return f"track-{self.artist_sort_name}-{self.album_sort_name}-{self.sort_title}-{self.played_at}"
 
     @property
     def track_artist_id(self) -> str:
-        return f"{self.title}-{self.artist}"
+        return f"track-{self.sort_title}-{self.artist_sort_name}"
+
+    @property
+    def artist_album_id(self) -> str:
+        return f"track-{self.artist_sort_name}-{self.album_sort_name}"
 
     @property
     def played_at_ts(self) -> Arrow:

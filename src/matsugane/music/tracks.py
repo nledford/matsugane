@@ -5,10 +5,9 @@ from attrs import define, field
 
 from matsugane import utils
 from matsugane.data.lastfm import LastfmFetcher, LastfmTrack
-from matsugane.music.album import Album, AlbumName
-from matsugane.music.artist import Artist, ArtistName
+from matsugane.music.album import Album
+from matsugane.music.artist import Artist
 from matsugane.music.stats import Stats
-from matsugane.music.track import TrackTitle, UniversalTrack
 
 fetcher = LastfmFetcher()
 
@@ -70,61 +69,68 @@ class UniversalTracks:
 
     @property
     def artists(self) -> List[Artist]:
-        seen = set()
-        artists: List[Artist] = []
+        artists_dict = dict()
         for track in self.lastfm_tracks:
-            artist = Artist(ArtistName(track.artist))
+            artists_dict[track.artist_id] = track.artist
 
-            if artist.sort_name not in seen:
-                seen.add(artist.sort_name)
-
-                artist.albums = self._albums_by_artist(artist)
-                artists.append(artist)
+        artists = []
+        for artist_id, artist_name in artists_dict.items():
+            num_plays = self._plays_by_artist(artist_id)
+            num_tracks = self._tracks_by_artist(artist_id)
+            num_albums = self._albums_by_artist(artist_id)
+            artist = Artist(artist_name, num_plays, num_tracks, num_albums)
+            artists.append(artist)
 
         return sorted(artists, key=lambda a: a.sort_name)
 
-    def _albums_by_artist(self, artist: Artist) -> List[Album]:
-        raw_albums = set(
-            [
-                track.album
-                for track in self.lastfm_tracks
-                if utils.build_sort_name(track.artist) == artist.sort_name
-            ]
+    def _plays_by_artist(self, artist_id: str) -> int:
+        return len(
+            [track for track in self.lastfm_tracks if track.artist_id == artist_id]
         )
+
+    def _tracks_by_artist(self, artist_id: str) -> int:
+        seen = set()
+        for track in self.lastfm_tracks:
+            if track.artist_id == artist_id and track.unique_id not in seen:
+                seen.add(track.unique_id)
+        return len(seen)
+
+    def _albums_by_artist(self, artist_id: str) -> int:
+        seen = set()
+        for track in self.lastfm_tracks:
+            if track.artist_id == artist_id and track.album_id not in seen:
+                seen.add(track.album_id)
+        return len(seen)
+
+
+    @property
+    def albums(self) -> List[Album]:
+        albums_dict = dict()
+        for track in self.lastfm_tracks:
+            albums_dict[track.album_id] = track.album
+
         albums = []
-        for raw_album in raw_albums:
-            album = Album(AlbumName(raw_album))
-            album.tracks = self._tracks_by_album(artist, album)
+        for album_id,album_name in albums_dict.items():
+            num_plays = self._plays_by_album(album_id)
+            num_tracks = self._tracks_by_album(album_id)
+
+            album = Album(album_name, num_plays, num_tracks)
             albums.append(album)
 
         return sorted(albums, key=lambda a: a.sort_name)
 
-    def _tracks_by_album(self, artist: Artist, album: Album) -> List[UniversalTrack]:
-        raw_tracks = set(
-            [
-                track
-                for track in self.lastfm_tracks
-                if utils.build_sort_name(track.artist) == artist.sort_name
-                and utils.build_sort_name(track.album) == album.sort_name
-            ]
+    def _plays_by_album(self, album_id: str) -> int:
+        return len(
+            [track for track in self.lastfm_tracks if track.album_id == album_id]
         )
 
-        plays_dict: dict[str, int] = dict()
-        played_at_dict: dict[str, List[str]] = dict()
-        for raw_track in raw_tracks:
-            plays_dict[raw_track.title] = plays_dict.get(raw_track.title, 0) + 1
-            played_at_dict.setdefault(raw_track.title, [])
-            played_at_dict[raw_track.title].append(raw_track.played_at)
+    def _tracks_by_album(self, album_id: str) -> int:
+        seen = set()
+        for track in self.lastfm_tracks:
+            if track.album_id == album_id and track.album_id not in seen:
+                seen.add(track.album_id)
+        return len(seen)
 
-        tracks = []
-        for raw_track in raw_tracks:
-            track = UniversalTrack(
-                TrackTitle(raw_track.title),
-                plays=plays_dict[raw_track.title],
-                played_at=played_at_dict[raw_track.title],
-            )
-            tracks.append(track)
-        return sorted(tracks, key=lambda t: t.sort_name)
 
     @property
     def has_tracks(self) -> bool:
@@ -142,7 +148,11 @@ class UniversalTracks:
         if self.is_empty:
             return 0
 
-        return sum(artist.total_tracks for artist in self.artists)
+        seen = set()
+        for track in self.lastfm_tracks:
+            if track.id not in seen:
+                seen.add(track.id)
+        return len(seen)
 
     @property
     def total_plays(self) -> int:
@@ -152,7 +162,11 @@ class UniversalTracks:
         if self.is_empty:
             return 0
 
-        return sum(artist.total_plays for artist in self.artists)
+        seen = set()
+        for track in self.lastfm_tracks:
+            if track.track_artist_id not in seen:
+                seen.add(track.track_artist_id)
+        return len(seen)
 
     @property
     def total_artists(self) -> int:
@@ -169,7 +183,11 @@ class UniversalTracks:
         if self.is_empty:
             return 0
 
-        return sum(artist.total_albums for artist in self.artists)
+        seen = set()
+        for track in self.lastfm_tracks:
+            if track.artist_album_id not in seen:
+                seen.add(track.artist_album_id)
+        return len(seen)
 
     @property
     def plays_per_artist_stats(self) -> Stats:
@@ -185,10 +203,7 @@ class UniversalTracks:
         Builds and returns a `Stats` object for plays per album.
         :return: A `Stats` object for plays per album.
         """
-        plays = []
-        for artist in self.artists:
-            for album in artist.albums:
-                plays.append(album.total_plays)
+        plays = [album.total_plays for album in self.albums]
         return Stats(plays)
 
     @property
@@ -207,13 +222,9 @@ class UniversalTracks:
     @property
     def plays_by_hour(self) -> list[PlaysByHour]:
         hours: dict[int, int] = dict()
-
-        for artist in self.artists:
-            for album in artist.albums:
-                for track in album.tracks:
-                    for played_at in track.played_at:
-                        hour = utils.convert_ts_to_dt(played_at).hour
-                        hours[hour] = hours.get(hour, 0) + 1
+        for track in self.lastfm_tracks:
+            hour = utils.convert_ts_to_dt(track.played_at).hour
+            hours[hour] = hours.get(hour, 0) + 1
 
         plays_by_hour = [
             PlaysByHour(hour=k, plays=v, total=self.total_plays)
