@@ -2,13 +2,13 @@ from textual.reactive import reactive
 from textual.widgets import DataTable
 
 from matsugane import utils
-from matsugane.music.tracks import UniversalTracks
+from matsugane.data.lastfm import LastfmTracks
 
 
 class RecentPlays(DataTable):
-    ut: reactive[UniversalTracks] = reactive(UniversalTracks(), recompose=True)
+    ut: reactive[LastfmTracks] = reactive(LastfmTracks(), recompose=True)
 
-    def watch_ut(self, tracks: UniversalTracks) -> None:
+    def watch_ut(self, tracks: LastfmTracks) -> None:
         self.ut = tracks
         self.build_table(tracks)
 
@@ -20,13 +20,13 @@ class RecentPlays(DataTable):
         self.classes = "table"
         self.build_table(self.ut)
 
-    def build_table(self, ut: UniversalTracks) -> None:
+    def build_table(self, ut: LastfmTracks) -> None:
         self.clear()
 
         if ut.is_empty and self.row_count == 0:
             self.add_row("No tracks", "", "", "", key="NO DATA RECENT PLAYS")
         else:
-            for track in ut.lastfm_tracks:
+            for track in ut.tracks:
                 self.add_row(
                     utils.truncate(track.title),
                     utils.truncate(track.artist),

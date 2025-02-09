@@ -3,7 +3,7 @@ from textual.containers import HorizontalGroup, VerticalGroup
 from textual.reactive import reactive
 from textual.widgets import Label
 
-from matsugane.music.tracks import UniversalTracks
+from matsugane.data.lastfm import LastfmTracks
 
 
 class Stats(HorizontalGroup):
@@ -18,9 +18,9 @@ class Stats(HorizontalGroup):
 
 
 class StatsHeader(HorizontalGroup):
-    ut: reactive[UniversalTracks] = reactive(UniversalTracks(), recompose=True)
+    ut: reactive[LastfmTracks] = reactive(LastfmTracks(), recompose=True)
 
-    def watch_ut(self, tracks: UniversalTracks) -> None:
+    def watch_ut(self, tracks: LastfmTracks) -> None:
         self.ut = tracks
 
     def on_mount(self) -> None:

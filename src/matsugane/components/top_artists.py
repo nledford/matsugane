@@ -1,13 +1,13 @@
 from textual.reactive import reactive
 from textual.widgets import DataTable
 
-from matsugane.music.tracks import UniversalTracks
+from matsugane.data.lastfm import LastfmTracks
 
 
 class TopArtists(DataTable):
-    ut: reactive[UniversalTracks] = reactive(UniversalTracks(), recompose=True)
+    ut: reactive[LastfmTracks] = reactive(LastfmTracks(), recompose=True)
 
-    def watch_ut(self, tracks: UniversalTracks) -> None:
+    def watch_ut(self, tracks: LastfmTracks) -> None:
         self.ut = tracks
         self.build_table(tracks)
 
@@ -20,7 +20,7 @@ class TopArtists(DataTable):
         self.classes = "table"
         self.refresh()
 
-    def build_table(self, ut: UniversalTracks) -> None:
+    def build_table(self, ut: LastfmTracks) -> None:
         self.clear()
 
         def percentage(artist_plays: int = 0) -> str:

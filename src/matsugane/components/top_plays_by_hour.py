@@ -1,13 +1,13 @@
 from textual.reactive import reactive
 from textual.widgets import DataTable
 
-from matsugane.music.tracks import UniversalTracks
+from matsugane.data.lastfm import LastfmTracks
 
 
 class TopPlaysByHour(DataTable):
-    ut: reactive[UniversalTracks] = reactive(UniversalTracks())
+    ut: reactive[LastfmTracks] = reactive(LastfmTracks())
 
-    def watch_ut(self, tracks: UniversalTracks) -> None:
+    def watch_ut(self, tracks: LastfmTracks) -> None:
         self.ut = tracks
         self.build_table(tracks)
 
@@ -19,7 +19,7 @@ class TopPlaysByHour(DataTable):
         self.border_title = "Top Plays by Hour"
         self.classes = "table"
 
-    def build_table(self, ut: UniversalTracks) -> None:
+    def build_table(self, ut: LastfmTracks) -> None:
         self.clear()
 
         if ut.is_empty and self.row_count == 0:

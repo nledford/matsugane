@@ -8,7 +8,7 @@ from matsugane.components.recent_plays import RecentPlays
 from matsugane.components.stats_header import StatsHeader
 from matsugane.components.top_artists import TopArtists
 from matsugane.components.top_plays_by_hour import TopPlaysByHour
-from matsugane.music.tracks import UniversalTracks
+from matsugane.data.lastfm import LastfmTracks
 
 
 class MatsuganeApp(App):
@@ -17,7 +17,7 @@ class MatsuganeApp(App):
     CSS_PATH = "styles.tcss"
     BINDINGS = [("r", "refresh_data", "Refresh Last.fm Data")]
 
-    ut: reactive[UniversalTracks] = reactive(UniversalTracks())
+    ut: reactive[LastfmTracks] = reactive(LastfmTracks())
     is_refreshing: reactive[bool] = reactive(False)
 
     async def on_mount(self) -> None:
@@ -31,7 +31,7 @@ class MatsuganeApp(App):
 
     async def refresh_tracks(self) -> None:
         self.update_is_refreshing(True)
-        self.ut = await UniversalTracks.build(True)
+        self.ut = await LastfmTracks.build(True)
         self.update_is_refreshing()
 
     def compose(self) -> ComposeResult:
