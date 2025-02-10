@@ -22,14 +22,11 @@ dependencies = [
 dev = [
     "pytest>=8.3.4",
     "textual-dev>=1.7.0",
-]
-lint = [
     "pyright>=1.1.393",
     "ruff>=0.9.4",
-]
-just = [
     "toml>=0.10.2",
 ]
+
 
 [project.scripts]
 lastfm_stats = "matsugane.main:main"
@@ -48,6 +45,7 @@ pythonpath = [
 ]
 
 [tool.pyright]
+venvPath = "./.venv"
 include = ["src"]
 exclude = [
     "**/node_modules",
@@ -56,7 +54,7 @@ exclude = [
     "**/.pytest_cache",
     "**/tests",
     "**/.git",
-    "**/playground"
+    "debug.py"
 ]
 defineConstant = { DEBUG = true }
 stubPath = "src/stubs"
