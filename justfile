@@ -26,7 +26,8 @@ test: lint
 # Run the application
 [group('Python')]
 run: test
-    uvx textual run --dev ./src/matsugane/main.py
+    uv run textual run --dev ./src/matsugane/main.py
+    #uvx textual run --dev ./src/matsugane/main.py
 
 # Upgrades `pyproject.toml` dependencies with `uv`. (SOURCE: https://gist.github.com/yhoiseth/c80c1e44a7036307e424fce616eed25e)
 [group('Python')]
