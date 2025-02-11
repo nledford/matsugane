@@ -15,6 +15,7 @@ from matsugane.data.lastfm import LastfmTracks
 class MatsuganeApp(App):
     """A Textual app to display stats from Lastfm."""
 
+    TITLE = "matsugane"
     CSS_PATH = "styles.tcss"
     BINDINGS = [("r", "refresh_data", "Refresh Last.fm Data")]
 
