@@ -1,3 +1,4 @@
+from textual import work
 from textual.app import App, ComposeResult
 from textual.containers import VerticalGroup
 from textual.reactive import reactive
@@ -21,7 +22,7 @@ class MatsuganeApp(App):
     is_refreshing: reactive[bool] = reactive(False)
 
     async def on_mount(self) -> None:
-        await self.refresh_tracks()
+        self.refresh_tracks()
 
     def update_is_refreshing(self, override: bool = False) -> None:
         if override:
@@ -29,6 +30,7 @@ class MatsuganeApp(App):
         else:
             self.is_refreshing = not self.is_refreshing
 
+    @work
     async def refresh_tracks(self) -> None:
         self.update_is_refreshing(True)
         self.ut = await LastfmTracks.build(True)
@@ -47,7 +49,7 @@ class MatsuganeApp(App):
         yield Footer()
 
     async def action_refresh_data(self) -> None:
-        await self.refresh_tracks()
+        self.refresh_tracks()
 
 
 if __name__ == "__main__":
