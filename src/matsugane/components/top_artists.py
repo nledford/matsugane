@@ -1,6 +1,7 @@
 from textual.reactive import reactive
 from textual.widgets import DataTable
 
+from matsugane import utils
 from matsugane.data.lastfm import LastfmTracks
 
 
@@ -36,7 +37,7 @@ class TopArtists(DataTable):
         else:
             for top_artist in ut.top_artists:
                 self.add_row(
-                    top_artist.name,
+                    utils.truncate(top_artist.name, 35),
                     top_artist.total_plays,
                     top_artist.total_tracks,
                     top_artist.total_albums,
