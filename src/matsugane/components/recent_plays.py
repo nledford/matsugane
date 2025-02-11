@@ -32,5 +32,5 @@ class RecentPlays(DataTable):
                     utils.truncate(track.artist),
                     utils.truncate(track.album),
                     utils.convert_ts_to_local_time(track.played_at),
-                    key=track.unique_id,
+                    key=track.play_id,
                 )

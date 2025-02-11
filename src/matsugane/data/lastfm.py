@@ -64,11 +64,11 @@ class LastfmTrack:
     played_at: str
 
     @property
-    def id(self) -> str:
+    def track_id(self) -> str:
         return f"track={self.sort_title}-{self.artist_sort_name}-{self.album_sort_name}"
 
     @property
-    def unique_id(self) -> str:
+    def play_id(self) -> str:
         return f"track-{self.artist_sort_name}-{self.album_sort_name}-{self.sort_title}-{self.played_at}"
 
     @property
@@ -155,8 +155,8 @@ class LastfmTracks:
         seen = set()
         tracks = [track for track in self.tracks if track.artist_id == artist_id]
         for track in tracks:
-            if track.track_artist_id not in seen:
-                seen.add(track.track_artist_id)
+            if track.track_id not in seen:
+                seen.add(track.track_id)
         return len(seen)
 
     def _albums_by_artist(self, artist_id: str) -> int:
@@ -212,8 +212,8 @@ class LastfmTracks:
 
         seen = set()
         for track in self.tracks:
-            if track.id not in seen:
-                seen.add(track.id)
+            if track.track_id not in seen:
+                seen.add(track.track_id)
         return len(seen)
 
     @property
@@ -224,7 +224,7 @@ class LastfmTracks:
         if self.is_empty:
             return 0
 
-        return len([track.unique_id for track in self.tracks])
+        return len([track.play_id for track in self.tracks])
 
     @property
     def total_artists(self) -> int:
