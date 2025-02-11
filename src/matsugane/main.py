@@ -33,19 +33,25 @@ class MatsuganeApp(App):
 
     @work
     async def refresh_tracks(self) -> None:
+        app_container = self.query_one("#lastfmContainer")
+
         self.update_is_refreshing(True)
+        app_container.loading = True
+
         self.ut = await LastfmTracks.build(True)
         self.update_is_refreshing()
+        app_container.loading = False
 
     def compose(self) -> ComposeResult:
         yield Header()
 
         with VerticalGroup(id="appContainer"):
             yield LastRefresh(id="lastRefreshed").data_bind(MatsuganeApp.is_refreshing)
-            yield StatsHeader().data_bind(MatsuganeApp.ut)
-            yield RecentPlays(id="recentPlays").data_bind(MatsuganeApp.ut)
-            yield TopArtists().data_bind(MatsuganeApp.ut)
-            yield TopPlaysByHour().data_bind(MatsuganeApp.ut)
+            with VerticalGroup(id="lastfmContainer"):
+                yield StatsHeader().data_bind(MatsuganeApp.ut)
+                yield RecentPlays(id="recentPlays").data_bind(MatsuganeApp.ut)
+                yield TopArtists().data_bind(MatsuganeApp.ut)
+                yield TopPlaysByHour().data_bind(MatsuganeApp.ut)
 
         yield Footer()
 
