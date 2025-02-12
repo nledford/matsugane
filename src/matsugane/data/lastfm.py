@@ -1,5 +1,5 @@
 import os
-from typing import ClassVar, List
+from typing import List
 
 import arrow
 import attrs
@@ -131,8 +131,7 @@ class LastfmTracks:
         """
         Fetches tracks from last.fm
         """
-        fetcher = LastfmFetcher()
-        self.tracks = await fetcher.fetch_recent_tracks(1000)
+        self.tracks = await fetch_lastfm_tracks()
         self.artists = self._get_artists()
         self.albums = self._get_albums()
 
@@ -286,39 +285,39 @@ class LastfmTracks:
         return plays_by_hour
 
 
-@define
-class LastfmFetcher:
-    api_key: ClassVar[str] = str(os.getenv("LASTFM_KEY"))
-    api_secret: ClassVar[str] = str(os.getenv("LASTFM_SECRET"))
-    username: ClassVar[str] = str(os.getenv("LASTFM_USER"))
-    password: ClassVar[str] = str(os.getenv("LASTFM_PASSWORD"))
+async def fetch_lastfm_tracks(limit: int = 1000) -> list[LastfmTrack]:
+    """
+    Fetches all tracks played today from Last.fm
+    :param limit: The number of tracks to fetch. Defaults to 1000.
+    :return: A list of last.fm tracks
+    """
+    api_key: str = str(os.getenv("LASTFM_KEY"))
+    # api_secret: str = str(os.getenv("LASTFM_SECRET"))
+    username: str = str(os.getenv("LASTFM_USER"))
+    # password: str = str(os.getenv("LASTFM_PASSWORD"))
 
-    @classmethod
-    async def fetch_recent_tracks(cls, limit: int = 200) -> list[LastfmTrack]:
-        params = {
-            "method": "user.getrecenttracks",
-            "user": cls.username,
-            "extended": "1",
-            "limit": str(limit),
-            "api_key": cls.api_key,
-            "from": str(utils.get_today_at_midnight()),
-            "format": "json",
-        }
+    params = {
+        "method": "user.getrecenttracks",
+        "user": username,
+        "extended": "1",
+        "limit": str(limit),
+        "api_key": api_key,
+        "from": str(utils.get_today_at_midnight()),
+        "format": "json",
+    }
 
-        async with httpx.AsyncClient() as client:
-            result = await client.get(
-                "http://ws.audioscrobbler.com/2.0/", params=params
+    async with httpx.AsyncClient() as client:
+        result = await client.get("http://ws.audioscrobbler.com/2.0/", params=params)
+        recent_tracks = result.json()["recenttracks"]["track"]
+
+        return [
+            LastfmTrack(
+                title=track["name"],
+                track_url=track["url"],
+                artist=track["artist"]["name"],
+                artist_url=track["artist"]["url"],
+                album=track["album"]["#text"],
+                played_at=track["date"]["uts"],
             )
-            recent_tracks = result.json()["recenttracks"]["track"]
-
-            return [
-                LastfmTrack(
-                    title=track["name"],
-                    track_url=track["url"],
-                    artist=track["artist"]["name"],
-                    artist_url=track["artist"]["url"],
-                    album=track["album"]["#text"],
-                    played_at=track["date"]["uts"],
-                )
-                for track in recent_tracks
-            ]
+            for track in recent_tracks
+        ]
