@@ -111,8 +111,8 @@ class LastfmTrack:
 @define
 class LastfmTracks:
     tracks: List[LastfmTrack] = []
-    artists: List[LastfmItem] = []
-    albums: List[LastfmItem] = []
+    _artists: List[LastfmItem] = []
+    _albums: List[LastfmItem] = []
 
     @staticmethod
     async def build(fetch_tracks: bool = False) -> "LastfmTracks":
@@ -132,10 +132,13 @@ class LastfmTracks:
         Fetches tracks from last.fm
         """
         self.tracks = await fetch_lastfm_tracks()
-        self.artists = self._get_artists()
-        self.albums = self._get_albums()
+        self._build_artists()
+        self._build_albums()
 
-    def _get_artists(self) -> List[LastfmItem]:
+    def _build_artists(self) -> None:
+        """
+        Builds a list of artists and associated metrics
+        """
         artists_dict = dict()
         for track in self.tracks:
             artists_dict[track.artist_id] = track.artist
@@ -148,28 +151,38 @@ class LastfmTracks:
             artist = LastfmItem(artist_name, num_plays, num_tracks, num_albums)
             artists.append(artist)
 
-        return sorted(artists, key=lambda a: a.sort_name)
+        self._artists = sorted(artists, key=lambda a: a.sort_name)
 
     def _plays_by_artist(self, artist_id: str) -> int:
+        """
+        Calculates the number of tracks played by a given artist
+        :param artist_id: The id of the artist
+        :return: The total number of tracks played
+        """
         return len([track for track in self.tracks if track.artist_id == artist_id])
 
     def _tracks_by_artist(self, artist_id: str) -> int:
-        seen = set()
+        """
+        Calculates the total number of tracks by a given artist
+        :param artist_id: The id of the artist
+        :return: The total number of tracks
+        """
         tracks = [track for track in self.tracks if track.artist_id == artist_id]
-        for track in tracks:
-            if track.track_id not in seen:
-                seen.add(track.track_id)
-        return len(seen)
+        return len(set(track.track_id for track in tracks))
 
     def _albums_by_artist(self, artist_id: str) -> int:
-        seen = set()
+        """
+        Calculates the total number of albums by a given artist
+        :param artist_id: The id of the artist
+        :return: The total number of albums
+        """
         tracks = [track for track in self.tracks if track.artist_id == artist_id]
-        for track in tracks:
-            if track.album_id not in seen:
-                seen.add(track.album_id)
-        return len(seen)
+        return len(set([track.album_id for track in tracks]))
 
-    def _get_albums(self) -> List[LastfmItem]:
+    def _build_albums(self) -> None:
+        """
+        Builds a list of albums and associated metrics
+        """
         albums_dict = dict()
         for track in self.tracks:
             albums_dict[track.album_id] = track.album
@@ -182,26 +195,31 @@ class LastfmTracks:
             album = LastfmItem(album_name, num_plays, num_tracks)
             albums.append(album)
 
-        return sorted(albums, key=lambda a: a.sort_name)
+        self._albums = sorted(albums, key=lambda a: a.sort_name)
 
     def _plays_by_album(self, album_id: str) -> int:
+        """
+        Calculates the number of plays from a given album
+        :param album_id: The id of the album
+        :return: The total number of plays
+        """
         return len([track for track in self.tracks if track.album_id == album_id])
 
     def _tracks_by_album(self, album_id: str) -> int:
-        seen = set()
+        """
+        Calculates the total number of tracks associated with a given album
+        :param album_id: The id of the album
+        :return: The total number of tracks
+        """
         tracks = [track for track in self.tracks if track.album_id == album_id]
-        for track in tracks:
-            if track.album_id not in seen:
-                seen.add(track.album_id)
-        return len(seen)
-
-    @property
-    def has_tracks(self) -> bool:
-        return len(self.tracks) > 0
+        return len(set([track.album_id for track in tracks]))
 
     @property
     def is_empty(self) -> bool:
-        return not self.has_tracks
+        """
+        Returns false if no tracks have been loaded from Last.fm
+        """
+        return len(self.tracks) <= 0
 
     @property
     def total_tracks(self) -> int:
@@ -228,7 +246,7 @@ class LastfmTracks:
         """
         Returns the total number of artists.
         """
-        return len(self.artists)
+        return len(self._artists)
 
     @property
     def total_albums(self) -> int:
@@ -238,7 +256,7 @@ class LastfmTracks:
         if self.is_empty:
             return 0
 
-        return len(self.albums)
+        return len(self._albums)
 
     @property
     def plays_per_artist_stats(self) -> Stats:
@@ -246,7 +264,7 @@ class LastfmTracks:
         Builds and returns a `Stats` objects for plays per artist.
         :return: A `Stats` object for plays per artist.
         """
-        return Stats([artist.total_plays for artist in self.artists])
+        return Stats([artist.total_plays for artist in self._artists])
 
     @property
     def plays_per_album_stats(self) -> Stats:
@@ -254,13 +272,17 @@ class LastfmTracks:
         Builds and returns a `Stats` object for plays per album.
         :return: A `Stats` object for plays per album.
         """
-        plays = [album.total_plays for album in self.albums]
+        plays = [album.total_plays for album in self._albums]
         return Stats(plays)
 
     @property
     def top_artists(self) -> List[LastfmItem]:
+        """
+        Builds a new list of artists and associated stats, ordered by most plays
+        :return: A list of ordered artists
+        """
         top_artists = sorted(
-            self.artists,
+            self._artists,
             key=lambda x: (
                 -x.total_plays,
                 -x.total_tracks,
@@ -272,6 +294,11 @@ class LastfmTracks:
 
     @property
     def plays_by_hour(self) -> list[PlaysByHour]:
+        """
+        Constructs a list of the number of tracks played each hour,
+        and sorts it by number of tracks played in descending order
+        :return: A list of tracks played by hour.
+        """
         hours: dict[int, int] = dict()
         for track in self.tracks:
             hour = utils.convert_ts_to_dt(track.played_at).hour
@@ -289,7 +316,7 @@ async def fetch_lastfm_tracks(limit: int = 1000) -> list[LastfmTrack]:
     """
     Fetches all tracks played today from Last.fm
     :param limit: The number of tracks to fetch. Defaults to 1000.
-    :return: A list of last.fm tracks
+    :return: A list of :class:`LastfmTrack`
     """
     api_key: str = str(os.getenv("LASTFM_KEY"))
     # api_secret: str = str(os.getenv("LASTFM_SECRET"))
