@@ -57,19 +57,19 @@ class LastfmItem:
 @define(eq=False)
 class LastfmTrack:
     title: str
-    track_url: str
     artist: str
-    artist_url: str
     album: str
     played_at: str
+    artist_url: str = ""
+    track_url: str = ""
 
     @property
     def track_id(self) -> str:
-        return f"track={self.sort_title}-{self.artist_sort_name}-{self.album_sort_name}"
+        return f"track-{self.sort_title}-{self.artist_sort_name}-{self.album_sort_name}"
 
     @property
     def play_id(self) -> str:
-        return f"track-{self.artist_sort_name}-{self.album_sort_name}-{self.sort_title}-{self.played_at}"
+        return f"track-{self.sort_title}-{self.artist_sort_name}-{self.album_sort_name}-{self.played_at}"
 
     @property
     def track_artist_id(self) -> str:
