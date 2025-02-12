@@ -111,6 +111,8 @@ class LastfmTrack:
 @define
 class LastfmTracks:
     tracks: List[LastfmTrack] = []
+    artists: List[LastfmItem] = []
+    albums: List[LastfmItem] = []
 
     @staticmethod
     async def build(fetch_tracks: bool = False) -> "LastfmTracks":
@@ -131,9 +133,10 @@ class LastfmTracks:
         """
         fetcher = LastfmFetcher()
         self.tracks = await fetcher.fetch_recent_tracks(1000)
+        self.artists = self._get_artists()
+        self.albums = self._get_albums()
 
-    @property
-    def artists(self) -> List[LastfmItem]:
+    def _get_artists(self) -> List[LastfmItem]:
         artists_dict = dict()
         for track in self.tracks:
             artists_dict[track.artist_id] = track.artist
@@ -167,8 +170,7 @@ class LastfmTracks:
                 seen.add(track.album_id)
         return len(seen)
 
-    @property
-    def albums(self) -> List[LastfmItem]:
+    def _get_albums(self) -> List[LastfmItem]:
         albums_dict = dict()
         for track in self.tracks:
             albums_dict[track.album_id] = track.album
@@ -210,11 +212,7 @@ class LastfmTracks:
         if self.is_empty:
             return 0
 
-        seen = set()
-        for track in self.tracks:
-            if track.track_id not in seen:
-                seen.add(track.track_id)
-        return len(seen)
+        return len(set([track.track_id for track in self.tracks]))
 
     @property
     def total_plays(self) -> int:
@@ -224,7 +222,7 @@ class LastfmTracks:
         if self.is_empty:
             return 0
 
-        return len([track.play_id for track in self.tracks])
+        return len(set([track.play_id for track in self.tracks]))
 
     @property
     def total_artists(self) -> int:
@@ -241,11 +239,7 @@ class LastfmTracks:
         if self.is_empty:
             return 0
 
-        seen = set()
-        for track in self.tracks:
-            if track.artist_album_id not in seen:
-                seen.add(track.artist_album_id)
-        return len(seen)
+        return len(self.albums)
 
     @property
     def plays_per_artist_stats(self) -> Stats:
@@ -274,7 +268,7 @@ class LastfmTracks:
                 -x.total_albums,
                 x.sort_name,
             ),
-        )[:25]
+        )
         return top_artists
 
     @property
