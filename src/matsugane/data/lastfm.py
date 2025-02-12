@@ -110,9 +110,16 @@ class LastfmTrack:
 
 @define
 class LastfmTracks:
+    """
+    Stores tracks retrieved from last.fm and calculates various stats about the tracks.
+    """
+
     tracks: List[LastfmTrack] = []
+    """All tracks retrieved from last.fm."""
     _artists: List[LastfmItem] = []
+    """A list of unique artists from last.fm tracks."""
     _albums: List[LastfmItem] = []
+    """A list of unique albums from last.fm tracks."""
 
     @staticmethod
     async def build(fetch_tracks: bool = False) -> "LastfmTracks":
