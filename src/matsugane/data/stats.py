@@ -38,20 +38,24 @@ class Stats:
 
     @property
     def lower_limit(self) -> float:
+        result = self.average - (2 * self.stddev)
+
         if self.total == 0:
             return 0.0
-
-        result = self.average - (2 * self.stddev)
-        if result <= 1.0:
+        elif result <= 1.0:
             return 1.0
-        return result
+        else:
+            return result
 
     @property
     def upper_limit(self) -> float:
+        result = self.average + (2 * self.stddev)
+
         if self.total == 0:
             return 0.0
-
-        return self.average + (2 * self.stddev)
+        elif result <= 1.0:
+            return 1.0
+        return result
 
     @property
     def items_exceeding_upper_limit(self) -> int:
