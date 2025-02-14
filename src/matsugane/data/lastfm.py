@@ -283,6 +283,15 @@ class LastfmTracks:
         return Stats(plays)
 
     @property
+    def albums_per_artist_stats(self) -> Stats:
+        """
+        Builds and returns a `Stats` object for albums per artist
+        :return: A `Stats` object for albums per artist
+        """
+        data = [artist.total_albums for artist in self._artists]
+        return Stats(data)
+
+    @property
     def top_artists(self) -> List[LastfmItem]:
         """
         Builds a new list of artists and associated stats, ordered by most plays

@@ -40,8 +40,8 @@ class StatsHeader(HorizontalGroup):
                     data=str(self.ut.plays_per_artist_stats.average),
                 ),
                 Stats(
-                    header="Avg. Plays Per Album",
-                    data=str(self.ut.plays_per_album_stats.average),
+                    header="Avg. Albums Per Artist",
+                    data=str(self.ut.albums_per_artist_stats.average),
                 ),
             ),
             HorizontalGroup(
@@ -51,7 +51,17 @@ class StatsHeader(HorizontalGroup):
                 ),
                 Stats(
                     header="Std Dev",
-                    data=str(self.ut.plays_per_album_stats.stddev),
+                    data=str(self.ut.albums_per_artist_stats.stddev),
+                ),
+            ),
+            HorizontalGroup(
+                Stats(
+                    header="Lower Limit",
+                    data=str(self.ut.plays_per_artist_stats.lower_limit),
+                ),
+                Stats(
+                    header="Lower Limit",
+                    data=str(self.ut.albums_per_artist_stats.lower_limit),
                 ),
             ),
             HorizontalGroup(
@@ -61,7 +71,7 @@ class StatsHeader(HorizontalGroup):
                 ),
                 Stats(
                     header="Upper Limit",
-                    data=str(self.ut.plays_per_album_stats.upper_limit),
+                    data=str(self.ut.albums_per_artist_stats.upper_limit),
                 ),
             ),
             HorizontalGroup(
@@ -73,7 +83,9 @@ class StatsHeader(HorizontalGroup):
                 ),
                 Stats(
                     header="Exceeding Upper Limit",
-                    data=str(self.ut.plays_per_album_stats.items_exceeding_upper_limit),
+                    data=str(
+                        self.ut.albums_per_artist_stats.items_exceeding_upper_limit
+                    ),
                 ),
             ),
         )

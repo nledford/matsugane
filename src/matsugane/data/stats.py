@@ -42,8 +42,8 @@ class Stats:
             return 0.0
 
         result = self.average - (2 * self.stddev)
-        if result <= 0:
-            return 0.0
+        if result <= 1.0:
+            return 1.0
         return result
 
     @property
