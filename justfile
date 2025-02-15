@@ -6,6 +6,9 @@ set dotenv-load := true
 default:
     @just -l
 
+install:
+     fd -I . 'dist/' -e whl -x pip install {}
+
 # Activate virtual environment
 [group('Python')]
 venv:
