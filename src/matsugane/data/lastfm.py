@@ -120,6 +120,15 @@ class LastfmTracks:
     """A list of unique artists from last.fm tracks."""
     _albums: List[LastfmItem] = []
     """A list of unique albums from last.fm tracks."""
+    _is_empty: bool = True
+    _total_tracks: int = 0
+    _total_plays: int = 0
+    _total_artists: int = 0
+    _total_albums: int = 0
+    _plays_per_artist_stats: Stats = Stats()
+    _plays_per_album_stats: Stats = Stats()
+    _albums_per_artist_stats: Stats = Stats()
+    _plays_by_hour: List[PlaysByHour] = []
 
     @staticmethod
     async def build(fetch_tracks: bool = False) -> "LastfmTracks":
@@ -138,9 +147,28 @@ class LastfmTracks:
         """
         Fetches tracks from last.fm
         """
-        self.tracks = await fetch_lastfm_tracks()
+        tracks: List[LastfmTrack] = await fetch_lastfm_tracks()
+        total_tracks = len(set([track.track_id for track in tracks]))
+        total_plays = len(set([track.play_id for track in tracks]))
+
+        self.tracks = tracks
         self._build_artists()
         self._build_albums()
+        self._is_empty = total_tracks <= 0
+        self._total_tracks = total_tracks
+        self._total_plays = total_plays
+        self._total_artists = len(self._artists)
+        self._total_albums = len(self._albums)
+        self._plays_per_artist_stats = Stats(
+            [artist.total_plays for artist in self._artists]
+        )
+        self._plays_per_album_stats = Stats(
+            [album.total_plays for album in self._albums]
+        )
+        self._albums_per_artist_stats = Stats(
+            [artist.total_albums for artist in self._artists]
+        )
+        self._plays_by_hour = self._build_plays_by_hour(tracks, total_plays)
 
     def _build_artists(self) -> None:
         """
@@ -226,44 +254,35 @@ class LastfmTracks:
         """
         Returns false if no tracks have been loaded from Last.fm
         """
-        return len(self.tracks) <= 0
+        return self._is_empty
 
     @property
     def total_tracks(self) -> int:
         """
         Returns the number of tracks from all artists and albums.
         """
-        if self.is_empty:
-            return 0
-
-        return len(set([track.track_id for track in self.tracks]))
+        return self._total_tracks
 
     @property
     def total_plays(self) -> int:
         """
         Returns the sum of plays from all tracks.
         """
-        if self.is_empty:
-            return 0
-
-        return len(set([track.play_id for track in self.tracks]))
+        return self._total_plays
 
     @property
     def total_artists(self) -> int:
         """
         Returns the total number of artists.
         """
-        return len(self._artists)
+        return self._total_artists
 
     @property
     def total_albums(self) -> int:
         """
         Returns the total number of albums for all artists.
         """
-        if self.is_empty:
-            return 0
-
-        return len(self._albums)
+        return self._total_albums
 
     @property
     def plays_per_artist_stats(self) -> Stats:
@@ -271,16 +290,14 @@ class LastfmTracks:
         Builds and returns a `Stats` objects for plays per artist.
         :return: A `Stats` object for plays per artist.
         """
-        return Stats([artist.total_plays for artist in self._artists])
+        return self._plays_per_artist_stats
 
     @property
     def plays_per_album_stats(self) -> Stats:
         """
-        Builds and returns a `Stats` object for plays per album.
-        :return: A `Stats` object for plays per album.
+        Returns a `Stats` object for plays per album.
         """
-        plays = [album.total_plays for album in self._albums]
-        return Stats(plays)
+        return self._plays_per_album_stats
 
     @property
     def albums_per_artist_stats(self) -> Stats:
@@ -288,8 +305,7 @@ class LastfmTracks:
         Builds and returns a `Stats` object for albums per artist
         :return: A `Stats` object for albums per artist
         """
-        data = [artist.total_albums for artist in self._artists]
-        return Stats(data)
+        return self._albums_per_artist_stats
 
     @property
     def top_artists(self) -> List[LastfmItem]:
@@ -309,20 +325,29 @@ class LastfmTracks:
         return top_artists
 
     @property
-    def plays_by_hour(self) -> list[PlaysByHour]:
+    def plays_by_hour(self) -> List[PlaysByHour]:
+        return self._plays_by_hour
+
+    @staticmethod
+    def _build_plays_by_hour(
+        tracks: List[LastfmTrack] | None = None, total_plays: int = 0
+    ) -> List[PlaysByHour]:
         """
         Constructs a list of the number of tracks played each hour,
         and sorts it by number of tracks played in descending order
         :return: A list of tracks played by hour.
         """
+
+        if tracks is None or total_plays <= 0:
+            return []
+
         hours: dict[int, int] = dict()
-        for track in self.tracks:
+        for track in tracks:
             hour = utils.convert_ts_to_dt(track.played_at).hour
             hours[hour] = hours.get(hour, 0) + 1
 
         plays_by_hour = [
-            PlaysByHour(hour=k, plays=v, total=self.total_plays)
-            for k, v in hours.items()
+            PlaysByHour(hour=k, plays=v, total=total_plays) for k, v in hours.items()
         ]
         plays_by_hour.sort(key=lambda x: (-x.percent, -x.plays, x.hour))
         return plays_by_hour

@@ -6,7 +6,7 @@ from attrs import define
 
 @define
 class Stats:
-    items: List[int]
+    items: List[int] = []
 
     @property
     def total(self) -> int:
