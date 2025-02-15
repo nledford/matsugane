@@ -59,6 +59,10 @@ class MatsuganeApp(App):
         self.refresh_tracks()
 
 
-if __name__ == "__main__":
+def main() -> None:
     app = MatsuganeApp()
     app.run()
+
+
+if __name__ == "__main__":
+    main()

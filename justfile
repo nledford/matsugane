@@ -7,7 +7,7 @@ default:
     @just -l
 
 install:
-     fd -I . 'dist/' -e whl -x pip install {}
+     fd -I . 'dist/' -e whl -x pip install {} --force-reinstall
 
 # Activate virtual environment
 [group('Python')]
