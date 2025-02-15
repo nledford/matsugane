@@ -1,4 +1,5 @@
 import hashlib
+import math
 import unicodedata
 from datetime import datetime, tzinfo
 
@@ -158,7 +159,15 @@ def truncate(text: str, max_length: int = 40) -> str:
     :param max_length: The maximum length of the string, including `...`
     :return: Truncated text
     """
-    if len(text) > max_length:
+
+    if has_unicode_group(text):
+        unicode_max_length: int = math.floor(max_length / 1.6)
+
+        if len(text) > unicode_max_length:
+            return f"{text[: unicode_max_length - 3]}..."
+        else:
+            return text
+    elif len(text) > max_length:
         return f"{text[: max_length - 3]}..."
     else:
         return text
