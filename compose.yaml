@@ -1,0 +1,6 @@
+﻿services:
+  matsugane:
+    image: matsugane
+    build:
+      context: .
+      dockerfile: matsugane/Dockerfile
