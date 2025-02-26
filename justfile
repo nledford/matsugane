@@ -4,9 +4,14 @@
 default:
     @just -l
 
+[group('dotnet')]
+watch:
+    dotnet watch --project matsugane
+
 [group('Tailwind')]
 tailwind-build:
-    bunx @tailwindcss/cli -i ./matsugane/Styles/tailwind.css -o ./matsugane/wwwroot/lib/css/styles.css
+    bun update --cwd ./matsugane
+    bunx @tailwindcss/cli --cwd ./matsugane -i ./Styles/tailwind.css -o ./wwwroot/app.css --minify
 
 [group('Tailwind')]
 tailwind-watch:
