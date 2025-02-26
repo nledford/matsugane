@@ -5,6 +5,10 @@ default:
     @just -l
 
 [group('dotnet')]
+build: tailwind-build
+    dotnet build
+
+[group('dotnet')]
 watch:
     dotnet watch --project matsugane
 
