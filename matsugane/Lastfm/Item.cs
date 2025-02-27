@@ -2,12 +2,12 @@ namespace matsugane.Lastfm;
 
 public class Item
 {
-    public string Name { get; set; }
-    public string SortName { get; set; }
-    public int TotalTracks { get; set; }
-    public int TotalPlays { get; set; }
-    public int TotalAlbums { get; set; }
-    public double PlaysPercent { get; set; }
+    public string Name { get; private init; } = string.Empty;
+    public string SortName { get; private init; } = string.Empty;
+    public int TotalTracks { get; private init; }
+    public int TotalPlays { get; private init; }
+    public int TotalAlbums { get; private init; }
+    public double PlaysPercent { get; private init; }
     public string PlaysPercentFmt => $"{PlaysPercent * 100.0}%";
 
     public static async Task<Item> Build(string name, int totalTracks, int totalPlays, int totalAlbums, int globalPlays)

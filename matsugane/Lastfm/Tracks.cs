@@ -96,7 +96,7 @@ public class Tracks
                 .OrderByDescending(t => t.TotalPlays)
                 .ThenByDescending(t => t.TotalTracks)
                 .ThenByDescending(t => t.TotalAlbums)
-                .ThenByDescending(t => t.SortName);
+                .ThenBy(t => t.SortName);
         }
     }
 
