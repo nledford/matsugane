@@ -19,7 +19,7 @@ public class Track
     public string Album { get; private init; } = string.Empty;
     public string SortAlbum { get; private init; } = string.Empty;
     public DateTime PlayedAt { get; private init; }
-    public string PlayedAtFmt => PlayedAt.ToString("T");
+    public string PlayedAtFmt => PlayedAt.ToString("HH:mm:ss");
 
     public static async Task<Track> BuildTrack(string title, string artist, string album, string playedAt)
     {

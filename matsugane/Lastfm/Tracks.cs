@@ -116,4 +116,6 @@ public class Tracks
                 .ThenBy(h => h.Hour);
         }
     }
+
+    public double AvgPlaysPerHour => PlaysByHours.Select(x => x.Plays).Average();
 }
