@@ -111,7 +111,9 @@ public class Tracks
                     hour = grp.Key,
                     plays = grp.Count()
                 })
-                .Select(hour => new PlaysByHour(hour.hour, hour.plays, TotalPlays));
+                .Select(hour => new PlaysByHour(hour.hour, hour.plays, TotalPlays))
+                .OrderByDescending(h => h.Plays)
+                .ThenBy(h => h.Hour);
         }
     }
 }
