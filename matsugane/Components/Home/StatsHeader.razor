@@ -1,0 +1,43 @@
+@using System.Globalization
+<div class="flex flex-col lg:flex-row lg:flex-wrap border border-b-0 border-neutral-700/30 rounded">
+    <div class="flex flex-col lg:flex-row w-full">
+        <Cell Header="Total Artists" Data="@Tracks.TotalArtists.ToString()"/>
+        <Cell Header="Total Albums" Data="@Tracks.TotalAlbums.ToString()"/>
+        <Cell Header="Total Tracks" Data="@Tracks.TotalTracks.ToString()"/>
+        <Cell Header="Total Plays" Data="@Tracks.TotalPlays.ToString()"/>
+    </div>
+
+    <div class="basis-full lg:basis-1/2 flex flex-col">
+        <Cell Header="Avg. Plays Per Artist" Data="@AvgPlaysPerArtist"/>
+        <Cell Header="Variance" Data="@PlaysVariance" />
+        <Cell Header="Standard Deviation" Data="@PlaysStdDev" />
+        <Cell Header="Upper Limit" Data="@PlaysUpperLimit" />
+        <Cell Header="Exceeding Upper Limit" Data="@PlaysExceeding" />
+    </div>
+
+    <div class="basis-full lg:basis-1/2 flex flex-col">
+        <Cell Header="Avg. Albums Per Artist" Data="@AvgAlbumsPerArtist"/>
+        <Cell Header="Variance" Data="@AlbumsVariance" />
+        <Cell Header="Standard Deviation" Data="@AlbumsStdDev" />
+        <Cell Header="Upper Limit" Data="@AlbumsUpperLimit" />
+        <Cell Header="Exceeding Upper Limit" Data="@AlbumsExceeding" />
+    </div>
+</div>
+
+@code {
+    [EditorRequired] [Parameter] public required Tracks Tracks { get; set; }
+
+    // Plays Per Artist
+    private string AvgPlaysPerArtist => Tracks.PlaysPerArtistStats.Mean.ToString(CultureInfo.CurrentCulture);
+    private string PlaysVariance => Tracks.PlaysPerArtistStats.Variance.ToString(CultureInfo.CurrentCulture);
+    private string PlaysStdDev => Tracks.PlaysPerArtistStats.StandardDeviation.ToString(CultureInfo.CurrentCulture);
+    private string PlaysUpperLimit => Tracks.PlaysPerArtistStats.UpperLimit.ToString(CultureInfo.CurrentCulture);
+    private string PlaysExceeding => Tracks.PlaysPerArtistStats.ItemsExceedingUpperLimit.ToString(CultureInfo.CurrentCulture);
+
+    // Albums Per Artist
+    private string AvgAlbumsPerArtist => Tracks.AlbumsPerArtistStats.Mean.ToString(CultureInfo.CurrentCulture);
+    private string AlbumsVariance => Tracks.AlbumsPerArtistStats.Variance.ToString(CultureInfo.CurrentCulture);
+    private string AlbumsStdDev => Tracks.AlbumsPerArtistStats.StandardDeviation.ToString(CultureInfo.CurrentCulture);
+    private string AlbumsUpperLimit => Tracks.AlbumsPerArtistStats.UpperLimit.ToString(CultureInfo.CurrentCulture);
+    private string AlbumsExceeding => Tracks.AlbumsPerArtistStats.ItemsExceedingUpperLimit.ToString(CultureInfo.CurrentCulture);
+}

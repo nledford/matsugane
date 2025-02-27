@@ -1,0 +1,10 @@
+<div class="flex flex-row items-center w-full bg-neutral-800 tabular-nums border-b border-neutral-700/30">
+    <div class="basis-1/2 bg-neutral-950/50 font-semibold px-2 py-1">@Header</div>
+    <div class="basis-1/2 px-2 py-1">@Data</div>
+</div>
+
+@code {
+    [EditorRequired] [Parameter] public required string Header { get; set; }
+
+    [EditorRequired] [Parameter] public required string Data { get; set; }
+}

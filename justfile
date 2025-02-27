@@ -1,5 +1,7 @@
 #!/usr/bin/env just --justfile
 
+set dotenv-load := true
+
 # List all available commands
 default:
     @just -l
@@ -10,7 +12,7 @@ build: tailwind-build
 
 [group('dotnet')]
 watch:
-    dotnet watch --project matsugane
+    ASPNETCORE_ENVIRONMENT=Development LASTFM_KEY=$LASTFM_KEY LASTFM_USER=$LASTFM_USER dotnet watch --project matsugane
 
 [group('Tailwind')]
 tailwind-build:
