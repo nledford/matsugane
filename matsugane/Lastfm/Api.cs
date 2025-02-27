@@ -31,15 +31,21 @@ public class LastfmClient : ILastfmClient, IDisposable
 
         var response = await _client.GetAsync(req);
         var json = JObject.Parse(response.Content!);
-
         var tracks = json["recenttracks"]!["track"]!;
 
-        return (from track in tracks
-            let title = (string)track["name"]!
-            let artist = (string)track["artist"]!["name"]!
-            let album = (string)track["album"]!["#text"]!
-            let playedAt = (string)track["date"]!["uts"]!
-            select new Track(title, artist, album, playedAt)).ToList();
+        var lastfmTracks = new List<Track>();
+        foreach (var track in tracks)
+        {
+            var title = (string)track["name"]!;
+            var artist = (string)track["artist"]!["name"]!;
+            var album = (string)track["album"]!["#text"]!;
+            var playedAt = (string)track["date"]!["uts"]!;
+
+            var lastfmTrack = await Track.BuildTrack(title, artist, album, playedAt);
+            lastfmTracks.Add(lastfmTrack);
+        }
+
+        return lastfmTracks;
     }
 
     public void Dispose()

@@ -1,0 +1,43 @@
+@typeparam TData
+
+<div class="flex flex-col gap-2 w-full tabular-nums">
+    <div class="flex-grow w-full h-64 overflow-auto border border-neutral-700/30 tabular-nums bg-neutral-800">
+        <table class="relative w-full bg-neutral-800">
+            <thead>
+            <tr>
+                @{ var i = 0; }
+                @foreach (var header in Headers)
+                {
+                    <th class="sticky top-0 bg-neutral-950/90 px-2 py-1 font-semibold text-left"
+                        style="@(Widths != null ? $"width: {Widths[i]}%" : null)">
+                        @header
+                    </th>
+                    i++;
+                }
+            </tr>
+            </thead>
+
+            <tbody>
+            @foreach (var item in Data)
+            {
+                <tr>
+                    @foreach (var col in Columns)
+                    {
+                        <td class="px-2 py-1 truncate text-sm">
+                            @item!.GetType().GetProperty(col)!.GetValue(item, null)
+                        </td>
+                    }
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    [EditorRequired] [Parameter] public required string[] Headers { get; set; }
+    [Parameter] public required string[] Columns { get; set; }
+
+    [Parameter] public int[]? Widths { get; set; }
+    [Parameter] public required IEnumerable<TData> Data { get; set; }
+}

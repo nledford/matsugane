@@ -13,6 +13,13 @@ public static class Utils
         return name.ToLowerInvariant();
     }
 
+    public static async Task<string> BuildSortNameAsync(string name)
+    {
+        name = await ConvertJapaneseToRomaji(name);
+        name = RemoveArticles(name);
+        return name.ToLowerInvariant();
+    }
+
     private static async Task<string> ConvertJapaneseToRomaji(string name)
     {
         var converter = new KawazuConverter();

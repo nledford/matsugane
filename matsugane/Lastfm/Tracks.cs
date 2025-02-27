@@ -4,14 +4,18 @@ public class Tracks
 {
     private readonly LastfmClient _client = new();
 
+    public IEnumerable<Item> Artists { get; private set; } = new List<Item>();
+    public IEnumerable<Item> Albums { get; private set; } = new List<Item>();
+
     public static async Task<Tracks> Build(bool fetchTracks = false)
     {
         var tracks = new Tracks();
 
-        if (fetchTracks)
-        {
-            await tracks.RefreshTracks();
-        }
+        if (!fetchTracks) return tracks;
+
+        await tracks.RefreshTracks();
+        await tracks.BuildArtists();
+        await tracks.BuildAlbums();
 
         return tracks;
     }
@@ -43,40 +47,71 @@ public class Tracks
         get { return RecentlyPlayedTracks.DistinctBy(t => t.PlayId).Count(); }
     }
 
-    public IEnumerable<Item> Artists
+    private async Task BuildArtists()
     {
-        get
-        {
-            var artists = RecentlyPlayedTracks
-                .Select(t => new { id = t.SortArtist, artist = t.Artist })
-                .DistinctBy(a => a.id);
+        var artists = RecentlyPlayedTracks
+            .Select(t => new { id = t.SortArtist, artist = t.Artist })
+            .DistinctBy(a => a.id);
 
-            return from artist in artists
-                let allTracks = RecentlyPlayedTracks.Where(t => t.SortArtist == artist.id).ToList()
-                let totalTracks = allTracks.DistinctBy(t => t.TrackId).Count()
-                let totalPlays = allTracks.DistinctBy(t => t.PlayId).Count()
-                let totalAlbums = allTracks.DistinctBy(t => t.AlbumId).Count()
-                select new Item(artist.artist, totalTracks, totalPlays, totalAlbums, TotalPlays);
+        var result = new List<Item>();
+        foreach (var artist in artists)
+        {
+            var allTracks = RecentlyPlayedTracks.Where(t => t.SortArtist == artist.id).ToList();
+            var totalTracks = allTracks.DistinctBy(t => t.TrackId).Count();
+            var totalPlays = allTracks.DistinctBy(t => t.PlayId).Count();
+            var totalAlbums = allTracks.DistinctBy(t => t.AlbumId).Count();
+            result.Add(await Item.Build(artist.artist, totalTracks, totalPlays, totalAlbums, TotalPlays));
         }
+
+        Artists = result;
     }
 
-    public IEnumerable<Item> Albums
+    private async Task BuildAlbums()
     {
-        get
-        {
-            var albums = RecentlyPlayedTracks
-                .Select(t => new { id = t.SortAlbum, album = t.Album })
-                .DistinctBy(a => a.id);
+        var albums = RecentlyPlayedTracks
+            .Select(t => new { id = t.SortAlbum, album = t.Album })
+            .DistinctBy(a => a.id);
 
-            return from album in albums
-                let allTracks = RecentlyPlayedTracks.Where(t => t.SortAlbum == album.id).ToList()
-                let totalTracks = allTracks.DistinctBy(t => t.TrackId).Count()
-                let totalPlays = allTracks.DistinctBy(t => t.PlayId).Count()
-                let totalAlbums = 0
-                select new Item(album.album, totalTracks, totalPlays, totalAlbums, TotalPlays);
+
+        var result = new List<Item>();
+        foreach (var album in albums)
+        {
+            var allTracks = RecentlyPlayedTracks.Where(t => t.SortAlbum == album.id).ToList();
+            var totalTracks = allTracks.DistinctBy(t => t.TrackId).Count();
+            var totalPlays = allTracks.DistinctBy(t => t.PlayId).Count();
+            result.Add(await Item.Build(album.album, totalTracks, totalPlays, 0, TotalPlays));
         }
+
+        Albums = result;
     }
 
     public Stats PlaysPerArtistStats => new(Artists.Select(a => a.TotalPlays).ToList());
     public Stats AlbumsPerArtistStats => new(Artists.Select(a => a.TotalAlbums).ToList());
+
+    public IEnumerable<Item> TopArtists
+    {
+        get
+        {
+            return Artists
+                .OrderByDescending(t => t.TotalPlays)
+                .ThenByDescending(t => t.TotalTracks)
+                .ThenByDescending(t => t.TotalAlbums)
+                .ThenByDescending(t => t.SortName);
+        }
+    }
+
+    public IEnumerable<PlaysByHour> PlaysByHours
+    {
+        get
+        {
+            return RecentlyPlayedTracks
+                .GroupBy(t => t.PlayedAt.Hour)
+                .Select(grp => new
+                {
+                    hour = grp.Key,
+                    plays = grp.Count()
+                })
+                .Select(hour => new PlaysByHour(hour.hour, hour.plays, TotalPlays));
+        }
+    }
 }
