@@ -13,7 +13,8 @@ else
     <StatsHeader Tracks="_tracks"/>
 
     @* ReSharper disable once Html.TagShouldNotBeSelfClosed *@
-    <Table Headers="@(new[] { "Title", "Artist", "Album", "Played At" })"
+    <Table Title="Recently Played"
+           Headers="@(new[] { "Title", "Artist", "Album", "Played At" })"
            Columns="@(new[] { "Title", "Artist", "Album", "PlayedAtFmt" })"
            Data="_tracks.RecentlyPlayedTracks"
            Widths="@(new[] { 30, 30, 30, 10 })"
@@ -21,12 +22,16 @@ else
 
 
     <div class="flex flex-col lg:flex-row gap-5">
-        <Table Headers="@(new[] { "Artist", "Plays", "Tracks", "Albums", "Plays %" })"
+        @* ReSharper disable once Html.TagShouldNotBeSelfClosed *@
+        <Table Title="Top Artists"
+               Headers="@(new[] { "Artist", "Plays", "Tracks", "Albums", "Plays %" })"
                Columns="@(new[] { "Name", "TotalPlays", "TotalTracks", "TotalAlbums", "PlaysPercentFmt" })"
                Data="_tracks.TopArtists"
         />
 
-        <Table Headers="@(new[] { "Hour", "Plays", "Percent" })"
+        @* ReSharper disable once Html.TagShouldNotBeSelfClosed *@
+        <Table Title="Plays By Hour"
+               Headers="@(new[] { "Hour", "Plays", "Percent" })"
                Columns="@(new[] { "HourFmt", "PlaysFmt", "PercentFmt" })"
                Data="_tracks.PlaysByHours"
         />

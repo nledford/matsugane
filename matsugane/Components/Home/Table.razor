@@ -1,6 +1,11 @@
 @typeparam TData
 
 <div class="flex flex-col gap-2 w-full tabular-nums">
+    @if (!string.IsNullOrWhiteSpace(Title))
+    {
+        <h2 class="font-semibold">@Title</h2>
+    }
+
     <div class="flex-grow w-full h-64 overflow-auto border border-neutral-700/30 tabular-nums bg-neutral-800">
         <table class="relative w-full bg-neutral-800">
             <thead>
@@ -35,6 +40,8 @@
 </div>
 
 @code {
+    [Parameter] public string? Title { get; set; } = string.Empty;
+
     [EditorRequired] [Parameter] public required string[] Headers { get; set; }
     [Parameter] public required string[] Columns { get; set; }
 
