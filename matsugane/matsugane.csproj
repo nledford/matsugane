@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="BouncyCastle.Cryptography" Version="2.5.1" />
       <PackageReference Include="Kawazu" Version="1.1.4" />
       <PackageReference Include="LibNMeCab" Version="0.10.2" />
       <PackageReference Include="LibNMeCab.IpaDicBin" Version="0.10.0" />

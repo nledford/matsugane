@@ -1,9 +1,12 @@
 using matsugane.Components;
+using matsugane.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddRazorComponents()
+builder.Services
+    .AddScoped<JsConsole>()
+    .AddRazorComponents()
     .AddInteractiveServerComponents();
 
 var app = builder.Build();

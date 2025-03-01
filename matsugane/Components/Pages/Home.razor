@@ -1,7 +1,9 @@
 ﻿@page "/"
-@using System.Globalization
 @using matsugane.Components.Home
+@using matsugane.Utils
+@inject JsConsole Js
 @attribute [StreamRendering]
+@rendermode InteractiveServer
 
 <PageTitle>Home</PageTitle>
 
@@ -11,6 +13,24 @@
 }
 else
 {
+    <div class="flex flex-row items-center justify-between border border-neutral-600/30 rounded bg-neutral-700/50 p-3">
+        <div>
+            <button class="border border-orange-700/30 rounded
+                     bg-orange-800 enabled:hover:bg-orange-700 disabled:opacity-25
+                           hover:text-white
+                           px-2 py-1
+                           disabled:cursor-not-allowed"
+                    disabled="@IsRefreshing"
+                    @onclick="RefreshData">
+                @(!IsRefreshing ? "Refresh Data" : "Refreshing Data...")
+            </button>
+        </div>
+
+        <div>
+            @_lastRefreshed
+        </div>
+    </div>
+
     <StatsHeader Tracks="_tracks"/>
 
     @* ReSharper disable once Html.TagShouldNotBeSelfClosed *@
@@ -43,10 +63,36 @@ else
 @code {
 
     private Tracks? _tracks;
+    private string? _lastRefreshed;
+
+    private bool IsRefreshing { get; set; }
+
+    private void SetLastRefreshed(bool refreshing)
+    {
+        IsRefreshing = refreshing;
+        _lastRefreshed = refreshing ? "Refreshing..." : $"Last Refresh: {DateTime.Now:HH:mm:ss}";
+    }
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadData();
+    }
+
+    private async Task LoadData()
+    {
+        SetLastRefreshed(true);
         _tracks = await Tracks.Build(true);
+        SetLastRefreshed(false);
+    }
+
+    private async Task RefreshData()
+    {
+        SetLastRefreshed(true);
+        await LoadData();
+        SetLastRefreshed(false);
+
+        // await Js.LogAsync("Refreshing Data. Please wait...");
+        // await Js.LogAsync(DateTime.Now.ToString("u"));
     }
 
 }
