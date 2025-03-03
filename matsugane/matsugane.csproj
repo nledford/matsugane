@@ -14,12 +14,18 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
       <PackageReference Include="BouncyCastle.Cryptography" Version="2.5.1" />
+      <PackageReference Include="Dapper" Version="2.1.66" />
       <PackageReference Include="Kawazu" Version="1.1.4" />
       <PackageReference Include="LibNMeCab" Version="0.10.2" />
       <PackageReference Include="LibNMeCab.IpaDicBin" Version="0.10.0" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.0" />
+      <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.2" />
+      <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.2" />
       <PackageReference Include="morelinq" Version="4.4.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+      <PackageReference Include="Npgsql" Version="9.0.3" />
       <PackageReference Include="RestSharp" Version="112.1.0" />
       <PackageReference Include="WanaKanaShaapu" Version="2.0.2" />
     </ItemGroup>
