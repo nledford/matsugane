@@ -14,7 +14,7 @@ builder.Services
     .AddInteractiveServerComponents();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(x => { x.LoginPath = "/login"; });
+    .AddCookie(x => { x.LoginPath = "/auth/login"; });
 builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();
 

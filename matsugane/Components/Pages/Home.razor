@@ -1,35 +1,20 @@
 ﻿@page "/"
-@using matsugane.Data.Db
 @using Microsoft.AspNetCore.Authorization
-@using Microsoft.EntityFrameworkCore
 @attribute [Authorize]
-@inject MatsuganeContext Ctx
 
+<div id="time" class="w-full text-6xl text-center tabular-nums">
+    @(DateTime.Now.ToString("HH:mm:ss"))
+</div>
 
-<p>Sorry, there's no login logic yet.</p>
+<script>
+    /*
+        Page will be initially rendered with time from the server.
+        Time will be updated client-side with the following JavaScript
+     */
 
-<p>Go to <a href="/apps/lastfm">lastfm</a> though...</p>
+    const time = document.querySelector("#time");
 
-<p>By the way, there are @Users.Count user(s):</p>
-
-@if (Users.Count > 0)
-{
-    <ul>
-        @foreach (var user in Users)
-        {
-            <li>@user.Username | @user.Password</li>
-        }
-    </ul>
-}
-
-@code {
-    private List<User> Users { get; set; } = [];
-
-
-    protected override async Task OnInitializedAsync()
-    {
-        await using var context = this.Ctx;
-        Users = await context.Users.ToListAsync();
-    }
-
-}
+    setInterval(() => {
+        time.innerHTML = new Date().toLocaleTimeString('en-US', {hour12: false})
+    }, 250);
+</script>

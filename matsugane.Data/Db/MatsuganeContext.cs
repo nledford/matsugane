@@ -4,7 +4,7 @@ namespace matsugane.Data.Db;
 
 public class MatsuganeContext(DbContextOptions<MatsuganeContext> options) : DbContext(options)
 {
-    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Profile> Profiles { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
