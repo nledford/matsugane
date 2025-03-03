@@ -1,11 +1,14 @@
 using matsugane.Components;
+using matsugane.Data.Db;
 using matsugane.Utils;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services
     .AddScoped<JsConsole>()
+    .AddDbContext<MatsuganeContext>(opt => opt.UseNpgsql(Conn.BuildConnection()))
     .AddRazorComponents()
     .AddInteractiveServerComponents();
 

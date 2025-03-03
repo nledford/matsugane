@@ -1,4 +1,5 @@
 using Kawazu;
+using matsugane.Translation;
 using WanaKanaShaapu;
 
 namespace matsugane.Lastfm;
@@ -7,24 +8,9 @@ public static class Utils
 {
     public static async Task<string> BuildSortNameAsync(string name)
     {
-        var sortName = await ConvertJapaneseToRomaji(name);
+        var sortName = await Japanese.ConvertJapaneseToRomaji(name);
         sortName = RemoveArticles(sortName);
         return sortName.ToLowerInvariant();
-    }
-
-    private static async Task<string> ConvertJapaneseToRomaji(string name)
-    {
-        if (!WanaKana.IsJapanese(name)) return name;
-
-        if (WanaKana.IsKanji(name))
-        {
-            var converter = new KawazuConverter();
-            name = await converter.Convert(name, To.Romaji);
-        }
-
-        name = WanaKana.ToRomaji(name);
-
-        return name;
     }
 
     private static string RemoveArticles(string name)
