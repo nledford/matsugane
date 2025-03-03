@@ -31,4 +31,14 @@
       <ProjectReference Include="..\matsugane.Translation\matsugane.Translation.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <AdditionalFiles Include="Components\Pages\Apps\Lastfm\Components\Cell.razor" />
+      <AdditionalFiles Include="Components\Pages\Apps\Lastfm\Components\StatsHeader.razor" />
+      <AdditionalFiles Include="Components\Pages\Apps\Lastfm\Components\Table.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Components\Shared\" />
+    </ItemGroup>
+
 </Project>
