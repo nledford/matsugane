@@ -1,0 +1,42 @@
+@page "/login"
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.AspNetCore.Authentication.Cookies
+@inject NavigationManager NavigationManager
+
+<EditForm method="post" OnSubmit="LoginUser" Model="UserCredentials" FormName="LoginUser">
+    <InputText @bind-Value="UserCredentials.Username" placeholder="Username"></InputText>
+    <InputText @bind-Value="UserCredentials.Password" type="password" placeholder="Password"></InputText>
+    <button type="submit">Log In</button>
+</EditForm>
+
+@code {
+    // ReSharper disable once PreferConcreteValueOverDefault
+    [CascadingParameter] public HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromForm] public Credentials UserCredentials { get; set; } = new Credentials();
+
+    public async Task LoginUser()
+    {
+        if (UserCredentials is { Username: "Harry", Password: "Potter" })
+        {
+            var claims = new List<Claim>
+            {
+                new(type: ClaimTypes.Name, UserCredentials.Username)
+            };
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+            await HttpContext.SignInAsync(principal);
+
+            NavigationManager.NavigateTo("/");
+        }
+    }
+
+
+    public class Credentials
+    {
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+    }
+
+}

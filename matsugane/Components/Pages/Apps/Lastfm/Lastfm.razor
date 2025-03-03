@@ -2,9 +2,11 @@
 @using matsugane.Components.Home
 @using matsugane.Data.Lastfm
 @using matsugane.Utils
+@using Microsoft.AspNetCore.Authorization
 @inject JsConsole Js
 @attribute [StreamRendering]
 @rendermode InteractiveServer
+@attribute [Authorize]
 
 <PageTitle>Home</PageTitle>
 
