@@ -1,4 +1,4 @@
-namespace matsugane.Lastfm;
+namespace matsugane.Data.Lastfm;
 
 public class PlaysByHour(int hour, int plays, int globalPlays)
 {

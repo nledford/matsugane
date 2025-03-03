@@ -1,8 +1,6 @@
-using Kawazu;
 using matsugane.Translation;
-using WanaKanaShaapu;
 
-namespace matsugane.Lastfm;
+namespace matsugane.Data.Lastfm;
 
 public static class Utils
 {

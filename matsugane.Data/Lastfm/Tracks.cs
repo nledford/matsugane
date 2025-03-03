@@ -1,4 +1,4 @@
-namespace matsugane.Lastfm;
+namespace matsugane.Data.Lastfm;
 
 public class Tracks
 {

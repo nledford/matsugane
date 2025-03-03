@@ -1,6 +1,4 @@
-using System.Numerics;
-
-namespace matsugane.Utils;
+namespace matsugane.Data.Utils;
 
 public static class StatsExtensions
 {

@@ -4,7 +4,7 @@
 
 // ReSharper disable UnusedAutoPropertyAccessor.Global
 
-namespace matsugane.Lastfm;
+namespace matsugane.Data.Lastfm;
 
 public class Track
 {

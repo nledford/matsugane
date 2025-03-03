@@ -1,10 +1,10 @@
-using matsugane.Utils;
+using matsugane.Data.Utils;
 
-namespace matsugane.Lastfm;
+namespace matsugane.Data.Lastfm;
 
 public class Stats(List<int> items)
 {
-    public int Total => items.Count;
+    private int Total => items.Count;
     public double Mean => items.Mean();
 
     public double Median => items.OrderBy(item => item)

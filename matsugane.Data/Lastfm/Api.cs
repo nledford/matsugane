@@ -1,7 +1,7 @@
 using Newtonsoft.Json.Linq;
 using RestSharp;
 
-namespace matsugane.Lastfm;
+namespace matsugane.Data.Lastfm;
 
 interface ILastfmClient
 {
