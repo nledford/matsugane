@@ -1,0 +1,29 @@
+@using System.Linq.Expressions
+<div class="flex flex-col">
+    <label for="@Label"
+           class="font-medium text-sm text-white mb-2">
+        @Label
+    </label>
+    <InputText id="@Label"
+               Value="@Value"
+               ValueChanged="ValueChanged"
+               ValueExpression="ValueExpression"
+               placeholder="@Label"
+               type="@(IsPassword ? "password" : "text")"
+               class="bg-neutral-950 border border-neutral-700 rounded p-2.5"
+    >
+    </InputText>
+    <ValidationMessage For="ValueExpression"/>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public required string Label { get; set; }
+    [Parameter] public string? Value { get; set; }
+    [Parameter] public bool IsPassword { get; set; }
+    [Parameter] public EventCallback<string?> ValueChanged { get; set; }
+    [Parameter] public Expression<Func<string?>>? ValueExpression { get; set; }
+
+    private async Task OnValueChanged(string? value)
+        => await this.ValueChanged.InvokeAsync(value);
+
+}

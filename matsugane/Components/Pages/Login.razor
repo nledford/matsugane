@@ -1,16 +1,42 @@
 @page "/login"
+@using System.ComponentModel.DataAnnotations
 @using System.Security.Claims
+@using matsugane.Components.Forms
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Authentication.Cookies
 @inject NavigationManager NavigationManager
+@* min-height: 100vh *@
 
-<EditForm method="post" OnSubmit="LoginUser" Model="UserCredentials" FormName="LoginUser">
-    <InputText @bind-Value="UserCredentials.Username" placeholder="Username"></InputText>
-    <InputText @bind-Value="UserCredentials.Password" type="password" placeholder="Password"></InputText>
-    <button type="submit">Log In</button>
-</EditForm>
+<div class="h-[calc(100vh-9.5rem)] w-full flex flex-row items-center justify-center">
+    <EditForm method="post"
+              OnValidSubmit="LoginUser"
+              Model="UserCredentials"
+              FormName="LoginUser"
+              id="LoginForm"
+              class="flex flex-col gap-6
+               bg-neutral-800
+                     border border-neutral-700 rounded
+                     w-1/2
+                     p-5">
+        <DataAnnotationsValidator/>
+
+        <Input Label="Username" @bind-Value="@UserCredentials.Username"/>
+        <Input Label="Password" @bind-Value="@UserCredentials.Password" IsPassword="true"/>
+
+        <button
+            class="inline-flex h-12 items-center justify-center rounded-md bg-orange-800 px-6 font-medium text-orange-50 transition active:scale-110 hover:bg-orange-600 hover:cursor-pointer">
+            Log In
+        </button>
+    </EditForm>
+</div>
 
 @code {
+    /*
+     * SOURCES:
+     *  - http://archive.today/107DJ
+     *  - https://stackoverflow.com/a/78897626
+     */
+
     // ReSharper disable once PreferConcreteValueOverDefault
     [CascadingParameter] public HttpContext HttpContext { get; set; } = default!;
 
@@ -18,7 +44,15 @@
 
     public async Task LoginUser()
     {
-        if (UserCredentials is { Username: "Harry", Password: "Potter" })
+        var username = Environment.GetEnvironmentVariable("STARTPAGE_USERNAME");
+        var password = Environment.GetEnvironmentVariable("STARTPAGE_PASSWORD");
+
+        if (string.IsNullOrWhiteSpace(username) && string.IsNullOrWhiteSpace(password))
+        {
+            return;
+        }
+
+        if (UserCredentials.Username == username! && UserCredentials.Password == password!)
         {
             var claims = new List<Claim>
             {
@@ -35,8 +69,9 @@
 
     public class Credentials
     {
-        public string Username { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+        [Required] public string Username { get; set; } = string.Empty;
+
+        [Required] public string Password { get; set; } = string.Empty;
     }
 
 }
