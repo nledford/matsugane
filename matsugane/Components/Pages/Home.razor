@@ -1,5 +1,33 @@
 ﻿@page "/"
+@using matsugane.Data.Db
+@using Microsoft.EntityFrameworkCore
+@inject MatsuganeContext Ctx
+
 
 <p>Sorry, there's no login logic yet.</p>
 
 <p>Go to <a href="/apps/lastfm">lastfm</a> though...</p>
+
+<p>By the way, there are @Users.Count user(s):</p>
+
+@if (Users.Count > 0)
+{
+    <ul>
+        @foreach (var user in Users)
+        {
+            <li>@user.Username | @user.Password</li>
+        }
+    </ul>
+}
+
+@code {
+    private List<User> Users { get; set; } = [];
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await using var context = this.Ctx;
+        Users = await context.Users.ToListAsync();
+    }
+
+}

@@ -4,5 +4,13 @@ namespace matsugane.Data.Db;
 
 public class MatsuganeContext(DbContextOptions<MatsuganeContext> options) : DbContext(options)
 {
-    public DbSet<User> Users { get; set; }
+    public virtual DbSet<User> Users { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseNpgsql(Conn.BuildConnection());
+        }
+    }
 }
