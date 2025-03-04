@@ -1,20 +1,63 @@
-﻿@using Microsoft.AspNetCore.Components.Authorization
+﻿@using matsugane.Components.Shared
+@using matsugane.Utils
+@using Microsoft.AspNetCore.Components.Authorization
 @inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
 <div class="sticky top-0
       bg-neutral-950/90 backdrop-blur-sm
             border-b border-neutral-700/30">
     <nav class="container mx-auto h-16 flex flex-row items-center">
-        <div class="basis-1/2">
-            <a href="/">matsugane</a>
+        <div class="basis-1/2 flex flex-row items-center gap-5">
+            <h2 class="font-semibold text-xl">
+                <a href="/">matsugane</a>
+            </h2>
+
+            @if (_routes.Count > 0 && LoggedIn)
+            {
+                <OutsideClickDetector MethodToCallOnClick="@(() => ShowMenu = false)"
+                                      LowestInsideComponentZIndex="1000"/>
+                <div class="relative z-[1000]">
+                    <button @onclick="ToggleMenu"
+                            class="group flex flex-row items-center hover:text-orange-500">
+                        @CurrentRouteTitle
+
+                        @if (ShowMenu)
+                        {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="m7 10l5 5l5-5z"/>
+                            </svg>
+                        }
+                        else
+                        {
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="m14 7l-5 5l5 5z"/>
+                            </svg>
+                        }
+                    </button>
+
+                    <ul class="absolute top-11 -left-3 w-48 flex-col bg-neutral-700 rounded z-[500] @(ShowMenu ? "inline-flex" : "hidden")">
+                        @foreach (var route in AvailableRoutes)
+                        {
+                            <li class="bg-neutral-800 hover:bg-neutral-800/75
+                                           border border-b-0 last:border-b border-neutral-700 first:rounded-t last:rounded-b
+                                           px-3 py-1">
+                                <a href="@route.Key" @onclick="@(() => ShowMenu = false)" class="block w-full">
+                                    @route.Value
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
         </div>
 
         <div class="basis-1/2 flex flex-row items-center justify-end gap-5">
-            @if (!string.IsNullOrEmpty(_username))
+            @if (LoggedIn)
             {
                 <div>@_username</div>
                 <div>
-                    <a href="/logout" class="text-orange-500">
+                    <a href="/auth/logout" class="text-orange-500">
                         Logout
                     </a>
                 </div>
@@ -24,13 +67,47 @@
 </div>
 
 @code {
-
+    private string? _currentRoute;
     private string? _username;
+    private Dictionary<string, string> _routes = new();
+    private bool ShowMenu { get; set; }
 
-    // ReSharper disable once PreferConcreteValueOverDefault
-    [CascadingParameter] public HttpContext HttpContext { get; set; } = default!;
+    /// <summary>
+    /// If we have a username, we are logged in.
+    /// </summary>
+    private bool LoggedIn => !string.IsNullOrWhiteSpace(_username);
+
+    /// <summary>
+    /// The current route of the app
+    /// </summary>
+    private string CurrentRoute => NavigationManager.Page();
+
+    /// <summary>
+    /// The title of the route, from the routes dictionary
+    /// </summary>
+    private string CurrentRouteTitle => _routes[CurrentRoute];
+
+    /// <summary>
+    /// Filters out the current route from the routes dictionary
+    /// </summary>
+    private Dictionary<string, string> AvailableRoutes
+    {
+        get { return _routes.Where(x => x.Key != CurrentRoute).ToDictionary(); }
+    }
 
     [CascadingParameter] private Task<AuthenticationState>? AuthState { get; set; }
+
+    private void ToggleMenu()
+    {
+        ShowMenu = !ShowMenu;
+    }
+
+    private void BuildRoutes()
+    {
+        _routes.Add("/", "Home");
+        _routes.Add("/apps/lastfm", "Last.fm");
+        _routes.Add("/apps/plexfm", "Plex.fm");
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -43,6 +120,9 @@
         {
             _username = string.Empty;
         }
+
+        BuildRoutes();
+        _currentRoute = NavigationManager.Page();
     }
 
 }

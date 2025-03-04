@@ -1,3 +1,4 @@
+using Iconify.Extensions;
 using matsugane.Components;
 using matsugane.Data.Db;
 using matsugane.Utils;
@@ -17,6 +18,8 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
     .AddCookie(x => { x.LoginPath = "/auth/login"; });
 builder.Services.AddAuthorization();
 builder.Services.AddCascadingAuthenticationState();
+
+builder.Services.AddIconify();
 
 var app = builder.Build();
 
