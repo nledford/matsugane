@@ -15,8 +15,7 @@
 
             @if (_routes.Count > 0 && LoggedIn)
             {
-                <OutsideClickDetector MethodToCallOnClick="@(() => ShowMenu = false)"
-                                      LowestInsideComponentZIndex="1000"/>
+
                 <div class="relative z-[1000]">
                     <button @onclick="ToggleMenu"
                             class="group flex flex-row items-center hover:text-orange-500">
@@ -37,6 +36,9 @@
                     </button>
 
                     <ul class="absolute top-11 -left-3 w-48 flex-col bg-neutral-700 rounded z-[500] @(ShowMenu ? "inline-flex" : "hidden")">
+                        <OutsideClickDetector MethodToCallOnClick="@(() => ShowMenu = false)"
+                                              LowestInsideComponentZIndex="1000"/>
+
                         @foreach (var route in AvailableRoutes)
                         {
                             <li class="bg-neutral-800 hover:bg-neutral-800/75
