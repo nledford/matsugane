@@ -22,6 +22,10 @@ else
 {
     <div class="flex flex-row items-center justify-between border border-neutral-600/30 rounded bg-neutral-700/50 p-3">
         <div>
+            @_lastRefreshed
+        </div>
+
+        <div>
             <button class="border border-orange-700/30 rounded
                      bg-orange-800 enabled:hover:bg-orange-700 disabled:opacity-25
                            hover:text-white
@@ -31,10 +35,6 @@ else
                     @onclick="RefreshData">
                 @(!IsRefreshing ? "Refresh Data" : "Refreshing Data...")
             </button>
-        </div>
-
-        <div>
-            @_lastRefreshed
         </div>
     </div>
 
