@@ -25,6 +25,7 @@ else
             <th>Profile</th>
             <th>Refresh Interval</th>
             <th>Next Refresh</th>
+            <td>&nbsp;</td>
         </tr>
         </thead>
 
@@ -35,6 +36,9 @@ else
                 <td>@profile.ProfileTitle</td>
                 <td>@profile.RefreshInterval Minutes</td>
                 <td>@profile.NextRefresh.ToString("HH:mm:ss")</td>
+                <td>
+                    <a href="#">Edit Profile</a>
+                </td>
             </tr>
         }
         </tbody>
