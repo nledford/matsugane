@@ -1,20 +1,41 @@
 ﻿@page "/"
-@using Microsoft.AspNetCore.Authorization
 @attribute [Authorize]
+@using System.Timers
+@using Microsoft.AspNetCore.Authorization
+@implements IDisposable
+@rendermode InteractiveServer
 
 <div id="time" class="w-full text-6xl text-center tabular-nums">
-    @(DateTime.Now.ToString("HH:mm:ss"))
+    @_time
 </div>
 
-<script>
-    /*
-        Page will be initially rendered with time from the server.
-        Time will be updated client-side with the following JavaScript
-     */
 
-    const time = document.querySelector("#time");
+@code {
+    private Timer _timer = null!;
+    private string _time = "00:00:00";
 
-    setInterval(() => {
-        time.innerHTML = new Date().toLocaleTimeString('en-US', {hour12: false})
-    }, 250);
-</script>
+    protected override void OnInitialized()
+    {
+        _timer = new Timer(250);
+        _timer.Enabled = true;
+        _timer.AutoReset = true;
+        _timer.Elapsed += UpdateTime;
+    }
+
+    // ReSharper disable once AsyncVoidMethod
+    private async void UpdateTime(object? sender, ElapsedEventArgs e)
+    {
+        await InvokeAsync(() =>
+        {
+            _time = DateTime.Now.ToString("HH:mm:ss");
+            ;
+            StateHasChanged();
+        });
+    }
+
+    public void Dispose()
+    {
+        _timer?.Dispose();
+    }
+
+}
