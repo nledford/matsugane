@@ -22,3 +22,16 @@ tailwind-build:
 [group('Tailwind')]
 tailwind-watch:
     bunx @tailwindcss/cli --cwd ./matsugane -i ./Styles/tailwind.css -o ./wwwroot/tailwind.css --watch --minify
+
+# Build a docker image
+[group('docker')]
+docker-build:
+    docker build -t nledford/matsugane .
+
+[group('docker')]
+docker-run: docker-build
+    docker run --rm -it \
+      -p 8080:8080 \
+      --env-file .env \
+      -e TZ=America/New_York \
+      --name matsugane nledford/matsugane:latest

@@ -1,36 +1,49 @@
+using Microsoft.AspNetCore.WebUtilities;
 using Newtonsoft.Json.Linq;
-using RestSharp;
 
 namespace matsugane.Data.Lastfm;
 
-interface ILastfmClient
+public class LastfmClient : IDisposable
 {
-    Task<IEnumerable<Track>> GetRecentTracks(int limit = 1000);
-}
+    private readonly HttpClient _client;
 
-public class LastfmClient : ILastfmClient, IDisposable
-{
-    private readonly RestClient _client;
-
-    public LastfmClient()
+    public LastfmClient(HttpClient client)
     {
-        var options = new RestClientOptions("http://ws.audioscrobbler.com/2.0/");
-        _client = new RestClient(options);
+        client.BaseAddress = new Uri("http://ws.audioscrobbler.com/2.0/");
+        _client = client;
     }
 
     public async Task<IEnumerable<Track>> GetRecentTracks(int limit = 1000)
     {
-        var req = new RestRequest();
-        req.AddQueryParameter("method", "User.getrecenttracks");
-        req.AddQueryParameter("user", Environment.GetEnvironmentVariable("LASTFM_USER"));
-        req.AddQueryParameter("limit", limit);
-        req.AddQueryParameter("extended", 1);
-        req.AddQueryParameter("from", ((DateTimeOffset)DateTime.Today).ToUnixTimeSeconds());
-        req.AddQueryParameter("api_key", Environment.GetEnvironmentVariable("LASTFM_KEY"));
-        req.AddQueryParameter("format", "json");
+        var user = Environment.GetEnvironmentVariable("LASTFM_USER");
+        var key = Environment.GetEnvironmentVariable("LASTFM_KEY");
 
-        var response = await _client.GetAsync(req);
-        var json = JObject.Parse(response.Content!);
+        if (string.IsNullOrWhiteSpace(user))
+        {
+            throw new Exception("`LASTFM_USER` environment variable not found.");
+        }
+
+        if (string.IsNullOrWhiteSpace(key))
+        {
+            throw new Exception("`LASTFM_KEY` environment variable not found.");
+        }
+
+        var query = new Dictionary<string, string?>()
+        {
+            ["method"] = "User.getrecenttracks",
+            ["user"] = user,
+            ["limit"] = limit.ToString(),
+            ["extended"] = "1",
+            ["from"] = ((DateTimeOffset)DateTime.Today).ToUnixTimeSeconds().ToString(),
+            ["api_key"] = key,
+            ["format"] = "json"
+        };
+
+        var response = await _client.GetAsync(QueryHelpers.AddQueryString("", query));
+        Console.WriteLine(response.ToString());
+        Console.WriteLine(response.RequestMessage?.RequestUri);
+
+        var json = JObject.Parse(await response.Content.ReadAsStringAsync());
         var tracks = json["recenttracks"]!["track"]!;
 
         var lastfmTracks = new List<Track>();
@@ -50,7 +63,7 @@ public class LastfmClient : ILastfmClient, IDisposable
 
     public void Dispose()
     {
-        _client?.Dispose();
+        _client.Dispose();
         GC.SuppressFinalize(this);
     }
 }

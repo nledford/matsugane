@@ -7,8 +7,16 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+
+COPY ["matsugane.Translation/matsugane.Translation.csproj", "matsugane.Translation/"]
+RUN dotnet restore "matsugane.Translation/matsugane.Translation.csproj"
+
+COPY ["matsugane.Data/matsugane.Data.csproj", "matsugane.Data/"]
+RUN dotnet restore "matsugane.Data/matsugane.Data.csproj"
+
 COPY ["matsugane/matsugane.csproj", "matsugane/"]
 RUN dotnet restore "matsugane/matsugane.csproj"
+
 COPY . .
 WORKDIR "/src/matsugane"
 RUN dotnet build "matsugane.csproj" -c $BUILD_CONFIGURATION -o /app/build

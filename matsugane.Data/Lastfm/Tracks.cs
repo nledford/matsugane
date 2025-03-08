@@ -2,14 +2,19 @@ namespace matsugane.Data.Lastfm;
 
 public class Tracks
 {
-    private readonly LastfmClient _client = new();
+    private readonly LastfmClient _client;
+
+    public Tracks(HttpClient client)
+    {
+        _client = new LastfmClient(client);
+    }
 
     public IEnumerable<Item> Artists { get; private set; } = new List<Item>();
     public IEnumerable<Item> Albums { get; private set; } = new List<Item>();
 
-    public static async Task<Tracks> Build(bool fetchTracks = false)
+    public static async Task<Tracks> Build(HttpClient client, bool fetchTracks = false)
     {
-        var tracks = new Tracks();
+        var tracks = new Tracks(client);
 
         if (!fetchTracks) return tracks;
 

@@ -7,6 +7,8 @@
 @attribute [StreamRendering]
 @rendermode InteractiveServer
 @attribute [Authorize]
+@inject IHttpClientFactory ClientFactory
+@implements IDisposable
 
 <PageTitle>Home</PageTitle>
 
@@ -71,6 +73,7 @@ else
 
     private Tracks? _tracks;
     private string? _lastRefreshed;
+    private HttpClient? _client;
 
     private bool IsRefreshing { get; set; }
 
@@ -82,13 +85,14 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        _client = ClientFactory.CreateClient();
         await LoadData();
     }
 
     private async Task LoadData()
     {
         SetLastRefreshed(true);
-        _tracks = await Tracks.Build(true);
+        _tracks = await Tracks.Build(_client!, true);
         SetLastRefreshed(false);
     }
 
@@ -100,6 +104,11 @@ else
 
         // await Js.LogAsync("Refreshing Data. Please wait...");
         // await Js.LogAsync(DateTime.Now.ToString("u"));
+    }
+
+    public void Dispose()
+    {
+        _client?.Dispose();
     }
 
 }
