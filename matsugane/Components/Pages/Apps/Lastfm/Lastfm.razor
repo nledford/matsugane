@@ -1,13 +1,13 @@
 @page "/apps/lastfm"
-@using matsugane.Components.Pages.Apps.Lastfm.Components
-@using matsugane.Data.Lastfm
-@using matsugane.Utils
-@using Microsoft.AspNetCore.Authorization
 @inject JsConsole Js
 @attribute [StreamRendering]
 @rendermode InteractiveServer
 @attribute [Authorize]
 @inject IHttpClientFactory ClientFactory
+@using matsugane.Components.Pages.Apps.Lastfm.Components
+@using matsugane.Data.Lastfm
+@using matsugane.Utils
+@using Microsoft.AspNetCore.Authorization
 @implements IDisposable
 
 <PageTitle>Home</PageTitle>
@@ -85,13 +85,13 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _client = ClientFactory.CreateClient();
         await LoadData();
     }
 
     private async Task LoadData()
     {
         SetLastRefreshed(true);
+        _client = ClientFactory.CreateClient();
         _tracks = await Tracks.Build(_client!, true);
         SetLastRefreshed(false);
     }
