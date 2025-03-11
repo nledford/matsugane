@@ -17,7 +17,7 @@ watch:
 [group('Tailwind')]
 tailwind-build:
     bun update --cwd ./matsugane
-    bunx @tailwindcss/cli --cwd ./matsugane -i ./Styles/tailwind.css -o ./wwwroot/tailwindcss.css --minify
+    bunx @tailwindcss/cli --cwd ./matsugane -i ./Styles/tailwind.css -o ./wwwroot/tailwind.css --minify
 
 [group('Tailwind')]
 tailwind-watch:

@@ -65,7 +65,29 @@ public class Tracks
             var totalTracks = allTracks.DistinctBy(t => t.TrackId).Count();
             var totalPlays = allTracks.DistinctBy(t => t.PlayId).Count();
             var totalAlbums = allTracks.DistinctBy(t => t.AlbumId).Count();
-            result.Add(await Item.Build(artist.artist, totalTracks, totalPlays, totalAlbums, TotalPlays));
+
+            var item = await new ItemBuilder()
+                .Name(artist.artist)
+                .TotalTracks(totalTracks)
+                .TotalPlays(totalPlays)
+                .TotalAlbums(totalAlbums)
+                .PlaysPercent((double)totalPlays / TotalPlays)
+                .BuildAsync();
+
+            result.Add(item);
+        }
+
+        result = result.OrderByDescending(x => x.TotalPlays)
+            .ThenBy(x => x.SortName)
+            .ToList();
+
+        var cumulativePlays = 0;
+        foreach (var item in result)
+        {
+            cumulativePlays += item.TotalPlays;
+
+            item.CumulativeTotal = cumulativePlays;
+            item.CumulativePercent = (double)cumulativePlays / TotalPlays;
         }
 
         Artists = result;
@@ -95,14 +117,7 @@ public class Tracks
 
     public IEnumerable<Item> TopArtists
     {
-        get
-        {
-            return Artists
-                .OrderByDescending(t => t.TotalPlays)
-                .ThenByDescending(t => t.TotalTracks)
-                .ThenByDescending(t => t.TotalAlbums)
-                .ThenBy(t => t.SortName);
-        }
+        get { return Artists.OrderBy(i => i.CumulativePercent).ThenBy(i => i.SortName); }
     }
 
     public IEnumerable<PlaysByHour> PlaysByHours

@@ -54,8 +54,8 @@ else
     <div class="flex flex-col lg:flex-row gap-5">
         @* ReSharper disable once Html.TagShouldNotBeSelfClosed *@
         <Table Title="Top Artists"
-               Headers="@(new[] { "Artist", "Plays", "Tracks", "Albums", "Plays %" })"
-               Columns="@(new[] { "Name", "TotalPlays", "TotalTracks", "TotalAlbums", "PlaysPercentFmt" })"
+               Headers="@(new[] { "Artist", "Plays", "Tracks", "Albums", "Plays %", "Cum. %" })"
+               Columns="@(new[] { "Name", "TotalPlays", "TotalTracks", "TotalAlbums", "PlaysPercentFmt", "CumulativePercentFmt" })"
                Data="_tracks.TopArtists"
         />
 
