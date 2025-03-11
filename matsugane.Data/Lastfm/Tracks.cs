@@ -78,6 +78,8 @@ public class Tracks
         }
 
         result = result.OrderByDescending(x => x.TotalPlays)
+            .ThenByDescending(x => x.TotalTracks)
+            .ThenByDescending(x => x.TotalAlbums)
             .ThenBy(x => x.SortName)
             .ToList();
 
